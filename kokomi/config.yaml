@@ -1,0 +1,19 @@
+BotConfig:
+    Superuser : 3197206779
+    Blacklist : []
+    Error_report : True
+    Verson : 3.0.1
+
+
+MonitorConfig:
+    SecretId : 0
+    SecretKey : 0
+    Region : 0
+    Namespace : 0
+    Dimensions_Name : 0
+    Dimensions_Value : 0
+
+
+DatabaseConfig:
+    Database_path : xxx
+    Update_interval : 0
