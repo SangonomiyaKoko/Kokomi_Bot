@@ -14,13 +14,10 @@ import yaml
 from .scripts.ship import ship
 from .scripts.recent import recent
 from .scripts.contribution import contribution
+from .scripts.monitor import monitor
 from .scripts.name import name
 from .scripts.set import set
-# def getFileSize(filePath, size=0):
-#     for root, dirs, files in os.walk(filePath):
-#         for f in files:
-#             size += os.path.getsize(os.path.join(root, f))
-#     return size/1024/1024/1024
+
 
 isWin = True if platform.system().lower() == 'windows' else False
 file_path = os.path.join(os.path.dirname(__file__), 'data')
@@ -287,7 +284,7 @@ async def rl(bot: Bot, event: Event, state: T_State):
         if DEBUG:
             await bot.send_private_msg(user_id=SUPERUSER, message='calendar发生错误，参数：'+str(canshu))
         else:
-            await wwsmerankrecent.finish()
+            await wws_rl.finish()
         await wws_rl.finish(Message('呜呜呜，好像哪里坏掉了(该bug已上报,将会及时处理)'))
 
 wws_seach = on_startswith({'wws seach'})
@@ -316,7 +313,7 @@ async def name_seach(bot: Bot, event: Event, state: T_State):
         if DEBUG:
             await bot.send_private_msg(user_id=SUPERUSER, message='seach发生错误'+str(res))
         else:
-            await wwsmerankrecent.finish()
+            await wws_seach.finish()
         await wws_seach.finish(Message('呜呜呜，好像哪里坏掉了(该bug已上报,将会及时处理)'))
 
 
@@ -335,16 +332,37 @@ async def name_add(bot: Bot, event: Event, state: T_State):
                'message': 'UNKNOW ERROR', 'error': str(e)}
     gc.collect()
     if res['status'] == 'error' and res['message'] == 'Invalid Standardname':
-        await wws_seach.finish(Message('未查询到船只[{}]'.format(info_message[0])))
+        await wws_add.finish(Message('未查询到船只[{}]'.format(info_message[0])))
     elif res['status'] == 'ok' and res['message'] == 'SUCCESS':
         await bot.send_private_msg(user_id=SUPERUSER, message='为[{}]添加别名[{}]'.format(info_message[0], info_message[1]))
-        await wws_seach.finish(Message('添加成功'))
+        await wws_add.finish(Message('添加成功'))
     else:
         if DEBUG:
             await bot.send_private_msg(user_id=SUPERUSER, message='add发生错误'+str(res))
         else:
-            await wwsmerankrecent.finish()
-        await wws_seach.finish(Message('呜呜呜，好像哪里坏掉了(该bug已上报,将会及时处理)'))
+            await wws_add.finish()
+        await wws_add.finish(Message('呜呜呜，好像哪里坏掉了(该bug已上报,将会及时处理)'))
+
+wws_monitor = on_startswith({'wws monitor'})
+
+
+@wws_monitor.handle()
+async def kokomi_monitor(bot: Bot, event: Event, state: T_State):
+    try:
+        res = monitor.pic().kokomi()
+    except Exception as e:
+        res = {'status': 'error', 'hidden': False,
+               'message': 'UNKNOW ERROR', 'error': str(e)}
+    gc.collect()
+    if res['status'] == 'ok' and res['message'] == 'SUCCESS':
+        await wws_monitor.send(MessageSegment.image("file:///"+res['img']))
+        os.remove(res['img'])
+    else:
+        if DEBUG:
+            await bot.send_private_msg(user_id=SUPERUSER, message='monitor发生错误'+str(res))
+        else:
+            await wws_monitor.finish()
+        await wws_monitor.finish(Message('呜呜呜，好像哪里坏掉了(该bug已上报,将会及时处理)'))
 
 wws_set = on_startswith({'wws asia set', 'wws eu set', 'wws na set', 'wws ru set', 'wws cn set',
                         'wws 亚服 set', 'wws 欧服 set', 'wws 美服 set', 'wws 俄服 set', 'wws 国服 set', 'wws Asia set', 'wws aisa set'})
@@ -391,7 +409,7 @@ async def rl(bot: Bot, event: Event, state: T_State):
         if DEBUG:
             await bot.send_private_msg(user_id=SUPERUSER, message='set发生错误'+str(res))
         else:
-            await wwsmerankrecent.finish()
+            await wws_set.finish()
         await wws_set.finish(Message('呜呜呜，好像哪里坏掉了(该bug已上报,将会及时处理)'))
 
 
@@ -473,59 +491,6 @@ class update:
                 with open(server_data_path, 'w', encoding='utf-8') as f:
                     f.write(json.dumps(result1, ensure_ascii=False))
                 f.close()
-                # url = 'https://vortex.worldofwarships.asia/api/encyclopedia/en/vehicles/'
-                # res = await client.get(url, timeout=3)
-                # if res.status_code != 200:
-                #     return {'status': 'error', 'data': 'Network Error'}
-                # result = res.json()
-                # new_ship = []
-                # for ship_id, ship_data in result['data'].items():
-                #     if ship_id in self.ship_info_data:
-                #         continue
-                #     else:
-                #         tier = ship_data['level']
-                #         type = ship_data['tags'][0]
-                #         nation = ship_data['nation']
-                #         name = ship_data['name'].split('_')[0]
-                #         name_zh = ship_data['localization']['shortmark']['zh_sg']
-                #         name_en = ship_data['localization']['shortmark']['en']
-                #         png_url = ship_data['icons']['large']
-                #         new_ship.append(name_zh)
-                #         print(name)
-                #         print(name_zh)
-                #         file_png_path = os.path.join(
-                #             png_path, 'wows_ico', 'ship_large', '{}.png'.format(name))
-                #         if os.path.exists(file_png_path) == False:
-                #             img_url = 'https://glossary-wows-global.gcdn.co/icons/'+png_url
-                #             T = requests.get(img_url, timeout=3)
-                #             with open(file_png_path, 'wb') as f:
-                #                 f.write(T.content)
-                #             f.close()
-                #         self.ship_info_data[ship_id] = {
-                #             'tier': tier,
-                #             'type': type,
-                #             'nation': nation,
-                #             'name': name,
-                #             'ship_name': {
-                #                 'zh_sg': name_zh,
-                #                 'en': name_en,
-                #                 'nick': [],
-                #                 'other': []
-                #             }
-                #         }
-                #         self.ship_info_data[ship_id]['ship_name']['other'].append(
-                #             name_zh)
-                #         self.ship_info_data[ship_id]['ship_name']['other'].append(
-                #             name_en)
-                #         if name_zh != self.name_format(name_zh):
-                #             self.ship_info_data[ship_id]['ship_name']['other'].append(
-                #                 self.name_format(name_zh))
-                #         self.ship_info_data[ship_id]['ship_name']['other'].append(
-                #             self.name_format(name_en))
-                #         with open(os.path.join(file_path, 'ship_name.json'), 'w', encoding='utf-8') as f:
-                #             f.write(json.dumps(
-                #                 self.ship_info_data, ensure_ascii=False))
-                #         f.close()
                 return {'status': 'ok'}
             except Exception as e:
                 return {'status': 'error', 'data': str(e)}
@@ -573,6 +538,7 @@ class server_log():
             self.serverlog['hour'][str(add_hour)] = 0
         self.serverlog['day'][day] += 1
         self.serverlog['hour'][str(hour)] += 1
+        self.serverlog['all']['times'] += 1
         with open(os.path.join(file_path, 'server_log.json'), 'w', encoding='utf-8') as f:
             f.write(json.dumps(self.serverlog, ensure_ascii=False))
         f.close()
