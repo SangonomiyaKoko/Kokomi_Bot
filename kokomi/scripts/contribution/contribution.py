@@ -604,6 +604,7 @@ class pic:
         pic_name = str(time.time())
         pic_path = os.path.join(file_path, 'temp', f'{pic_name}.jpg')
         plt.savefig(pic_path, format='jpg')
+        plt.close()
         achieve_img = Image.open(pic_path)
         img.paste(achieve_img, (80, 1687))
         os.remove(pic_path)
