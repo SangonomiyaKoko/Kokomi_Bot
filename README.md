@@ -1,2 +1,2 @@
-# nonebot_plugin_kokomi_v3
+# nonebot_plugin_kokomi
 
