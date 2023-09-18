@@ -206,12 +206,9 @@ AttributeError: module font has no attribute getsize
     <br>
         时间：2023/9/18 12:36
     </br>
+    <style>
+        .text {
+            text-align: right;
+        }
+    </style>
 </h4>
-<style>
-    .text {
-        text-align: right;
-    }
-</style>
-
-
-
