@@ -200,7 +200,7 @@ AttributeError: module font has no attribute getsize
 **如果您觉得Kokomi还不错的话，还请给项目点个小小的star 或者 [投喂](http://www.wows-coral.com/article/Introduction.html#%E8%B5%9E%E5%8A%A9%E9%80%9A%E9%81%93) 以支持服务器每月的开销，谢谢喵~！**
 
 
-<h4 style="text-align:right;">
+<h4 style="text-align:right">
     <br>
         作者：Maoyu          
     </br>
