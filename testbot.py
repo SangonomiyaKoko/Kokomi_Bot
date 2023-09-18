@@ -1,7 +1,7 @@
 import asyncio
 import traceback
 from kokomi_bot.command_select import select_funtion
-from kokomi_bot.scripts.config import BLACKLIST, WHITELIST, FUNCTION_CONFIG
+#from kokomi_bot.scripts.config import BLACKLIST, WHITELIST, FUNCTION_CONFIG
 
 import subprocess
 
@@ -66,12 +66,12 @@ async def main():
         gruop_id = '677135822'
         group_name = 'None'
         group_data = None
-        # 黑名单
-        if gruop_id in BLACKLIST:
-            return
-        # 白名单
-        if gruop_id != None and WHITELIST != [] and gruop_id not in WHITELIST:
-            return
+        # # 黑名单
+        # if gruop_id in BLACKLIST:
+        #     return
+        # # 白名单
+        # if gruop_id != None and WHITELIST != [] and gruop_id not in WHITELIST:
+        #     return
         if gruop_id != None and 'group' in split_msg:
             group_data = user_list
             group_info = [{'group_id': 164933984,
@@ -94,10 +94,10 @@ async def main():
         elif fun['status'] == 'info':
             print('INFO:', fun['message'])
         else:
-            # 判断是否被关闭
-            if FUNCTION_CONFIG[fun['index']][0] != True:
-                print('该功能已关闭')
-                return
+            # # 判断是否被关闭
+            # if FUNCTION_CONFIG[fun['index']][0] != True:
+            #     print('该功能已关闭')
+            #     return
             function = fun['function']
             result = await function(fun['parameter'])
             if result['status'] == 'ok':
