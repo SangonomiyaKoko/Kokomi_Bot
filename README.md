@@ -25,8 +25,6 @@
 
 插件会使用到的模块有: `pillow` (PIL) , `opencv-python` (cv2) , `httpx`
 
-**注意： `pillow` 的版本不能大于等于 `10.0.0` 版本， `9.1.0` ~ `9.5.0` 版本均可**
-
 使用以下的命令可以查看当前 python 环境内已安装的包。
 ```
 pip list
@@ -51,7 +49,7 @@ pip install 模块名==指定版本号
 pip uninstall 模块名
 
 # 示例
-pip install pillow==9.5.0
+pip install pillow
 ```
 当系统中同时存在多个 Python 版本时，可能会存在多个 pip 版本
 
@@ -74,16 +72,36 @@ linux系统字体文件夹:/usr/share/font
 windows系统字体文件夹:C:\Windows\Fonts
 ```
 
-### 1.3 配置文件
+### 1.3 配置token
 
-> token配置文件路径：kokomi_bot_plugin\token.json
 > config配置文件路径：kokomi_bot_plugin\scripts\config.py
 
-1. 将token配置文件中 `kokomi_basic_api` 的 `token` 配置为作者给你的token（没有token请看 [前言](#前言) ）
+1. 在下面的文件路径中，新建一个token.json
 
-2. 将config配置文件中 `PIC_TYPE` 配置为 `file` (测试用)，**测试完记得改回 `base64`**
+```
+-- nonebot_plugin_kokomi/
+    -- json/
+    -- scripts/
+    -- temp/ 
+    -- data_source.py   
+    -- command_select.py
+    -- __init__.py
+    -- token.json  <- 这里
+```
 
-3. 其他配置项保持默认
+2. 用记事本打开文件，复制粘贴下面的json数据
+
+```json
+{
+    "kokomi_basic_api": {
+        "url": "http://www.wows-coral.com:443",
+        "token": "12345"
+    }
+}
+```
+
+3. 将文件中 `kokomi_basic_api` 的 `token` 配置为作者给你的token（没有token请看 [前言](#前言) ）
+
 
 ## 第二步-测试插件
 
@@ -93,9 +111,11 @@ windows系统字体文件夹:C:\Windows\Fonts
 
 2. 将文件放到与 nonebot_plugin_kokomi **同一文件夹**下
 
-3. 将 nonebot_plugin_kokomi 内 `__init__.py` 文件拿出来和 `testbot.py` 放一起，文件结构如下所示
+3. 将config配置文件中 `PIC_TYPE` 配置为 `file` (测试用)，**测试完记得改回 `base64`** (token配置文件路径：kokomi_bot_plugin\token.json)
 
-> 这一步是因为部分用户加载__init__文件会出现ImportError报错的问题
+4. 将 nonebot_plugin_kokomi 内 `__init__.py` 文件拿出来和 `testbot.py` 放一起，文件结构如下所示
+
+> 这一步是因为部分用户直接加载__init__文件会出现ImportError报错的问题
 
 ```
 -- testbot.py
@@ -185,7 +205,7 @@ AttributeError: module font has no attribute getsize
 
 由于每个人使用及启动 `NoneBot2` 的版本或者方式有所不同，具体请参考 `NoneBot2` 官网关于如何加载插件的 [文章](https://nonebot.dev/docs/tutorial/create-plugin)，里面有非常详细且易懂的教程，在此就不过多赘述。
 
-当你做完这一步，Kokomi也就成功运行了，快去群聊里面狠狠的wws me吧！
+当你做完这一步，Kokomi也就成功运行了，快去群聊里面狠狠的wws me recent吧！
 
 > 此外，`NoneBot2` 还有非常多的官方以及第三方现成的插件，可以去官网的 [商店](https://nonebot.dev/store) 下载到这些丰富有趣的插件，来丰富你机器人的功能！
 
@@ -199,7 +219,6 @@ AttributeError: module font has no attribute getsize
 
 **如果您觉得Kokomi还不错的话，还请给项目点个小小的star 或者 [投喂](http://www.wows-coral.com/article/Introduction.html#%E8%B5%9E%E5%8A%A9%E9%80%9A%E9%81%93) 以支持服务器每月的开销，谢谢喵~！**
 
-
 <h4 style="text-align:right;">
     <br>
         作者：Maoyu          
@@ -208,3 +227,4 @@ AttributeError: module font has no attribute getsize
         时间：2023/9/18 12:36
     </br>
 </h4>
+
