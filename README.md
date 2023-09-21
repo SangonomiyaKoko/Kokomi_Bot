@@ -74,8 +74,6 @@ windows系统字体文件夹:C:\Windows\Fonts
 
 ### 1.3 配置token
 
-> config配置文件路径：kokomi_bot_plugin\scripts\config.py
-
 1. 在下面的文件路径中，新建一个token.json
 
 ```
@@ -111,7 +109,7 @@ windows系统字体文件夹:C:\Windows\Fonts
 
 2. 将文件放到与 nonebot_plugin_kokomi **同一文件夹**下
 
-3. 将config配置文件中 `PIC_TYPE` 配置为 `file` (测试用)，**测试完记得改回 `base64`** (token配置文件路径：kokomi_bot_plugin\token.json)
+3. 将config配置文件中 `PIC_TYPE` 配置为 `file` (测试用)，**测试完记得改回 `base64`** (token配置文件路径：kokomi_bot_plugin\scripts\config.py)
 
 4. 将 nonebot_plugin_kokomi 内 `__init__.py` 文件拿出来和 `testbot.py` 放一起，文件结构如下所示
 
