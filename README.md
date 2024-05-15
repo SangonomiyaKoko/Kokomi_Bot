@@ -96,7 +96,14 @@ class Plugin_Config:
     }
     BOT_AUTHOR = 'Powered by Maoyu'
 ```
-需要重点关注的配置是 BOT_PLATFORM 和 RETURN_PIC_TYPE ，请根据实际情况修改，其他默认已配置好
+
+❗❗❗ 需要重点关注的配置是 BOT_PLATFORM 和 RETURN_PIC_TYPE ，请根据实际情况修改，其他默认已配置好
+
+❗❗❗ 需要重点关注的配置是 BOT_PLATFORM 和 RETURN_PIC_TYPE ，请根据实际情况修改，其他默认已配置好
+
+❗❗❗ 需要重点关注的配置是 BOT_PLATFORM 和 RETURN_PIC_TYPE ，请根据实际情况修改，其他默认已配置好
+
+(重要的事情说三遍)
 
 
 ## 第二步-测试插件
