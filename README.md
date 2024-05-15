@@ -1,21 +1,10 @@
-# Kokomi_bot_plugin 部署教程 （V 3.3.0） 
+# Kokomi_bot 部署教程 （V 4.0.0+） 
 
 ## 前言
 
-1. Kokomi 本质是一个**插件**，并不是一个完整的bot，需要依赖 `NoneBot2` 或者相关 `频道SDK` 实现功能
+1. Kokomi 本质是一个**插件**，并不是一个完整的bot，需要依赖 `频道SDK` 实现功能
 
-2. 默认采用作者的公开数据接口，如果您有一定的编程经验且对此有兴趣，也可以找作者获取数据接口&数据库的搭建方法
-
-3. 如果你还没有安装 `NoneBot2` ，请自行搜索教程，相关链接。
-
-    - [Nonebot2官网](https://v2.nonebot.dev/)
-    - [go-cqhttp官网](https://docs.go-cqhttp.org/)
-
-4. 以下教程以 `NoneBot2` 如何配置并加载kokomi插件为例，适配器为 `onebot.v11`。
-
-5. 如果您对python虚拟环境不了解，推荐在nb2创建bot时选择不使用虚拟环境
-
-6. **获取token以及开发者交流群（462447502）**
+2. **开发者交流群（462447502）**
 
 ## 第一步-配置环境
 
@@ -31,12 +20,12 @@ pip list
 ```
 对于没有进行过python开发的小白来说，python是没有自带这几个模块
 
-如果上述需要模块不存在，**在下面进行测试时会自动安装**，您也可以通过手动安装
+如果上述需要模块不存在，您可以通过手动安装
 
 <details>
 <summary>手动安装python包</summary>
 
-特别注意：如果使用了虚拟环境，请在虚拟环境内安装相关模块，需要先进入虚拟环境再安装python包(所以小白不建议使用虚拟环境)
+特别注意：如果使用了虚拟环境，请在虚拟环境内安装相关模块，需要先进入虚拟环境再安装python包(小白不建议使用虚拟环境)
 
 ```
 # 安装指定模块
@@ -72,121 +61,96 @@ linux系统字体文件夹:/usr/share/font
 windows系统字体文件夹:C:\Windows\Fonts
 ```
 
-### 1.3 配置token
+### 1.3 配置token和config
 
-1. 在下面的文件路径中，新建一个token.json
+config文件路径：kokomi_bot_plugin\config.py
 
-```
--- nonebot_plugin_kokomi/
-    -- json/
-    -- scripts/
-    -- temp/ 
-    -- data_source.py   
-    -- command_select.py
-    -- __init__.py
-    -- token.json  <- 这里
-```
+```python
+class Plugin_Config:
+    # 数据接口相关配置，以下数据默认配置已好
+    API_URL = ''
+    API_TYPE = ''
+    API_USERNAME = ''
+    API_PASSWORD = ''
+    # 指令的开头
+    CN_START_WITH = 'wws'
+    EN_START_WITH = '/'
 
-2. 用记事本打开文件，复制粘贴下面的json数据
-
-```json
-{
-    "kokomi_basic_api": {
-        "url": "http://www.wows-coral.com:443",
-        "token": "12345"
+    VERSON = '4.0.2' # 文件版本
+    REQUEST_TIMEOUT = 10 # 接口请求超时时长(s)
+    LOCAL_TIME_ZONE = 8 # 服务器所在时区，8 表示UTC+8
+    RETURN_PIC_TYPE = 'file' # file / base64
+    # 返回图片的格式，qq_bot平台使用base64，其他平台使用file
+    SHOW_DOG_TAG = True # 是否显示用户徽章
+    SHOW_CLAN_TAG = True # 是否显示工会徽章
+    SHOW_SPECIAL_TAG = True
+    SHOW_CUSTOM_TAG = True
+    
+    BOT_PLATFORM = 'qq_bot' #当前支持平台 qq_bot / discord / qq_group / qq_guild，新增平台请联系作者
+    BOT_INFO = {
+        'en':f'Wows-Stats-Bot Kokomi-{VERSON}',
+        'cn':f'Wows-Stats-Bot Kokomi-{VERSON}',
+        'ja':f'Wows-Stats-Bot Kokomi-{VERSON}'
     }
-}
+    BOT_AUTHOR = 'Powered by Maoyu'
 ```
-
-3. 将文件中 `kokomi_basic_api` 的 `token` 配置为作者给你的token（没有token请看 [前言](#前言) ）
+需要重点关注的配置是 BOT_PLATFORM 和 RETURN_PIC_TYPE ，请根据实际情况修改，其他默认已配置好
 
 
 ## 第二步-测试插件
 
 ### 2.1 运行测试文件
 
-1. 下载 [testbot.py](https://github.com/SangonomiyaKoko/nonebot_plugin_kokomi/blob/main/testbot.py) 文件
+1. 下载 [run_bot.py](https://github.com/SangonomiyaKoko/Kokomi_Bot/blob/main/run_bot.py) 文件（对于该文件的原理，在下文会有详细介绍）
 
-2. 将文件放到与 nonebot_plugin_kokomi **同一文件夹**下
+2. 将文件放到与 kokomi_bot **同一文件夹** 下
 
-3. 将config配置文件中 `PIC_TYPE` 配置为 `file` (测试用)，**测试完记得改回 `base64`** (token配置文件路径：kokomi_bot_plugin\scripts\config.py)
+3. 确认文件的第二行的 ```from 文件夹名.command_select ....``` 中的文件夹名和你的文件夹名一致，如不一致会导致找不到文件
 
-4. 将 nonebot_plugin_kokomi 内 `__init__.py` 文件拿出来和 `testbot.py` 放一起，文件结构如下所示
+3. 将config配置文件中 `RETURN_PIC_TYPE` 配置为 `file`  
 
-> 这一步是因为部分用户直接加载__init__文件会出现ImportError报错的问题
+> **`file`表示生成的图片会保存在temp文件夹内，方便查看运行结果，测试完记得修改回你需要的格式**
+
+
 
 ```
--- testbot.py
--- __init__.py
--- nonebot_plugin_kokomi/
-    -- json/
+-- run_bot.py
+-- Kokomi_Bot/
     -- scripts/
     -- temp/ 
-    -- data_source.py   
-    -- command_select.py
+    -- ...
 ```
 
-4. 使用命令窗口（cmd）运行 testbot.py
+4. 使用命令窗口（cmd）运行 run_bot.py
 
 ```
-python testbot.py
+python run_bot.py
 ```
 
-运行后会默认检查环境并安装相应模块
 
 ### 2.2 测试结果
 
-1. 如果返回值为 `ok 发送图片`，并且在图片文件夹（kokomi_bot_plugin\temp）能看到生成的图片，说明插件正常运行
-    - 将上一步移出来的 `__init__.py` 文件放回去，与 `data_source.py` 位于同一文件夹下
-    - 将 **config文件** 中 `PIC_TYPE` 项改为 `base64` (别忘了)
-    - 即可直接跳到 [第三步 - 加载插件](#第三步-加载插件)
+1. 如果返回值为 `PIC 图片文件路径`，并且在图片文件夹（kokomi_bot\temp）能看到生成的战绩图片，说明插件正常运行
 
 2. 如果运行结果报错,请打开错误日志查看错误信息,下面一节将列举了常见的报错及解决办法
 
-> **错误日志文件路径：kokomi_bot_plugin\scripts\log\error.log**
+> **错误日志文件路径：kokomi_bot\log\error**
 
 ### 2.3 报错处理
 <details>
 <summary>常见报错的处理方式</summary>
-1.程序运行返回值为
-
-```json
-{
-    "status": "info", 
-    "message": "当前token不可用，请联系作者申请接口token"
-}
-```
-
-- 解决办法：检查config文件是否正确配置token
-
-2.程序运行返回值为
-
-```json
-{
-    "status": "info", 
-    "message": "数据接口请求失败\\网络请求超时,请稍后重试"
-}
-```
-- 解决办法：检查网络是否正常或者是否使用了VPN软件
-
-
-3.运行提示:
+1.运行提示:
 ```
 ImportError:no module named cv2/pil/httpx
 ```
 - 解决办法：检查 python 环境内是否正确安装了对应的包，如安装过依然报错请检查是否为存在多个 python 版本或nb2使用虚拟环境导致的
 
-4.运行提示：
+2.运行提示：
 ```
 OSError:cannot open resource
 ```
 - 解决办法：系统未安装字体导致，按照 **1.2 安装字体** 操作即可
 
-5.运行提示 `程序内部错误` ,查看错误日志提示为：
-```
-AttributeError: module font has no attribute getsize
-```
-- 解决办法：`pillow` 版本不支持，请更改为 `9.1.0` ~ `9.5.0` 版本
 </details>
 
 
@@ -197,32 +161,141 @@ AttributeError: module font has no attribute getsize
 - **运行报错代码截图**
 - **错误日志截图**
 
-> 没有错误截图我怎么debug
 
-## 第三步-加载插件
+## 第三步-对接社交平台接口
 
-由于每个人使用及启动 `NoneBot2` 的版本或者方式有所不同，具体请参考 `NoneBot2` 官网关于如何加载插件的 [文章](https://nonebot.dev/docs/tutorial/create-plugin)，里面有非常详细且易懂的教程，在此就不过多赘述。
+Kokomi本身的可拓展性很强，可以轻松兼容不同平台的不同接口
 
-当你做完这一步，Kokomi也就成功运行了，快去群聊里面狠狠的wws me recent吧！
+整体逻辑如下
+```
+获取用户发出的消息(msg)，用户id(user_id)，当前平台(platform)
+            ↓
+处理收到的消息，按照空格进行切片得到一个list
+            ↓
+将处理后的消息，用户id和当前平台 作为参数传入 command_select.py 文件中的 select_funtion.main 函数
+            ↓
+根据函数的返回值类型(msg/img)，向用户发送文字消息或者图片消息
+```
 
-> 此外，`NoneBot2` 还有非常多的官方以及第三方现成的插件，可以去官网的 [商店](https://nonebot.dev/store) 下载到这些丰富有趣的插件，来丰富你机器人的功能！
+### 最小实例
 
-## 第四步-自定义图片界面（选读）
+就如我们上面测试时用的文件 run_bot.py
 
-如果你想更改图片的相关界面，请阅读以下 [文章](https://github.com/SangonomiyaKoko/Kokomibot_docs/blob/main/docs/picture.md)
+```
+import asyncio
+from Kokomi_Bot.command_select import select_funtion # 从bot文件中导入接口函数
+
+async def main():
+    result = await select_funtion.main(
+        msg = ['wws','help'],    # 处理切片后的消息
+        user_id = '319720677',   # 用户id
+        user_data = {},
+        platform = 'qq_bot',     # 当前平台
+        platform_id = '123456',
+        channel_id = '123456',
+        platform_data = {}
+    )
+    return_type = result['type']        # 返回消息的类型 msg/img
+    return_data = result[return_type]   # 返回消息的数据
+    print(return_type.upper(),return_data)  # 因为只是测试，所以这里只是简单print出来
+
+asyncio.run(
+    main()
+)
+```
+### 实际演示
+
+接下以Discord平台为例，介绍如何搭建一个KokomiBot
+
+1. 注册一个Discord平台的机器人，获取到你的token
+
+2. (可选)查看Discord平台的[文档](https://discordpy.readthedocs.io/en/latest/quickstart.html)
+
+3. 编写主函数，代码如下
+```python 
+import traceback
+import logging
+import discord    # dc平台sdk
+import os
+from command_select import select_funtion
+from config import Plugin_Config
+
+file_path = os.path.dirname(__file__)
+
+# dc平台相关代码
+intents = discord.Intents.default()
+intents.message_content = True
+client = discord.Client(intents=intents)
+
+
+@client.event
+async def on_ready():
+    print(f'We have logged in as {client.user}')
+
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:    # 防止自己响应自己发的消息
+        return
+    if (
+        message.content.startswith('wws') or  # 检查消息是以wws或者/开头的的指令
+        message.content.startswith('/')
+    ):
+        try:
+            user_id = str(message.author.id)    # 获取用户id
+            gruop_id = None
+            group_name = 'None'
+            group_data = None
+            split_msg = str(message.content).split()  # 将用户发送的消息按照空格切片
+            # 这里请注意，国服玩家id可能带空格，需要特殊处理，此处没写
+            fun = await select_funtion.main(    # 调用bot的入口函数
+                msg=split_msg,
+                user_id=user_id,
+                user_data={},
+                platform=Plugin_Config.BOT_PLATFORM,
+                platform_id='123456',
+                channel_id='123456',
+                platform_data={}
+            )
+            if fun['type'] == 'msg':    # 如果消息类型为msg，则返回文字消息
+                await message.channel.send(fun['msg']) # 发送文字消息
+                return
+            elif fun['type'] == 'img':    # 如果消息类型为img，则返回图片消息
+                await message.channel.send(file=discord.File(fun['img'])) # 发送图片消息
+                os.remove(fun['img'])    # 删除图片
+                return
+        except Exception:
+            logging.error(traceback.format_exc())
+
+client.run('这里填你的token')
+```
+4. 保存并运行，就ok了
+
+### 其他平台
+
+从上述示例中可以看出，想要搭建一个平台所需的接口非常少，你只需要
+
+- 获取用户发送的消息
+- 获取用户的id
+- 发送文字消息的接口
+- 发送图片消息的接口
+
+所以对于其他平台，只需要有这个四个数据或者接口就能兼容Kokomi_Bot
+
+如果你想搭建的平台作者并没有写兼容，可以根据上述描述自己研究！
+
 
 ## 结尾
 
 **很高兴你能看到这里**
 
-**如果您觉得Kokomi还不错的话，还请给项目点个小小的star 或者 [投喂](http://www.wows-coral.com/article/Introduction.html#%E8%B5%9E%E5%8A%A9%E9%80%9A%E9%81%93) 以支持服务器每月的开销，谢谢喵~！**
+**如果您觉得Kokomi还不错的话，还请给项目点个小小的star或者赞助以支持服务器每月的开销，谢谢喵~！**
 
 <h4 style="text-align:right;">
     <br>
         作者：Maoyu          
     </br>
     <br>
-        时间：2023/9/18 12:36
+        时间：2024/5/15 12:36
     </br>
 </h4>
-
