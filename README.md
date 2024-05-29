@@ -300,6 +300,33 @@ client.run('这里填你的token')
 
 **如果您觉得Kokomi还不错的话，还请给项目点个小小的star或者赞助以支持服务器每月的开销，谢谢喵~！**
 
+### 赞助通道
+
+收到的赞助将会用于支持Kokomibot数据服务器的运行
+
+<details>
+<summary>爱发电</summary>
+
+![图片](https://github.com/SangonomiyaKoko/Kokomibot_docs/tree/main/docs/support/afd.jpg "爱发电")
+
+</details>
+
+
+<details>
+<summary>微信</summary>
+
+![图片](https://github.com/SangonomiyaKoko/Kokomibot_docs/tree/main/docs/support/wx.png "微信")
+
+</details>
+
+
+<details>
+<summary>支付宝</summary>
+
+![图片](https://github.com/SangonomiyaKoko/Kokomibot_docs/tree/main/docs/support/zfb.jpg "支付宝")
+
+</details>
+
 <h4 style="text-align:right;">
     <br>
         作者：Maoyu          
