@@ -307,7 +307,7 @@ client.run('这里填你的token')
 <details>
 <summary>爱发电</summary>
 
-![图片，如果打不开可点击跳转查看](https://github.com/SangonomiyaKoko/Kokomibot_docs/tree/main/docs/support/afd.jpg)
+![图片，如果打不开可点击跳转查看](https://github.com/SangonomiyaKoko/Kokomibot_docs/blob/main/docs/support/afd.jpg)
 
 </details>
 
@@ -315,7 +315,7 @@ client.run('这里填你的token')
 <details>
 <summary>微信</summary>
 
-![图片，如果打不开可点击跳转查看](https://github.com/SangonomiyaKoko/Kokomibot_docs/tree/main/docs/support/wx.png)
+![图片，如果打不开可点击跳转查看](https://github.com/SangonomiyaKoko/Kokomibot_docs/blob/main/docs/support/wx.png)
 
 </details>
 
@@ -323,7 +323,7 @@ client.run('这里填你的token')
 <details>
 <summary>支付宝</summary>
 
-![图片，如果打不开可点击跳转查看](https://github.com/SangonomiyaKoko/Kokomibot_docs/tree/main/docs/support/zfb.jpg)
+![图片，如果打不开可点击跳转查看](https://github.com/SangonomiyaKoko/Kokomibot_docs/blob/main/docs/support/zfb.jpg)
 
 </details>
 
