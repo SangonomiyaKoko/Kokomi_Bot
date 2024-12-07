@@ -4,7 +4,7 @@ from logging.handlers import RotatingFileHandler
 
 import colorlog
 
-from scripts.config.setting import LOG_LEVEL, LOG_DIR
+from scripts.config import bot_settings, LOG_DIR
 
 # 日志格式
 # 09-10 20:25:98 [INFO] name | message
@@ -31,7 +31,7 @@ default_formats = {
     'log_format': '%(asctime)s [%(levelname)s] %(name)s | %(message)s'
 }
 
-if LOG_LEVEL == 'debug':
+if bot_settings.LOG_LEVEL == 'debug':
     set_log_level = logging.DEBUG
 else:
     set_log_level = logging.INFO

@@ -1,32 +1,35 @@
-from pathlib import Path
+from pydantic_settings import BaseSettings
+from typing import Literal
 
-# 日志等级
-LOG_LEVEL = 'debug'
-# 定义动态项目根目录
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-# 静态资源路径
-ASSETS_DIR = PROJECT_ROOT / "assets"
-# 代码资源路径
-SCRIPTS_DIR = PROJECT_ROOT / "scripts"
-# 数据资源路径
-ASSETS_DIR = PROJECT_ROOT / "data"
-# 图片输出路径
-OUTPUT_DIR = PROJECT_ROOT / "output"
-# 日志输出路径
-LOG_DIR = PROJECT_ROOT / "log"
 
-class APIConfig:
+class APISettings(BaseSettings):
     # 数据接口指定和默认配置
-    API_URL = 'http://43.134.96.105:8000'
-    API_TYPE = 'Bearer'
-    API_USERNAME = 'user'
-    API_PASSWORD = '123456'
-    REQUEST_TIMEOUT = 10
+    API_URL: str
+    API_TYPE: str
+    API_USERNAME: str
+    API_PASSWORD: str
+    REQUEST_TIMEOUT: int
 
-class BotConfig:
+    class Config:
+        extra = "allow"
+        env_file = ".env"
+        env_file_encoding = "utf-8"
+
+class BotSettings(BaseSettings):
+    # 日志等级
+    LOG_LEVEL: Literal['debug','info']
     # 返回图片的格式，请根据实际需求选择
-    RETURN_PIC_TYPE = 'file'
+    RETURN_PIC_TYPE: Literal['png','webp']
     # 是否显示徽章
-    SHOW_DOG_TAG = True                                                                                              
-    SHOW_CLAN_TAG = True
-    SHOW_CUSTOM_TAG = True
+    SHOW_DOG_TAG: bool                                                         
+    SHOW_CLAN_TAG: bool
+    SHOW_CUSTOM_TAG: bool
+
+    class Config:
+        extra = "allow"
+        env_file = ".env"
+        env_file_encoding = "utf-8"
+
+# 加载配置
+api_settings = APISettings()
+bot_settings = BotSettings()

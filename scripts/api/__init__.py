@@ -1,5 +1,7 @@
 from .basic import BasicAPI
+from .bind import BindAPI
 
 __all__ = [
-    'BasicAPI'
+    'BasicAPI',
+    'BindAPI'
 ]

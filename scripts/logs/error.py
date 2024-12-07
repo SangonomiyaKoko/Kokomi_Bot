@@ -1,7 +1,7 @@
 import os
 import time
 
-from ..config.setting import LOG_DIR
+from scripts.config import LOG_DIR
 
 def write_error_info(
     error_id: str,
