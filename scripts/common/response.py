@@ -9,5 +9,6 @@ class ResponseDict(TypedDict):
     message: str
     data: Optional[Union[Dict, List]]
 
+
 class JSONResponse:
     API_9001_UserNotLinked = {'status': 'ok', 'code': 9001, 'message': 'UserNotLinked', 'data': None}

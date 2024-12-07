@@ -1,15 +1,19 @@
 from scripts.api import BasicAPI, BindAPI
 from scripts.logs import logging
-from scripts.common.version import ReadVersionFile
+from scripts.language import Message
 from scripts.common import (
-    JSONResponse
+    Utils,
+    UserLocal,
+    JSONResponse,
+    ReadVersionFile
 )
 
 
 class KokomiBot:
     async def main(
+        self,
         message: str = None,
-        user: dict = None,
+        user_info: dict = None,
         platform: dict = None
     ):
         '''通过用户输入的参数返回生成的图片
@@ -37,46 +41,82 @@ class KokomiBot:
                 message_list[0] = message_list[0].replace(EN_STARTWITH,'')
             user_bind = await BindAPI.get_user_bind(
                 platform = platform['type'],
-                user = user['id']
+                user = user_info['id']
             )
-            if user_bind['code'] == 1000:
-                # 获取用户绑定信息成功
-                if user_bind['data'] == None:
-                    # 用户没有绑定数据，提示用户绑定数据
-                    user_bind = JSONResponse.API_9001_UserNotLinked
-                bind_data = {
-                    'account_id': None,
-                    'region_id': None,
-                    'language': None,
-                    'algorithm': None
-                }
-                # 如果用户没有绑定，给出默认的language
-                bind_data['language'] = None
-                # 获取用户的图片类型
-                bind_data['pic_type'] = None
-                # TODO: 检查该图片类型是否支持
-                # TODO: 根据用户输入的消息获取对应的函数
-
-                return {
-                    'type': None,
-                    'data': None
-                }
-            else:
+            user_local = UserLocal.get_user_local(
+                platform = platform['type'],
+                user = user_info['id']
+            )
+            default_language = Utils.get_default_language(platform)
+            default_picture = Utils.get_default_picture()
+            if user_bind['code'] != 1000:
                 # 获取用户绑定信息失败
-                ...
+                return self.__process_result(
+                    language = default_language,
+                    picture = default_picture,
+                    result = user_bind
+                )
+            if user_local['code'] != 1000:
+                # 获取用户本地信息失败
+                return self.__process_result(
+                    language = default_language,
+                    picture = default_picture,
+                    result = user_local
+                )
+            # 获取用户绑定信息成功
+            if user_bind['data'] == None:
+                # 用户没有绑定数据，提示用户绑定账号
+                user_bind = JSONResponse.API_9001_UserNotLinked
+                return self.__process_result(
+                    language = default_language,
+                    picture = user_local['data']['picture'],
+                    result = user_bind
+                )
+            else:
+                select_func_dict = {
+                    'cn': None,
+                    'en': None,
+                    'ja': None
+                }
+                select_func = select_func_dict[user_bind['language']]
+                result = select_func(
+                    message = message,
+                    platform = platform,
+                    user_info = user_info,
+                    user_bind = user_bind,
+                    user_local = user_local
+                )
+                return self.__process_result(
+                    language = user_bind['language'],
+                    picture = user_local['data']['picture'],
+                    result = result
+                )
         except:
             pass
 
-    def process_result(result: dict):
+    def __process_result(language: str, result: dict):
         if result['code'] == 1000:
-            # 返回图片
-            ...
+            # 正常结果，返回图片
+            return {
+                'type': 'img',
+                'data': result['dara']['img']
+            }
         elif result['code'] in [2000,3000]:
-            # 返回错误图片
-            ...
+            # 程序报错，返回图片
+            return {
+                'type': 'img',
+                'data': None
+            }
         else:
-            # 返回文字
-            ...
+            # 正常结果，返回文字
+            msg = Message.return_message(
+                language = language,
+                result = result
+            )
+            return {
+                'type': 'msg',
+                'data': msg
+            }
 
 
     async def init_bot():

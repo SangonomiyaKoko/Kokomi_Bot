@@ -1,9 +1,5 @@
-from .cn import LANGUAGE as LANGUAGE_CN
-from .en import LANGUAGE as LANGUAGE_EN
-from .ja import LANGUAGE as LANGUAGE_JA
+from .message import Message
 
 __all__ = [
-    'LANGUAGE_CN',
-    'LANGUAGE_EN',
-    'LANGUAGE_JA'
+    'Message'
 ]
