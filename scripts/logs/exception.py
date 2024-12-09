@@ -45,7 +45,7 @@ class ExceptionLogger:
                     error_args = str(args) + str(kwargs),
                     error_info = traceback.format_exc()
                 )
-                return {'status': 'ok','code': 5000,'message': 'ProgramError','data': {'error_id': error_id}}
+                return {'status': 'error','code': 5000,'message': 'ProgramError','data': {'error_id': error_id}}
         return wrapper
     
     @staticmethod
@@ -64,7 +64,7 @@ class ExceptionLogger:
                     error_args = str(args) + str(kwargs),
                     error_info = traceback.format_exc()
                 )
-                return {'status': 'ok','code': 5000,'message': 'ProgramError','data': {'error_id': error_id}}
+                return {'status': 'error','code': 5000,'message': 'ProgramError','data': {'error_id': error_id}}
         return wrapper
     
     @staticmethod
@@ -83,7 +83,7 @@ class ExceptionLogger:
                     error_args = str(args) + str(kwargs),
                     error_info = f'ERROR_{e.args[0]}\n' + str(e.args[1]) + f'\n{traceback.format_exc()}'
                 )
-                return {'status': 'ok','code': 3001,'message': 'DatabaseError','data': {'error_id': error_id}}
+                return {'status': 'error','code': 3001,'message': 'DatabaseError','data': {'error_id': error_id}}
             except sqlite3.OperationalError as e:
                 error_id = generate_error_id()
                 write_error_info(
@@ -93,7 +93,7 @@ class ExceptionLogger:
                     error_args = str(args) + str(kwargs),
                     error_info = f'ERROR_{e.args[0]}\n' + str(e.args[1]) + f'\n{traceback.format_exc()}'
                 )
-                return {'status': 'ok','code': 3002,'message': 'DatabaseError','data': {'error_id': error_id}}
+                return {'status': 'error','code': 3002,'message': 'DatabaseError','data': {'error_id': error_id}}
             except sqlite3.IntegrityError as e:
                 error_id = generate_error_id()
                 write_error_info(
@@ -103,7 +103,7 @@ class ExceptionLogger:
                     error_args = str(args) + str(kwargs),
                     error_info = f'ERROR_{e.args[0]}\n' + str(e.args[1]) + f'\n{traceback.format_exc()}'
                 )
-                return {'status': 'ok','code': 3003,'message': 'DatabaseError','data': {'error_id': error_id}}
+                return {'status': 'error','code': 3003,'message': 'DatabaseError','data': {'error_id': error_id}}
             except sqlite3.DatabaseError as e:
                 error_id = generate_error_id()
                 write_error_info(
@@ -113,7 +113,7 @@ class ExceptionLogger:
                     error_args = str(args) + str(kwargs),
                     error_info = f'ERROR_{e.args[0]}\n' + str(e.args[1]) + f'\n{traceback.format_exc()}'
                 )
-                return {'status': 'ok','code': 3000,'message': 'DatabaseError','data': {'error_id': error_id}}
+                return {'status': 'error','code': 3000,'message': 'DatabaseError','data': {'error_id': error_id}}
             except Exception as e:
                 error_id = generate_error_id()
                 write_error_info(
@@ -122,7 +122,7 @@ class ExceptionLogger:
                     error_name = str(type(e).__name__),
                     error_info = traceback.format_exc()
                 )
-                return {'status': 'ok','code': 5000,'message': 'ProgramError','data': {'error_id': error_id}}
+                return {'status': 'error','code': 5000,'message': 'ProgramError','data': {'error_id': error_id}}
         return wrapper
     
     @staticmethod
@@ -140,7 +140,7 @@ class ExceptionLogger:
                     error_name = NerworkExceptionName.connect_timeout,
                     error_args = str(args) + str(kwargs)
                 )
-                return {'status': 'ok','code': 2001,'message': 'NetworkError','data': {'error_id': error_id}}
+                return {'status': 'error','code': 2001,'message': 'NetworkError','data': {'error_id': error_id}}
             except httpx.ReadTimeout:
                 error_id = generate_error_id()
                 write_error_info(
@@ -149,7 +149,7 @@ class ExceptionLogger:
                     error_name = NerworkExceptionName.read_timeout,
                     error_args = str(args) + str(kwargs)
                 )
-                return {'status': 'ok','code': 2002,'message': 'NetworkError','data': {'error_id': error_id}}
+                return {'status': 'error','code': 2002,'message': 'NetworkError','data': {'error_id': error_id}}
             except httpx.TimeoutException:
                 error_id = generate_error_id()
                 write_error_info(
@@ -158,7 +158,7 @@ class ExceptionLogger:
                     error_name = NerworkExceptionName.request_timeout,
                     error_args = str(args) + str(kwargs)
                 )
-                return {'status': 'ok','code': 2003,'message': 'NetworkError','data': {'error_id': error_id}}
+                return {'status': 'error','code': 2003,'message': 'NetworkError','data': {'error_id': error_id}}
             except httpx.ConnectError:
                 error_id = generate_error_id()
                 write_error_info(
@@ -167,7 +167,7 @@ class ExceptionLogger:
                     error_name = NerworkExceptionName.connect_error,
                     error_args = str(args) + str(kwargs)
                 )
-                return {'status': 'ok','code': 2004,'message': 'NetworkError','data': {'error_id': error_id}}
+                return {'status': 'error','code': 2004,'message': 'NetworkError','data': {'error_id': error_id}}
             except httpx.ReadError:
                 error_id = generate_error_id()
                 write_error_info(
@@ -176,7 +176,7 @@ class ExceptionLogger:
                     error_name = NerworkExceptionName.read_error,
                     error_args = str(args) + str(kwargs)
                 )
-                return {'status': 'ok','code': 2005,'message': 'NetworkError','data': {'error_id': error_id}}
+                return {'status': 'error','code': 2005,'message': 'NetworkError','data': {'error_id': error_id}}
             except httpx.HTTPStatusError as e:
                 error_id = generate_error_id()
                 write_error_info(
@@ -186,7 +186,7 @@ class ExceptionLogger:
                     error_args = str(args) + str(kwargs),
                     error_info = f'StatusCode: {e.response.status_code}'
                 )
-                return {'status': 'ok','code': 2000,'message': 'NetworkError','data': {'error_id': error_id}}
+                return {'status': 'error','code': 2000,'message': 'NetworkError','data': {'error_id': error_id}}
             except Exception as e:
                 error_id = generate_error_id()
                 write_error_info(
@@ -196,6 +196,6 @@ class ExceptionLogger:
                     error_args = str(args) + str(kwargs),
                     error_info = traceback.format_exc()
                 )
-                return {'status': 'ok','code': 5000,'message': 'ProgramError','data': {'error_id': error_id}}
+                return {'status': 'error','code': 5000,'message': 'ProgramError','data': {'error_id': error_id}}
         return wrapper
     

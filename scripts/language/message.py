@@ -1,7 +1,7 @@
 from scripts.common import ResponseDict
-from .cn import LANGUAGE as LANGUAGE_CN
-from .en import LANGUAGE as LANGUAGE_EN
-from .ja import LANGUAGE as LANGUAGE_JA
+from .result.cn import LANGUAGE as LANGUAGE_CN
+from .result.en import LANGUAGE as LANGUAGE_EN
+from .result.ja import LANGUAGE as LANGUAGE_JA
 
 class Message:
     def return_message(language: str, result: ResponseDict) -> str:

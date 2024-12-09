@@ -29,6 +29,19 @@ class Box_Data:
 
 
 class Picture:
+    def hex_to_rgb(hex_color: str ,alpha:int = None) -> str:
+        "16进制颜色转rgb颜色"
+        if alpha:
+            r = int(hex_color[1:3], 16)
+            g = int(hex_color[3:5], 16)
+            b = int(hex_color[5:7], 16)
+            return (r, g, b, alpha)
+        else:
+            r = int(hex_color[1:3], 16)
+            g = int(hex_color[3:5], 16)
+            b = int(hex_color[5:7], 16)
+            return (r, g, b)
+    
     def x_coord(in_str: str, font: ImageFont.FreeTypeFont) -> float:
         # x = font.getsize(in_str)[0]
         x = font.getlength(in_str)

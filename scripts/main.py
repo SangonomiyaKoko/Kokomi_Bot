@@ -1,6 +1,8 @@
-from scripts.api import BasicAPI, BindAPI
+from scripts.api import BindAPI
 from scripts.logs import logging
 from scripts.language import Message
+from scripts.select_func import SelectFunc
+from scripts.schemas import UserInfoDict, PlatformDict
 from scripts.common import (
     Utils,
     UserLocal,
@@ -12,9 +14,9 @@ from scripts.common import (
 class KokomiBot:
     async def main(
         self,
-        message: str = None,
-        user_info: dict = None,
-        platform: dict = None
+        message: str,
+        user_info: UserInfoDict,
+        platform: PlatformDict
     ):
         '''通过用户输入的参数返回生成的图片
 
@@ -27,85 +29,118 @@ class KokomiBot:
             type: 返回的数据的格式img/msg
             data: 返回数据的内容
         '''
-        try:
-            # 用户输入的消息按照空格切割成list
-            message_list = message.split(' ')
-            # 删除触发词
-            CN_STARTWITH = 'wws'
-            EN_STARTWITH = '/'
-            if message_list[0] == CN_STARTWITH:
-                del message_list[0]
-            if EN_STARTWITH == message_list[0]:
-                del message_list[0]
-            if EN_STARTWITH in message_list[0]:
-                message_list[0] = message_list[0].replace(EN_STARTWITH,'')
-            user_bind = await BindAPI.get_user_bind(
-                platform = platform['type'],
-                user = user_info['id']
+        default_language = Utils.get_default_language(platform)
+        default_picture = Utils.get_default_picture()
+        logging.debug(f"Receive a message from {platform['type']}-{user_info['id']}")
+        # 用户输入的消息按照空格切割成list
+        message_list = message.split(' ')
+        # 删除触发词
+        CN_STARTWITH = 'wws'
+        EN_STARTWITH = '/'
+        if message_list[0] == CN_STARTWITH:
+            del message_list[0]
+        if EN_STARTWITH == message_list[0]:
+            del message_list[0]
+        if EN_STARTWITH in message_list[0]:
+            message_list[0] = message_list[0].replace(EN_STARTWITH,'')
+        # user_bind = await BindAPI.get_user_bind(
+        #     platform = platform['type'],
+        #     user = user_info['id']
+        # )
+        user_bind = {
+            'status': 'ok',
+            'code': 1000,
+            'message': 'SUccess',
+            'data': {
+                'region_id': 1,
+                'account_id': 2023619512,
+                'language': 'cn',
+                'algorithm': 'pr'
+            }
+        }
+        # user_local = UserLocal.get_user_local(
+        #     platform = platform['type'],
+        #     user = user_info['id']
+        # )
+        user_local = {
+            'status': 'ok',
+            'code': 1000,
+            'message': 'SUccess',
+            'data': {
+                'background': '#F8F9FB',
+                'content': 'light',
+                'theme': 'default'
+            }
+        }
+        if user_bind['code'] != 1000:
+            # 获取用户绑定信息失败
+            return self.__process_result(
+                language = default_language,
+                picture = default_picture,
+                result = user_bind
             )
-            user_local = UserLocal.get_user_local(
-                platform = platform['type'],
-                user = user_info['id']
+        if user_local['code'] != 1000:
+            # 获取用户本地信息失败
+            return self.__process_result(
+                language = default_language,
+                picture = default_picture,
+                result = user_local
             )
-            default_language = Utils.get_default_language(platform)
-            default_picture = Utils.get_default_picture()
-            if user_bind['code'] != 1000:
-                # 获取用户绑定信息失败
-                return self.__process_result(
-                    language = default_language,
-                    picture = default_picture,
-                    result = user_bind
-                )
-            if user_local['code'] != 1000:
-                # 获取用户本地信息失败
-                return self.__process_result(
-                    language = default_language,
-                    picture = default_picture,
-                    result = user_local
-                )
-            # 获取用户绑定信息成功
-            if user_bind['data'] == None:
-                # 用户没有绑定数据，提示用户绑定账号
-                user_bind = JSONResponse.API_9001_UserNotLinked
-                return self.__process_result(
-                    language = default_language,
-                    picture = user_local['data']['picture'],
-                    result = user_bind
-                )
-            else:
-                select_func_dict = {
-                    'cn': None,
-                    'en': None,
-                    'ja': None
-                }
-                select_func = select_func_dict[user_bind['language']]
-                result = select_func(
-                    message = message,
-                    platform = platform,
-                    user_info = user_info,
-                    user_bind = user_bind,
-                    user_local = user_local
-                )
-                return self.__process_result(
-                    language = user_bind['language'],
-                    picture = user_local['data']['picture'],
-                    result = result
-                )
-        except:
-            pass
+        # 获取用户绑定信息成功
+        if user_bind['data'] == None:
+            # 用户没有绑定数据，提示用户绑定账号
+            user_bind = JSONResponse.API_9001_UserNotLinked
+            return self.__process_result(
+                language = default_language,
+                picture = default_picture,
+                result = user_bind
+            )
+        select_func_dict = {
+            'cn': SelectFunc.main,
+            'en': SelectFunc.main,
+            'ja': SelectFunc.main
+        }
+        select_func = select_func_dict[user_bind['language']]
+        select_result = select_func(
+            message = message,
+            platform = platform,
+            user_info = user_info,
+            user_bind = user_bind['data'],
+            user_local = user_local['data']
+        )
+        if select_result:
+            generate_func = select_result['callback_func']
+            generate_result = generate_func(
+                platform = platform,
+                user_info = user_info,
+                user_bind = user_bind['data'],
+                user_local = user_local['data']
+                **select_result['extra_kwargs']
+            )
+            return self.__process_result(
+                language = user_bind['language'],
+                picture = user_local['data']['picture'],
+                result = generate_result
+            )
+        else:
+            return self.__process_result(
+                language = user_bind['language'],
+                picture = user_local['data']['picture'],
+                result = JSONResponse.API_9002_FuncNotFound
+            )
 
-    def __process_result(language: str, result: dict):
-        if result['code'] == 1000:
+    def __process_result(language: str, picture: dict, result: dict):
+        if result['status'] == 'error':
+            # 程序报错，返回图片
+            return {
+                'type': 'img',
+                'data': result['message']
+            }
+        elif result['code'] == 1000:
             # 正常结果，返回图片
             return {
                 'type': 'img',
                 'data': result['dara']['img']
-            }
-        elif result['code'] in [2000,3000]:
-            # 程序报错，返回图片
-            return {
-                'type': 'img',
-                'data': None
             }
         else:
             # 正常结果，返回文字

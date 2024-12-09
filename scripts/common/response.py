@@ -12,3 +12,4 @@ class ResponseDict(TypedDict):
 
 class JSONResponse:
     API_9001_UserNotLinked = {'status': 'ok', 'code': 9001, 'message': 'UserNotLinked', 'data': None}
+    API_9002_FuncNotFound = {'status': 'ok', 'code': 9002, 'message': 'FuncNotFound', 'data': None}
