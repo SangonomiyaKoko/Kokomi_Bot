@@ -2,14 +2,21 @@ class ContentLanguage:
     UserClan = 'User\'s Clan'
     Createdat = 'Created at'
     DataType = ''
-    RatingText_0 = 'Unknow'
-    RatingText_1 = 'Improvement Needed'
-    RatingText_2 = 'Below Average'
-    RatingText_3 = 'Average'
-    RatingText_4 = 'Good'
-    RatingText_5 = 'Very Good'
-    RatingText_6 = 'Great'
-    RatingText_7 = 'Unicum'
-    RatingText_8 = 'Super Unicum'
     RatingNextText_1 = 'Next level'
     RatingNextText_2 = 'Out of top rating'
+    
+    def get_rating_text(rating_class: int, return_len: bool = False) -> str | tuple:
+        rating_text_list = [
+            'Unknow','Improvement Needed','Below Average',
+            'Average','Good','Very Good','Great','Unicum',
+            'Super Unicum','Super Ultra Unicum'
+        ]
+        rating_len_list = [
+            425,910,660,420,
+            300,500,330,410,
+            630,825
+        ]
+        if return_len:
+            return rating_text_list[rating_class], rating_len_list[rating_class]
+        else:
+            return rating_text_list[rating_class]

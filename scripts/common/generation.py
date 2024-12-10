@@ -1,4 +1,10 @@
+import os
+import time
+
 from PIL import Image, ImageFont, ImageDraw
+
+from scripts.config import OUTPUT_DIR
+from .fonts import font_manager
 
 fonts = None
 
@@ -42,6 +48,21 @@ class Picture:
             b = int(hex_color[5:7], 16)
             return (r, g, b)
     
+    def return_img(img: Image.Image) -> str:
+        try:
+            file_name = os.path.join(OUTPUT_DIR, str(time.time()*1000) + '.png')
+            img.save(file_name)
+            return {
+                'status': 'ok',
+                'code': 1000,
+                'message': 'Success',
+                'data': {
+                    'img': file_name
+                }
+            }
+        finally:
+            del img
+    
     def x_coord(in_str: str, font: ImageFont.FreeTypeFont) -> float:
         # x = font.getsize(in_str)[0]
         x = font.getlength(in_str)
@@ -72,7 +93,7 @@ class Picture:
         draw = ImageDraw.Draw(res_img)
         for index in text_list:
             index: Text_Data
-            fontStyle = fonts.data[index.font_index][index.font_size]
+            fontStyle = font_manager.get_font(index.font_index, index.font_size)
             draw.text(
                 xy=index.xy,
                 text=index.text,

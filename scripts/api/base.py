@@ -15,6 +15,7 @@ class BaseAPI:
         headers = {
             'accept': 'application/json'
         }
+        print(url)
         async with httpx.AsyncClient() as client:
             res = await client.get(
                 url=url, 

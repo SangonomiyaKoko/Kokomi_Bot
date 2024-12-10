@@ -26,6 +26,7 @@ class UserOverallDict(TypedDict):
     win_rate: str
     avg_damage: str
     avg_frags: str
+    avg_exp: str
     rating: str
     rating_class: int
     rating_next: int

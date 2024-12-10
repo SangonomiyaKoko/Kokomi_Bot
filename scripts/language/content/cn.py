@@ -9,8 +9,14 @@ class ContentLanguage:
         rating_text_list = [
             '水平未知','还需努力','低于平均',
             '平均水平','好','很好','非常好',
-            '大佬平均','神佬平均'
+            '大佬平均','神佬平均','战舰仙人'
         ]
         rating_len_list = [
-            425, 910
+            430, 430, 430, 430,
+            210, 280, 355, 430,
+            430, 430
         ]
+        if return_len:
+            return rating_text_list[rating_class], rating_len_list[rating_class]
+        else:
+            return rating_text_list[rating_class]

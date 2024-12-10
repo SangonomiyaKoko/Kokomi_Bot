@@ -1,11 +1,23 @@
+import os
+
 from PIL import ImageFont
 
-class FontManager:
-    def __init__(self, font_path: str):
-        self.font_path = font_path
-        self.font_cache = {}
+from scripts.config import ASSETS_DIR
 
-    def get_font(self, size: int) -> ImageFont.FreeTypeFont:
-        if size not in self.font_cache:
-            self.font_cache[size] = ImageFont.truetype(self.font_path, size)
-        return self.font_cache[size]
+class FontManager:
+    def __init__(self):
+        self.font_path = {
+            1: os.path.join(ASSETS_DIR, 'fonts', 'SHSCN.ttf'),
+            2: os.path.join(ASSETS_DIR, 'fonts', 'NZBZ.ttf')
+        }
+        self.font_cache = {
+            1: {},
+            2: {}
+        }
+
+    def get_font(self, index: int, size: int) -> ImageFont.FreeTypeFont:
+        if size not in self.font_cache[index]:
+            self.font_cache[index][size] = ImageFont.truetype(self.font_path[index], size)
+        return self.font_cache[index][size]
+
+font_manager = FontManager()

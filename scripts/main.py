@@ -31,7 +31,7 @@ class KokomiBot:
         '''
         default_language = Utils.get_default_language(platform)
         default_picture = Utils.get_default_picture()
-        logging.debug(f"Receive a message from {platform['type']}-{user_info['id']}")
+        logging.debug(f"Receive a message from {platform['type']}-{user_info['id']} [{message}]")
         # 用户输入的消息按照空格切割成list
         message_list = message.split(' ')
         # 删除触发词
@@ -54,7 +54,7 @@ class KokomiBot:
             'data': {
                 'region_id': 1,
                 'account_id': 2023619512,
-                'language': 'cn',
+                'language': 'ja',
                 'algorithm': 'pr'
             }
         }
@@ -67,8 +67,8 @@ class KokomiBot:
             'code': 1000,
             'message': 'SUccess',
             'data': {
-                'background': '#F8F9FB',
-                'content': 'light',
+                'background': '#313131',
+                'content': 'dark',
                 'theme': 'default'
             }
         }
@@ -100,31 +100,26 @@ class KokomiBot:
             'en': SelectFunc.main,
             'ja': SelectFunc.main
         }
-        select_func = select_func_dict[user_bind['language']]
-        select_result = select_func(
-            message = message,
-            platform = platform,
-            user_info = user_info,
-            user_bind = user_bind['data'],
-            user_local = user_local['data']
-        )
+        select_func = select_func_dict[user_bind['data']['language']]
+        select_result = select_func(message_list = message_list)
         if select_result:
             generate_func = select_result['callback_func']
-            generate_result = generate_func(
+            generate_result = await generate_func(
                 platform = platform,
                 user_info = user_info,
                 user_bind = user_bind['data'],
-                user_local = user_local['data']
+                user_local = user_local['data'],
                 **select_result['extra_kwargs']
             )
+            logging.debug(str(generate_result))
             return self.__process_result(
-                language = user_bind['language'],
-                picture = user_local['data']['picture'],
+                language = user_bind['data']['language'],
+                picture = user_local['data'],
                 result = generate_result
             )
         else:
             return self.__process_result(
-                language = user_bind['language'],
+                language = user_bind['data']['language'],
                 picture = user_local['data']['picture'],
                 result = JSONResponse.API_9002_FuncNotFound
             )

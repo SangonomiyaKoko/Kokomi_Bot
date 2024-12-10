@@ -12,7 +12,6 @@ def write_error_info(
 ):
     now_day = time.strftime("%Y-%m-%d", time.localtime(time.time()))
     form_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time())))
-
     with open(os.path.join(LOG_DIR, f'{now_day}.txt'), "a", encoding="utf-8") as f:
         f.write('-------------------------------------------------------------------------------------------------------------\n')
         f.write(f">Platform:     API\n")

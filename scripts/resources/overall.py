@@ -4,10 +4,12 @@ from PIL import Image
 from typing_extensions import TypedDict
 
 from scripts.config import ASSETS_DIR, bot_settings
+from scripts.common import font_manager
+from scripts.logs import logging
 from scripts.api import BaseAPI
 from scripts.logs import ExceptionLogger
 from scripts.language import ContentText_CN, ContentText_EN, ContentText_JA
-from scripts.common import Text_Data, Box_Data, Picture, Utils
+from scripts.common import Text_Data, Box_Data, Picture, Utils, GameData, ThemeTextColor
 from scripts.schemas import (
     PlatformDict, UserInfoDict, UserBindDict, UserLocalDict,
     UserBasicDict, UserClanDict, UserOverallDict,
@@ -16,12 +18,15 @@ from scripts.schemas import (
 
 
 class OverallDict(TypedDict):
-    user: UserBasicDict
-    clan: UserClanDict
     overall: UserOverallDict
     battle_type: ResultBattleTypeDict
     ship_type: ResultShipTypeDict
     chart_data: dict
+
+class UserBaseResult(TypedDict):
+    user: UserBasicDict
+    clan: UserClanDict
+    statistics: OverallDict
 
 
 @ExceptionLogger.handle_program_exception_async
@@ -44,7 +49,10 @@ async def main(
         path=path,
         params=params
     )
-    if result['code'] != 1000:
+    if result['code'] == 1000:
+        logging.debug("接口请求成功")
+    else:
+        logging.debug(f"接口请求时报,Error: {result['message']}")
         return result
     res_img = get_png(
         result=result['data'],
@@ -57,9 +65,8 @@ async def main(
     del res_img
     return result
 
-
 def get_png(
-    result: OverallDict,
+    result: UserBaseResult,
     platform: PlatformDict,
     user_info: UserInfoDict,
     user_bind: UserBindDict,
@@ -68,7 +75,7 @@ def get_png(
     # 画布宽度和高度
     width, height = 2428, 3350
     # 背景颜色（RGB）
-    background_color = Picture.hex_to_rgb(user_local['background'], 100) # 红色
+    background_color = Picture.hex_to_rgb(user_local['background'], 0)
     # 创建画布
     canvas = Image.new("RGBA", (width, height), background_color)
     # TODO: 叠加主题背景
@@ -81,14 +88,25 @@ def get_png(
     
     res_img = canvas
     del canvas
-    # 叠加 文字/矩形
+    # 获取语言对应的文本文字
+    if user_bind['language'] == 'cn':
+        content_text = ContentText_CN
+    elif user_bind['language'] == 'en':
+        content_text = ContentText_EN
+    elif user_bind['language'] == 'ja':
+        content_text = ContentText_JA
+    else:
+        raise ValueError("Invaild language.")
+    # 获取不同主题的文字颜色
+    theme_text_color = ThemeTextColor(user_local['content'])
+    # 需要叠加的 文字/矩形
     text_list = []
     box_list = []
     text_list.append(
         Text_Data(
             xy=(172, 161),
             text=result['user']['name'],
-            fill=(0, 0, 0),
+            fill=theme_text_color.TextThemeColor2,
             font_index=1,
             font_size=100
         )
@@ -103,54 +121,39 @@ def get_png(
             font_size=45
         )
     )
-    fontStyle = fonts.data[1][55]
-    if result['data']['clans']['clan_tag'] != 'None':
-        tag = '['+str(result['data']['clans']['clan_tag'])+']'
+    fontStyle = font_manager.get_font(1,55)
+    if result['clan']['id'] != None:
+        tag = '['+str(result['clan']['tag'])+']'
     else:
-        tag = str(result['data']['clans']['clan_tag'])
-    tag_color = Picture.hex_to_rgb(result['data']['clans']['clan_color'])
-    header_dict = {
-        'cn': [
-            {'title': ContentText_CN.UserClan + ':', 'left': 169, 'top': 358},
-            {'title': ContentText_CN.Createdat + ':', 'left': 169, 'top': 448}
-        ],
-        'en': [
-            {'title': ContentText_EN.UserClan + ':', 'left': 169, 'top': 358},
-            {'title': ContentText_EN.Createdat + ':', 'left': 169, 'top': 448}
-        ],
-        'ja': [
-            {'title': ContentText_JA.UserClan + ':', 'left': 169, 'top': 358},
-            {'title': ContentText_JA.Createdat + ':', 'left': 169, 'top': 448}
-        ]
-    }
-    header_data = header_dict[user_bind['language']]
-    text_1 = header_data[0]['title']
+        tag = 'None'
+    clan_league_color = GameData.clan_league_color.get(result['clan']['league'])
+    text_1 = content_text.UserClan + ':'
     w_1 = Picture.x_coord(text_1, fontStyle)
     text_list.append(
         Text_Data(
-            xy=(header_data[0]['left'], header_data[0]['top']),
+            xy=(169, 358),
             text=text_1,
-            fill=(72, 72, 72),
+            fill=theme_text_color.TextThemeColor3,
             font_index=1,
             font_size=55
         )
     )
     text_list.append(
         Text_Data(
-            xy=(header_data[0]['left']+w_1+30, header_data[0]['top']),
+            xy=(169+w_1+30, 358),
             text=tag,
-            fill=tag_color,
+            fill=clan_league_color,
             font_index=1,
             font_size=55
         )
     )
-    text_2 = header_data[1]['title']
+    text_2 = content_text.Createdat + ':'
     w_2 = Picture.x_coord(text_2, fontStyle)
     text_list.append(
         Text_Data(
-            xy=(header_data[1]['left'], header_data[1]['top']),
+            xy=(169, 448),
             text=text_2,
-            fill=(72, 72, 72),
+            fill=theme_text_color.TextThemeColor3,
             font_index=1,
             font_size=55
         )
@@ -158,14 +161,14 @@ def get_png(
     creat_time = time.strftime("%Y-%m-%d", time.localtime(result['user']['crated_at']))
     text_list.append(
         Text_Data(
-            xy=(header_data[1]['left']+w_2+30, header_data[1]['top']),
+            xy=(169+w_2+30, 448),
             text=creat_time,
-            fill=(0,0,0),
+            fill=theme_text_color.TextThemeColor2,
             font_index=1,
             font_size=55
         )
     )
-    rating_class = result['overall']['rating_class']
+    rating_class = result['statistics']['overall']['rating_class']
     rating_png_path = os.path.join(ASSETS_DIR, r'content\rating\pr', user_bind['language'], '{}.png'.format(rating_class))
     rating_png = Image.open(rating_png_path)
     res_img.paste(rating_png, (132, 627))
@@ -176,36 +179,23 @@ def get_png(
         else:
             # TODO: 叠加徽章
             pass
-    rating_dict = {
-        'cn': [
-            {'text': ContentText_CN.RatingNextText_1 + ':    +'},
-            {'text': ContentText_CN.RatingNextText_2 + ':    +'}
-        ],
-        'en': [
-            {'text': ContentText_EN.RatingNextText_1 + ':    +'},
-            {'text': ContentText_EN.RatingNextText_2 + ':    +'}
-        ],
-        'ja': [
-            {'text': ContentText_JA.RatingNextText_1 + ':    +'},
-            {'text': ContentText_JA.RatingNextText_2 + ':    +'}
-        ]
-    }
-    fontStyle = fonts.data[1][35]
-    if result['overall']['rating_class'] == 9:
-        rating_next_text = rating_dict[user_bind['language']][1] + str(result['overall']['rating_next'])
+    fontStyle = font_manager.get_font(1,35)
+    if result['statistics']['overall']['rating_class'] == 9:
+        rating_next_text = content_text.RatingNextText_2 + ':    +' + str(result['statistics']['overall']['rating_next'])
     else:
-        rating_next_text = rating_dict[user_bind['language']][0] + str(result['overall']['rating_next'])
+        rating_next_text = content_text.RatingNextText_1 + ':    +' + str(result['statistics']['overall']['rating_next'])
+    _, rating_next_len = content_text.get_rating_text(result['statistics']['overall']['rating_class'], True)
     text_list.append(
         Text_Data(
-            xy=(132+ss+10, 690),
+            xy=(132+rating_next_len+10, 690),
             text=rating_next_text,
             fill=(255, 255, 255),
             font_index=1,
             font_size=35
         )
     )
-    str_pr = '{:,}'.format(result['data']['pr']['avg_pr'])
-    fontStyle = fonts.data[1][80]
+    str_pr = result['statistics']['overall']['rating']
+    fontStyle = font_manager.get_font(1,80)
     w = Picture.x_coord(str_pr, fontStyle)
     text_list.append(
         Text_Data(
@@ -216,10 +206,9 @@ def get_png(
             font_size=80
         )
     )
-    index = result['data']['pr']['battle_type'].upper()
     x0 = 324
     y0 = 860
-    temp_data = result['data']['pr']
+    temp_data: UserOverallDict = result['statistics']['overall']
     battles_count = temp_data['battles_count']
     avg_win = temp_data['win_rate']
     avg_damage = temp_data['avg_damage']
@@ -229,13 +218,12 @@ def get_png(
     avg_damage_color = Picture.hex_to_rgb(temp_data['avg_damage_color'])
     avg_frags_color = Picture.hex_to_rgb(temp_data['avg_frags_color'])
 
-    fontStyle = fonts.data[1][80]
     w = Picture.x_coord(battles_count, fontStyle)
     text_list.append(
         Text_Data(
             xy=(x0+446*0-w/2, y0),
             text=battles_count,
-            fill=(0, 0, 0),
+            fill=theme_text_color.TextThemeColor2,
             font_index=1,
             font_size=80
         )
@@ -275,7 +263,7 @@ def get_png(
         Text_Data(
             xy=(x0+446*4-w/2, y0),
             text=avg_xp,
-            fill=(0, 0, 0),
+            fill=theme_text_color.TextThemeColor2,
             font_index=1,
             font_size=80
         )
@@ -284,7 +272,7 @@ def get_png(
     for index in ['pvp_solo', 'pvp_div2', 'pvp_div3', 'rank_solo']:
         x0 = 0
         y0 = 1258
-        temp_data = result['data']['battle_type'][index]
+        temp_data: UserOverallDict = result['statistics']['battle_type'][index]
         battles_count = temp_data['battles_count']
         avg_win = temp_data['win_rate']
         avg_damage = temp_data['avg_damage']
@@ -293,23 +281,22 @@ def get_png(
         win_rate_color = Picture.hex_to_rgb(temp_data['win_rate_color'])
         avg_damage_color = Picture.hex_to_rgb(temp_data['avg_damage_color'])
         avg_frags_color = Picture.hex_to_rgb(temp_data['avg_frags_color'])
-        avg_pr_color = Picture.hex_to_rgb(temp_data['avg_pr_color'])
-        if temp_data['avg_pr_des'] == '-':
+        avg_pr_color = Picture.hex_to_rgb(temp_data['rating_color'])
+        rating_text = content_text.get_rating_text(temp_data['rating_class'])
+        if temp_data['rating'] == '-2':
             str_pr = '-'
         else:
-            if lang == 'cn':
-                str_pr = temp_data['avg_pr_des'] + '(+'+str(temp_data['avg_pr_dis'])+')'
-            elif lang == 'en':
-                str_pr = '■ '+str(int(temp_data['avg_pr']))
-            elif lang == 'ja':
-                str_pr = '■ '+str(int(temp_data['avg_pr']))
-        fontStyle = fonts.data[1][55]
+            if user_bind['language'] == 'cn':
+                str_pr = rating_text + '(+'+str(temp_data['rating_next'])+')'
+            else:
+                str_pr = '■ ' + temp_data['rating']
+        fontStyle = font_manager.get_font(1,55)
         w = Picture.x_coord(battles_count, fontStyle)
         text_list.append(
             Text_Data(
                 xy=(588-w/2+x0, y0+90*i),
                 text=battles_count,
-                fill=(0, 0, 0),
+                fill=theme_text_color.TextThemeColor2,
                 font_index=1,
                 font_size=55
             )
@@ -359,7 +346,7 @@ def get_png(
             Text_Data(
                 xy=(2177-w/2+x0, y0+90*i),
                 text=avg_xp,
-                fill=(0, 0, 0),
+                fill=theme_text_color.TextThemeColor2,
                 font_index=1,
                 font_size=55
             )
@@ -369,7 +356,7 @@ def get_png(
     for index in ['AirCarrier', 'Battleship', 'Cruiser', 'Destroyer', 'Submarine']:
         x0 = 0
         y0 = 1855
-        temp_data = result['data']['ship_type'][index]
+        temp_data: UserOverallDict = result['statistics']['ship_type'][index]
         battles_count = temp_data['battles_count']
         avg_win = temp_data['win_rate']
         avg_damage = temp_data['avg_damage']
@@ -378,23 +365,21 @@ def get_png(
         win_rate_color = Picture.hex_to_rgb(temp_data['win_rate_color'])
         avg_damage_color = Picture.hex_to_rgb(temp_data['avg_damage_color'])
         avg_frags_color = Picture.hex_to_rgb(temp_data['avg_frags_color'])
-        avg_pr_color = Picture.hex_to_rgb(temp_data['avg_pr_color'])
-        if temp_data['avg_pr_des'] == '-':
+        avg_pr_color = Picture.hex_to_rgb(temp_data['rating_color'])
+        if temp_data['rating'] == '-2':
             str_pr = '-'
         else:
-            if lang == 'cn':
-                str_pr = temp_data['avg_pr_des'] + '(+'+str(temp_data['avg_pr_dis'])+')'
-            elif lang == 'en':
-                str_pr = '■ '+str(int(temp_data['avg_pr']))
-            elif lang == 'ja':
-                str_pr = '■ '+str(int(temp_data['avg_pr']))
-        fontStyle = fonts.data[1][55]
+            if user_bind['language'] == 'cn':
+                str_pr = rating_text + '(+'+str(temp_data['rating_next'])+')'
+            else:
+                str_pr = '■ ' + temp_data['rating']
+        fontStyle = font_manager.get_font(1,55)
         w = Picture.x_coord(battles_count, fontStyle)
         text_list.append(
             Text_Data(
                 xy=(588-w/2+x0, y0+90*i),
                 text=battles_count,
-                fill=(0, 0, 0),
+                fill=theme_text_color.TextThemeColor2,
                 font_index=1,
                 font_size=55
             )
@@ -444,7 +429,7 @@ def get_png(
             Text_Data(
                 xy=(2177-w/2+x0, y0+90*i),
                 text=avg_xp,
-                fill=(0, 0, 0),
+                fill=theme_text_color.TextThemeColor2,
                 font_index=1,
                 font_size=55
             )
@@ -452,13 +437,13 @@ def get_png(
         i += 1
     max_num = 0
     num_list = []
-    for tier, num in result['data']['ship_tier'].items():
+    for _, num in result['statistics']['chart_data'].items():
         if num >= max_num:
             max_num = num
         num_list.append(num)
     max_index = (int(max_num/100) + 1)*100
     i = 0
-    fontStyle = fonts.data[1][35]
+    fontStyle = font_manager.get_font(1,35)
     for index in num_list:
         pic_len = 500-index/max_index*500
         x1 = 272+129*i
@@ -476,23 +461,23 @@ def get_png(
             Text_Data(
                 xy=(311-w/2+129*i, y1-40),
                 text=str(index),
-                fill=(0, 0, 0),
+                fill=theme_text_color.TextThemeColor2,
                 font_index=1,
                 font_size=35
             )
         )
         i += 1
-    fontStyle = fonts.data[1][80]
-    w = Picture.x_coord(Plugin_Config.BOT_INFO[lang], fontStyle)
-    text_list.append(
-        Text_Data(
-            xy=(1214-w/2, 3214),
-            text=Plugin_Config.BOT_INFO[lang],
-            fill=(174, 174, 174),
-            font_index=1,
-            font_size=80
-        )
-    )
+    # fontStyle = fonts.data[1][80]
+    # w = Picture.x_coord(Plugin_Config.BOT_INFO[lang], fontStyle)
+    # text_list.append(
+    #     Text_Data(
+    #         xy=(1214-w/2, 3214),
+    #         text=Plugin_Config.BOT_INFO[lang],
+    #         fill=(174, 174, 174),
+    #         font_index=1,
+    #         font_size=80
+    #     )
+    # )
     res_img = Picture.add_box(box_list, res_img)
     res_img = Picture.add_text(text_list, res_img)
     res_img_size = res_img.size
