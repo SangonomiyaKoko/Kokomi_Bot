@@ -20,10 +20,10 @@ class UserBindDict(TypedDict):
     '''返回数据格式'''
     region_id: Literal[1, 2, 3, 4, 5]
     account_id: int
-    language: Literal['cn', 'en', 'ja']
-    algorithm: Literal['pr', None]
 
 class UserLocalDict(TypedDict):
+    language: Literal['cn', 'en', 'ja']
+    algorithm: Literal['pr', None]
     background: str
     content: Literal['dark', 'light']
     theme: str

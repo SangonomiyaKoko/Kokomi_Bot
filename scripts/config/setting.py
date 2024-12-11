@@ -24,6 +24,8 @@ class BotSettings(BaseSettings):
     SHOW_DOG_TAG: bool                                                         
     SHOW_CLAN_TAG: bool
     SHOW_CUSTOM_TAG: bool
+    # 相关作者信息
+    BOT_INFO: str
 
     class Config:
         extra = "allow"

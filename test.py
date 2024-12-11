@@ -1,6 +1,7 @@
 import asyncio
-from datetime import datetime
 import sys
+import time
+from datetime import datetime
 
 sys.path.append(r'F:\Kokomi_PJ_Bot')
 
@@ -38,8 +39,9 @@ def log_format():
 
 async def main():
     print(kokomi_sign)
+    kokomi_bot = KokomiBot()
     # 初始化bot并检查bot更新
-    await KokomiBot.init_bot()
+    await kokomi_bot.init_bot()
     try:
         platform_type = 'qq'
         print(log_format() + "Default platform: QQ")
@@ -68,16 +70,18 @@ async def main():
                 'avatar': None,
                 'users': None
             }
-            kokomi_bot = KokomiBot()
+            start_time = time.time()
             return_result = await kokomi_bot.main(
                 message=message,
                 user_info=user_data,
                 platform=platform_data
             )
+            end_time = time.time()
             if return_result['type'] == 'img':
                 print(log_format() + "[RETURN] PIC: " + return_result['data'])
             else:
                 print(log_format() + "[RETURN] MSG: " + return_result['data'])
+            print(log_format() + f"[TIME] Total cost time: {round(end_time-start_time,2)}s")
         print(log_format() + "Program quit")
     except KeyboardInterrupt:
         print("\n" + log_format() + "Program quit")

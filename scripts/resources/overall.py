@@ -9,7 +9,11 @@ from scripts.logs import logging
 from scripts.api import BaseAPI
 from scripts.logs import ExceptionLogger
 from scripts.language import ContentText_CN, ContentText_EN, ContentText_JA
-from scripts.common import Text_Data, Box_Data, Picture, Utils, GameData, ThemeTextColor
+from scripts.common import (
+    Text_Data, Box_Data, Picture, Utils, GameData, 
+    ThemeTextColor, ThemeRatingColor, TimeFormat,
+    Insignias
+)
 from scripts.schemas import (
     PlatformDict, UserInfoDict, UserBindDict, UserLocalDict,
     UserBasicDict, UserClanDict, UserOverallDict,
@@ -41,18 +45,18 @@ async def main(
         'region': Utils.get_region_by_id(user_bind['region_id']),
         'account_id': user_bind['account_id'],
         'game_type': 'overall',
-        'language': Utils.get_language(user_bind['language'])
+        'language': Utils.get_language(user_local['language'])
     }
-    if user_bind['algorithm']:
-        params['algo_type'] = user_bind['algorithm']
+    if user_local['algorithm']:
+        params['algo_type'] = user_local['algorithm']
+    st = time.time()
     result = await BaseAPI.get(
         path=path,
         params=params
     )
-    if result['code'] == 1000:
-        logging.debug("接口请求成功")
-    else:
-        logging.debug(f"接口请求时报,Error: {result['message']}")
+    et = time.time()
+    if result['code'] != 1000:
+        logging.error(f"API request failed, Error: {result['message']}")
         return result
     res_img = get_png(
         result=result['data'],
@@ -65,6 +69,7 @@ async def main(
     del res_img
     return result
 
+@TimeFormat.cost_time_sync(message='Image generation completed')
 def get_png(
     result: UserBaseResult,
     platform: PlatformDict,
@@ -81,7 +86,7 @@ def get_png(
     # TODO: 叠加主题背景
 
     # 叠加图片主体
-    content_png_path = os.path.join(ASSETS_DIR, 'content', user_local['content'], user_bind['language'], 'basic.png')
+    content_png_path = os.path.join(ASSETS_DIR, 'content', user_local['content'], user_local['language'], 'basic.png')
     content_png = Image.open(content_png_path)
     canvas.alpha_composite(content_png, (0, 0))
     # TODO: 叠加图片主题图片
@@ -89,16 +94,17 @@ def get_png(
     res_img = canvas
     del canvas
     # 获取语言对应的文本文字
-    if user_bind['language'] == 'cn':
+    if user_local['language'] == 'cn':
         content_text = ContentText_CN
-    elif user_bind['language'] == 'en':
+    elif user_local['language'] == 'en':
         content_text = ContentText_EN
-    elif user_bind['language'] == 'ja':
+    elif user_local['language'] == 'ja':
         content_text = ContentText_JA
     else:
         raise ValueError("Invaild language.")
     # 获取不同主题的文字颜色
     theme_text_color = ThemeTextColor(user_local['content'])
+    theme_rating_color = ThemeRatingColor(user_local['content'])
     # 需要叠加的 文字/矩形
     text_list = []
     box_list = []
@@ -158,7 +164,7 @@ def get_png(
             font_size=55
         )
     )
-    creat_time = time.strftime("%Y-%m-%d", time.localtime(result['user']['crated_at']))
+    creat_time = TimeFormat.get_strftime(result['user']['region'], result['user']['crated_at'], "%Y-%m-%d")
     text_list.append(
         Text_Data(
             xy=(169+w_2+30, 448),
@@ -169,7 +175,7 @@ def get_png(
         )
     )
     rating_class = result['statistics']['overall']['rating_class']
-    rating_png_path = os.path.join(ASSETS_DIR, r'content\rating\pr', user_bind['language'], '{}.png'.format(rating_class))
+    rating_png_path = os.path.join(ASSETS_DIR, r'content\rating\pr', user_local['language'], '{}.png'.format(rating_class))
     rating_png = Image.open(rating_png_path)
     res_img.paste(rating_png, (132, 627))
     del rating_png
@@ -177,8 +183,13 @@ def get_png(
         if result['user']['dog_tag'] == [] or result['user']['dog_tag'] == {}:
             pass
         else:
-            # TODO: 叠加徽章
-            pass
+            res_img = Insignias.add_user_insignias(
+                img = res_img,
+                region_id = result['user']['region'],
+                account_id = result['user']['id'],
+                clan_id = result['clan']['id'],
+                response = result['user']['dog_tag']
+            )
     fontStyle = font_manager.get_font(1,35)
     if result['statistics']['overall']['rating_class'] == 9:
         rating_next_text = content_text.RatingNextText_2 + ':    +' + str(result['statistics']['overall']['rating_next'])
@@ -214,9 +225,9 @@ def get_png(
     avg_damage = temp_data['avg_damage']
     avg_frag = temp_data['avg_frags']
     avg_xp = temp_data['avg_exp']
-    win_rate_color = Picture.hex_to_rgb(temp_data['win_rate_color'])
-    avg_damage_color = Picture.hex_to_rgb(temp_data['avg_damage_color'])
-    avg_frags_color = Picture.hex_to_rgb(temp_data['avg_frags_color'])
+    win_rate_color = theme_rating_color.get_class_color(temp_data['win_rate_class'])
+    avg_damage_color = theme_rating_color.get_class_color(temp_data['avg_damage_class'])
+    avg_frags_color = theme_rating_color.get_class_color(temp_data['avg_frags_class'])
 
     w = Picture.x_coord(battles_count, fontStyle)
     text_list.append(
@@ -278,15 +289,15 @@ def get_png(
         avg_damage = temp_data['avg_damage']
         avg_frag = temp_data['avg_frags']
         avg_xp = temp_data['avg_exp']
-        win_rate_color = Picture.hex_to_rgb(temp_data['win_rate_color'])
-        avg_damage_color = Picture.hex_to_rgb(temp_data['avg_damage_color'])
-        avg_frags_color = Picture.hex_to_rgb(temp_data['avg_frags_color'])
-        avg_pr_color = Picture.hex_to_rgb(temp_data['rating_color'])
+        win_rate_color = theme_rating_color.get_class_color(temp_data['win_rate_class'])
+        avg_damage_color = theme_rating_color.get_class_color(temp_data['avg_damage_class'])
+        avg_frags_color = theme_rating_color.get_class_color(temp_data['avg_frags_class'])
+        avg_pr_color = theme_rating_color.get_class_color(temp_data['rating_class'])
         rating_text = content_text.get_rating_text(temp_data['rating_class'])
         if temp_data['rating'] == '-2':
             str_pr = '-'
         else:
-            if user_bind['language'] == 'cn':
+            if user_local['language'] == 'cn':
                 str_pr = rating_text + '(+'+str(temp_data['rating_next'])+')'
             else:
                 str_pr = '■ ' + temp_data['rating']
@@ -362,14 +373,14 @@ def get_png(
         avg_damage = temp_data['avg_damage']
         avg_frag = temp_data['avg_frags']
         avg_xp = temp_data['avg_exp']
-        win_rate_color = Picture.hex_to_rgb(temp_data['win_rate_color'])
-        avg_damage_color = Picture.hex_to_rgb(temp_data['avg_damage_color'])
-        avg_frags_color = Picture.hex_to_rgb(temp_data['avg_frags_color'])
-        avg_pr_color = Picture.hex_to_rgb(temp_data['rating_color'])
+        win_rate_color = theme_rating_color.get_class_color(temp_data['win_rate_class'])
+        avg_damage_color = theme_rating_color.get_class_color(temp_data['avg_damage_class'])
+        avg_frags_color = theme_rating_color.get_class_color(temp_data['avg_frags_class'])
+        avg_pr_color = theme_rating_color.get_class_color(temp_data['rating_class'])
         if temp_data['rating'] == '-2':
             str_pr = '-'
         else:
-            if user_bind['language'] == 'cn':
+            if user_local['language'] == 'cn':
                 str_pr = rating_text + '(+'+str(temp_data['rating_next'])+')'
             else:
                 str_pr = '■ ' + temp_data['rating']

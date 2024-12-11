@@ -30,7 +30,6 @@ class KokomiBot:
             data: 返回数据的内容
         '''
         default_language = Utils.get_default_language(platform)
-        default_picture = Utils.get_default_picture()
         logging.debug(f"Receive a message from {platform['type']}-{user_info['id']} [{message}]")
         # 用户输入的消息按照空格切割成list
         message_list = message.split(' ')
@@ -54,8 +53,6 @@ class KokomiBot:
             'data': {
                 'region_id': 1,
                 'account_id': 2023619512,
-                'language': 'ja',
-                'algorithm': 'pr'
             }
         }
         # user_local = UserLocal.get_user_local(
@@ -67,6 +64,8 @@ class KokomiBot:
             'code': 1000,
             'message': 'SUccess',
             'data': {
+                'language': 'ja',
+                'algorithm': 'pr',
                 'background': '#313131',
                 'content': 'dark',
                 'theme': 'default'
@@ -76,14 +75,12 @@ class KokomiBot:
             # 获取用户绑定信息失败
             return self.__process_result(
                 language = default_language,
-                picture = default_picture,
                 result = user_bind
             )
         if user_local['code'] != 1000:
             # 获取用户本地信息失败
             return self.__process_result(
                 language = default_language,
-                picture = default_picture,
                 result = user_local
             )
         # 获取用户绑定信息成功
@@ -92,7 +89,6 @@ class KokomiBot:
             user_bind = JSONResponse.API_9001_UserNotLinked
             return self.__process_result(
                 language = default_language,
-                picture = default_picture,
                 result = user_bind
             )
         select_func_dict = {
@@ -100,7 +96,7 @@ class KokomiBot:
             'en': SelectFunc.main,
             'ja': SelectFunc.main
         }
-        select_func = select_func_dict[user_bind['data']['language']]
+        select_func = select_func_dict[user_local['data']['language']]
         select_result = select_func(message_list = message_list)
         if select_result:
             generate_func = select_result['callback_func']
@@ -113,29 +109,21 @@ class KokomiBot:
             )
             logging.debug(str(generate_result))
             return self.__process_result(
-                language = user_bind['data']['language'],
-                picture = user_local['data'],
+                language = user_local['data']['language'],
                 result = generate_result
             )
         else:
             return self.__process_result(
-                language = user_bind['data']['language'],
-                picture = user_local['data']['picture'],
+                language = user_local['data']['language'],
                 result = JSONResponse.API_9002_FuncNotFound
             )
 
-    def __process_result(language: str, picture: dict, result: dict):
-        if result['status'] == 'error':
-            # 程序报错，返回图片
-            return {
-                'type': 'img',
-                'data': result['message']
-            }
-        elif result['code'] == 1000:
+    def __process_result(self, language: str, result: dict):
+        if result['code'] == 1000:
             # 正常结果，返回图片
             return {
                 'type': 'img',
-                'data': result['dara']['img']
+                'data': result['data']['img']
             }
         else:
             # 正常结果，返回文字
@@ -148,8 +136,7 @@ class KokomiBot:
                 'data': msg
             }
 
-
-    async def init_bot():
+    async def init_bot(self):
         # 检查当前bot的版本
         # least_version = await BasicAPI.get_bot_version()
         least_version = {'status': 'ok','code': 1000,'message': 'Success','data': {'code': '5.0.0.bate1', 'image': '5.0.0.bate1'}}

@@ -10,6 +10,7 @@ class DogTagDict(TypedDict):
 
 class UserBasicDict(TypedDict):
     id: int
+    region: int
     name: str
     karma: int
     crated_at: int
@@ -28,12 +29,11 @@ class UserOverallDict(TypedDict):
     avg_frags: str
     avg_exp: str
     rating: str
-    rating_class: int
     rating_next: int
-    win_rate_color: str
-    avg_damage_color: str
-    avg_frags_color: str
-    rating_color: str
+    win_rate_class: str
+    avg_damage_class: str
+    avg_frags_class: str
+    rating_class: int
 
 class ResultBattleTypeDict:
     pvp_solo: Optional[UserOverallDict]

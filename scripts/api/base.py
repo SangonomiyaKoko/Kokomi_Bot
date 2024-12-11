@@ -2,9 +2,11 @@ import httpx
 
 from scripts.config import api_settings
 from scripts.logs import ExceptionLogger
+from scripts.common import TimeFormat
 
 class BaseAPI:
     @ExceptionLogger.handle_network_exception_async
+    @TimeFormat.cost_time_async('API request completed')
     async def get(path: str, params: dict) -> dict:
         "实现get请求"
         base_url = api_settings.API_URL + path
@@ -15,7 +17,6 @@ class BaseAPI:
         headers = {
             'accept': 'application/json'
         }
-        print(url)
         async with httpx.AsyncClient() as client:
             res = await client.get(
                 url=url, 
