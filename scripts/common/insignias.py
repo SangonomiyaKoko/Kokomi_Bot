@@ -86,7 +86,7 @@ class Insignias:
             del background
             border_color_id = GameData.border_color[str(response['border_color_id'])]
             border_png_name = f'{background_id}_border_{border_color_id}'
-            border_png_path = os.path.join(ASSETS_DIR, r'components\insignias\symbol', operator, f'{border_png_name}.png')
+            border_png_path = os.path.join(ASSETS_DIR, r'components\insignias\background', f'{border_png_name}.png')
             border = Image.open(border_png_path).convert('RGBA')
             border = border.resize((419, 419))
             img.alpha_composite(border, (x1, y1))
@@ -103,7 +103,7 @@ class Insignias:
             img.alpha_composite(symbol, (x1, y1))
             del symbol
         else:
-            background_png_path = os.path.join(ASSETS_DIR, r'components\insignias\symbol', operator, f'{background_id}.png')
+            background_png_path = os.path.join(ASSETS_DIR, r'components\insignias\background', f'{background_id}.png')
             background = Image.open(background_png_path).convert('RGBA')
             background = background.resize((419, 419))
             img.alpha_composite(background, (x1, y1))
