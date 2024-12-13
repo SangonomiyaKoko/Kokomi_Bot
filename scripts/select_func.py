@@ -17,14 +17,8 @@ class SelectFunc:
         }
 
     @classmethod
-    def main(cls, message_list: list):
-        if (
-            len(message_list) == 1 and
-            message_list[0] == 'me'
-        ):
-            callback_func = overall.main
-            extra_kwargs = {}
-            return cls.return_data(callback_func, extra_kwargs)
+    def main(cls, user_binding_status: bool, message_list: list):
+        # 以下为不需要用户绑定的指令
         if (
             len(message_list) == 3 and
             message_list[0] == 'link'
@@ -37,6 +31,16 @@ class SelectFunc:
                 'region_id': region_id,
                 'nickname': message_list[2]
             }
+            return cls.return_data(callback_func, extra_kwargs)
+        if not user_binding_status:
+            return JSONResponse.API_9001_UserNotLinked
+        # 以下为需要用户绑定的指令
+        if (
+            len(message_list) == 1 and
+            message_list[0] == 'me'
+        ):
+            callback_func = overall.main
+            extra_kwargs = {}
             return cls.return_data(callback_func, extra_kwargs)
         if (
             len(message_list) == 3 and

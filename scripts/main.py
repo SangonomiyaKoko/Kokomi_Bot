@@ -64,21 +64,14 @@ class KokomiBot:
                 language = default_language,
                 result = user_local
             )
-        # 获取用户绑定信息成功
-        if user_bind['data'] == None:
-            # 用户没有绑定数据，提示用户绑定账号
-            user_bind = JSONResponse.API_9001_UserNotLinked
-            return self.__process_result(
-                language = default_language,
-                result = user_bind
-            )
         select_func_dict = {
             'cn': SelectFunc.main,
             'en': SelectFunc.main,
             'ja': SelectFunc.main
         }
         select_func = select_func_dict[user_local['data']['language']]
-        select_result = select_func(message_list = message_list)
+        user_binding_status = True if user_bind['data'] else False
+        select_result = select_func(user_binding_status, message_list)
         if select_result['code'] == 1000:
             generate_func = select_result['data']['callback_func']
             generate_result = await generate_func(
