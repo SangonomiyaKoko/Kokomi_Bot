@@ -27,8 +27,10 @@ Usage:
   <start> <command> [params]
 
 Commands:
-  /link <region> <ign>
-  /link <uid>
+  /link <region> <ign>                Link to your game account
+  /me                                 Overall 
+  /set language <cn/en/ja>            Change language
+  /set rating <show/hide>             Show or hide personal rating
 '''
 def log_format():
     green = '\033[32m'
@@ -43,8 +45,8 @@ async def main():
     # 初始化bot并检查bot更新
     await kokomi_bot.init_bot()
     try:
-        platform_type = 'qq'
-        print(log_format() + "Default platform: QQ")
+        platform_type = 'qq_bot'
+        print(log_format() + "Default platform: " + platform_type.upper())
         user_id = input(log_format() + "Please enter ID >>> ")
         print(log_format() + "Enter `help` to show help or enter `quit` to exit.")
         while True:

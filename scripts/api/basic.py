@@ -14,7 +14,7 @@ class BasicAPI:
     async def get_bot_version():
         "从服务器端获取当前bot的最新版本"
         path = '/r/version/'
-        result = BaseAPI.get(path)
+        result = await BaseAPI.get(path, {})
         return result
     
     async def search_user(region_id: int, name: str):
@@ -27,7 +27,7 @@ class BasicAPI:
             'limit': 10,
             'check': 'true'
         }
-        result = BaseAPI.get(path, params)
+        result = await BaseAPI.get(path, params)
         return result
     
     async def search_clan(region_id: int, tag: str):
@@ -40,5 +40,5 @@ class BasicAPI:
             'limit': 10,
             'check': 'true'
         }
-        result = BaseAPI.get(path, params)
+        result = await BaseAPI.get(path, params)
         return result

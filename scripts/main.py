@@ -1,4 +1,4 @@
-from scripts.api import BindAPI
+from scripts.api import BindAPI, BasicAPI
 from scripts.logs import logging
 from scripts.language import Message
 from scripts.select_func import SelectFunc
@@ -42,35 +42,16 @@ class KokomiBot:
             del message_list[0]
         if EN_STARTWITH in message_list[0]:
             message_list[0] = message_list[0].replace(EN_STARTWITH,'')
-        # user_bind = await BindAPI.get_user_bind(
-        #     platform = platform['type'],
-        #     user = user_info['id']
-        # )
-        user_bind = {
-            'status': 'ok',
-            'code': 1000,
-            'message': 'SUccess',
-            'data': {
-                'region_id': 1,
-                'account_id': 2023619512,
-            }
-        }
-        # user_local = UserLocal.get_user_local(
-        #     platform = platform['type'],
-        #     user = user_info['id']
-        # )
-        user_local = {
-            'status': 'ok',
-            'code': 1000,
-            'message': 'SUccess',
-            'data': {
-                'language': 'ja',
-                'algorithm': 'pr',
-                'background': '#313131',
-                'content': 'dark',
-                'theme': 'default'
-            }
-        }
+        user_bind = await BindAPI.get_user_bind(
+            platform = platform,
+            user = user_info
+        )
+        logging.debug(str(user_bind))
+        user_local = UserLocal.get_user_local(
+            platform = platform,
+            user = user_info
+        )
+        logging.debug(str(user_local))
         if user_bind['code'] != 1000:
             # 获取用户绑定信息失败
             return self.__process_result(
@@ -98,14 +79,14 @@ class KokomiBot:
         }
         select_func = select_func_dict[user_local['data']['language']]
         select_result = select_func(message_list = message_list)
-        if select_result:
-            generate_func = select_result['callback_func']
+        if select_result['code'] == 1000:
+            generate_func = select_result['data']['callback_func']
             generate_result = await generate_func(
                 platform = platform,
                 user_info = user_info,
                 user_bind = user_bind['data'],
                 user_local = user_local['data'],
-                **select_result['extra_kwargs']
+                **select_result['data']['extra_kwargs']
             )
             logging.debug(str(generate_result))
             return self.__process_result(
@@ -115,7 +96,7 @@ class KokomiBot:
         else:
             return self.__process_result(
                 language = user_local['data']['language'],
-                result = JSONResponse.API_9002_FuncNotFound
+                result = select_result
             )
 
     def __process_result(self, language: str, result: dict):
@@ -138,8 +119,7 @@ class KokomiBot:
 
     async def init_bot(self):
         # 检查当前bot的版本
-        # least_version = await BasicAPI.get_bot_version()
-        least_version = {'status': 'ok','code': 1000,'message': 'Success','data': {'code': '5.0.0.bate1', 'image': '5.0.0.bate1'}}
+        least_version = await BasicAPI.get_bot_version()
         if least_version['code'] == 8000:
             logging.warning("The server is currently under maintenance.")
         elif least_version['code'] != 1000:

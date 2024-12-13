@@ -17,8 +17,8 @@ class TimeFormat:
     def get_datetime_now() -> str:
         "获取图片的创建时间的格式"
         # e.g., "2024-12-11 08:30:15.123456+00:00"
-        utc_time_with_zone = datetime.now(timezone.utc)
-        return utc_time_with_zone
+        utc_time_with_zone = str(datetime.now(timezone.utc))
+        return utc_time_with_zone[:19].replace(' ', 'T') + utc_time_with_zone[26:]
     
     def get_strftime(region_id: int, timestamp: int, format: str = '%Y%m%d') -> str:
         "获取服务器对应时区的时间"

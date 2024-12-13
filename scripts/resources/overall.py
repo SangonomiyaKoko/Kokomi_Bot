@@ -104,10 +104,13 @@ def get_png(
         raise ValueError("Invaild language.")
     # 获取不同主题的文字颜色
     theme_text_color = ThemeTextColor(user_local['content'])
+    # 获取不同主题的评分颜色
     theme_rating_color = ThemeRatingColor(user_local['content'])
     # 需要叠加的 文字/矩形
     text_list = []
     box_list = []
+
+    # Header用户信息条
     text_list.append(
         Text_Data(
             xy=(172, 161),
@@ -174,6 +177,7 @@ def get_png(
             font_size=55
         )
     )
+    # 用户总体数据页
     rating_class = result['statistics']['overall']['rating_class']
     rating_png_path = os.path.join(ASSETS_DIR, r'content\rating\pr', user_local['language'], '{}.png'.format(rating_class))
     rating_png = Image.open(rating_png_path)
@@ -279,6 +283,7 @@ def get_png(
             font_size=80
         )
     )
+    # 战斗类型数据页
     i = 0
     for index in ['pvp_solo', 'pvp_div2', 'pvp_div3', 'rank_solo']:
         x0 = 0
@@ -363,6 +368,7 @@ def get_png(
             )
         )
         i += 1
+    # 船只类型数据页
     i = 0
     for index in ['AirCarrier', 'Battleship', 'Cruiser', 'Destroyer', 'Submarine']:
         x0 = 0
@@ -446,6 +452,7 @@ def get_png(
             )
         )
         i += 1
+    # 条形图数据
     max_num = 0
     num_list = []
     for _, num in result['statistics']['chart_data'].items():
@@ -478,20 +485,33 @@ def get_png(
             )
         )
         i += 1
-    # fontStyle = fonts.data[1][80]
-    # w = Picture.x_coord(Plugin_Config.BOT_INFO[lang], fontStyle)
-    # text_list.append(
-    #     Text_Data(
-    #         xy=(1214-w/2, 3214),
-    #         text=Plugin_Config.BOT_INFO[lang],
-    #         fill=(174, 174, 174),
-    #         font_index=1,
-    #         font_size=80
-    #     )
-    # )
+    # 底部信息条
+    fontStyle = font_manager.get_font(1,55)
+    png_create_time = TimeFormat.get_datetime_now()
+    text_list.append(
+        Text_Data(
+            xy=(97+20, 3214),
+            text='Creation time: '+png_create_time,
+            fill=theme_text_color.TextThemeColor5,
+            font_index=1,
+            font_size=55
+        )
+    )
+    w = Picture.x_coord('Powered by '+bot_settings.BOT_INFO, fontStyle)
+    text_list.append(
+        Text_Data(
+            xy=(2331-20-w, 3214),
+            text='Powered by '+bot_settings.BOT_INFO,
+            fill=theme_text_color.TextThemeColor5,
+            font_index=1,
+            font_size=55
+        )
+    )
+    # 完成文字和矩形的叠加
     res_img = Picture.add_box(box_list, res_img)
     res_img = Picture.add_text(text_list, res_img)
     res_img_size = res_img.size
+    # 缩小图片大小
     res_img = res_img.resize(
         (
             int(res_img_size[0]*0.5), 
