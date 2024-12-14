@@ -3,9 +3,9 @@ import sqlite3
 
 from scripts.config import DATA_DIR
 from scripts.logs import ExceptionLogger
-from scripts.common import Utils
+from scripts.schemas import KokomiUser
 
-class UserLocal:
+class UserLocalDB:
     def __create_db():
         db_path = os.path.join(DATA_DIR, 'local.db')
         conn = sqlite3.connect(db_path)
@@ -37,9 +37,9 @@ class UserLocal:
 
     @classmethod
     @ExceptionLogger.handle_database_exception_sync
-    def get_user_local(cls, platform: dict, user: dict):
-        user_id = user['id']
-        platform_type = platform['type']
+    def get_user_local(cls, kokomi_user: KokomiUser):
+        user_id = kokomi_user.basic.id
+        platform_type = kokomi_user.platform.name
         db_path = os.path.join(DATA_DIR, 'local.db')
         if os.path.exists(db_path) is False:
             cls.__create_db()
@@ -52,22 +52,20 @@ class UserLocal:
         ''')
         user = cursor.fetchone()
         if user is None:
-            default_language = Utils.get_default_language({'type': platform})
-            default_picture = Utils.get_default_picture()
             data = {
-                'language': default_language,
-                'algorithm': 'pr',
-                'background': default_picture['background'],
-                'content': default_picture['content'],
-                'theme': default_picture['theme']
+                'language': kokomi_user.local.language,
+                'algorithm': kokomi_user.local.algorithm,
+                'background': kokomi_user.local.background,
+                'content': kokomi_user.local.content,
+                'theme': kokomi_user.local.theme
             }
             cursor.execute('''
                 INSERT INTO users (platform, user_id, language, algorithm, background, content, theme)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
             ''',
             [
-                platform_type, user_id, default_language, 'pr', 
-                default_picture['background'], default_picture['content'], default_picture['theme']
+                platform_type, user_id, data['language'], data['algorithm'], 
+                data['background'], data['content'], data['theme']
             ]
             )
         else:
@@ -90,9 +88,9 @@ class UserLocal:
 
     @classmethod
     @ExceptionLogger.handle_database_exception_sync
-    def update_language(cls, platform: dict, user: dict, language: str):
-        user_id = user['id']
-        platform_type = platform['type']
+    def update_language(cls, user: KokomiUser, language: str):
+        user_id = user.basic.id
+        platform_type = user.platform.name
         db_path = os.path.join(DATA_DIR, 'local.db')
         if os.path.exists(db_path) is False:
             cls.__create_db()
@@ -109,9 +107,9 @@ class UserLocal:
 
     @classmethod
     @ExceptionLogger.handle_database_exception_sync
-    def update_algorithm(cls, platform: dict, user: dict, algorithm: str):
-        user_id = user['id']
-        platform_type = platform['type']
+    def update_algorithm(cls, user: KokomiUser, algorithm: str):
+        user_id = user.basic.id
+        platform_type = user.platform.name
         db_path = os.path.join(DATA_DIR, 'local.db')
         if os.path.exists(db_path) is False:
             cls.__create_db()

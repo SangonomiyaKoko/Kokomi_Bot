@@ -96,6 +96,7 @@ class ExceptionLogger:
                 return {'status': 'error','code': 3002,'message': 'DatabaseError','data': {'error_id': error_id}}
             except sqlite3.IntegrityError as e:
                 error_id = generate_error_id()
+                print(e.args)
                 write_error_info(
                     error_id = error_id,
                     error_type = ExceptionType.database,

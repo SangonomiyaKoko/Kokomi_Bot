@@ -1,18 +1,13 @@
 
 from scripts.logs import ExceptionLogger
 from scripts.api import BasicAPI, BindAPI
-from scripts.common import JSONResponse, UserLocal
-from scripts.schemas import (
-    PlatformDict, UserInfoDict, UserBindDict, UserLocalDict
-)
+from scripts.common import JSONResponse, UserLocalDB
+from scripts.schemas import KokomiUser
 
 
 @ExceptionLogger.handle_program_exception_async
 async def post_bind(
-    platform: PlatformDict,
-    user_info: UserInfoDict,
-    user_bind: UserBindDict,
-    user_local: UserLocalDict,
+    user: KokomiUser,
     region_id: int,
     nickname: str
 ) -> dict:
@@ -22,8 +17,8 @@ async def post_bind(
     if len(result['data']) != 1:
         return JSONResponse.API_9003_NameNotFound
     data = {
-        'platform': platform['type'],
-        'user_id': user_info['id'],
+        'platform': user.platform.name,
+        'user_id': user.basic.id,
         'region_id': result['data'][0]['region_id'],
         'account_id': result['data'][0]['account_id']
     }
@@ -34,13 +29,10 @@ async def post_bind(
 
 @ExceptionLogger.handle_program_exception_async
 async def update_language(
-    platform: PlatformDict,
-    user_info: UserInfoDict,
-    user_bind: UserBindDict,
-    user_local: UserLocalDict,
+    user: KokomiUser,
     language: str
 ) -> dict:
-    result = UserLocal.update_language(platform,user_info,language)
+    result = UserLocalDB.update_language(user,language)
     if result['code'] != 1000:
         return result
     else:
@@ -48,13 +40,10 @@ async def update_language(
 
 @ExceptionLogger.handle_program_exception_async
 async def update_algorithm(
-    platform: PlatformDict,
-    user_info: UserInfoDict,
-    user_bind: UserBindDict,
-    user_local: UserLocalDict,
+    user: KokomiUser,
     algorithm: str
 ) -> dict:
-    result = UserLocal.update_algorithm(platform,user_info,algorithm)
+    result = UserLocalDB.update_algorithm(user,algorithm)
     if result['code'] != 1000:
         return result
     else:

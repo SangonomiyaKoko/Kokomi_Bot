@@ -45,18 +45,4 @@ class Utils:
             5: 'cn'
         }
         return region_dict.get(region_id)
-
-    def get_default_language(platform: dict) -> str:
-        "获取平台默认的语言"
-        if platform['type'] in ['qq_bot', 'qq_group', 'qq_guild']:
-            return 'cn'
-        else:
-            return 'en'
-        
-    def get_default_picture() -> dict:
-        "获取默认的图片格式"
-        return {
-            'background': '#F8F9FB',
-            'content': 'light',
-            'theme': 'default'
-        }
+    

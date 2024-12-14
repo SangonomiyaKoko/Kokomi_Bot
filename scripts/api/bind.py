@@ -1,12 +1,13 @@
 from .base import BaseAPI
+from scripts.schemas import KokomiUser
 
 class BindAPI:
-    async def get_user_bind(platform: dict, user: dict):
+    async def get_user_bind(user: KokomiUser):
         "获取用户的绑定数据"
         path = '/r/user/bind/'
         params = {
-            'platform': platform['type'],
-            'user_id': user['id']
+            'platform': user.platform.name,
+            'user_id': user.basic.id
         }
         result = await BaseAPI.get(
             path=path,

@@ -15,8 +15,7 @@ from scripts.common import (
     Insignias
 )
 from scripts.schemas import (
-    PlatformDict, UserInfoDict, UserBindDict, UserLocalDict,
-    UserBasicDict, UserClanDict, UserOverallDict,
+    KokomiUser, UserBasicDict, UserClanDict, UserOverallDict,
     ResultShipTypeDict, ResultBattleTypeDict
 )
 
@@ -35,20 +34,17 @@ class UserBaseResult(TypedDict):
 
 @ExceptionLogger.handle_program_exception_async
 async def main(
-    platform: PlatformDict,
-    user_info: UserInfoDict,
-    user_bind: UserBindDict,
-    user_local: UserLocalDict
+    user: KokomiUser
 ) -> dict:
     path = '/r/account/'
     params = {
-        'region': Utils.get_region_by_id(user_bind['region_id']),
-        'account_id': user_bind['account_id'],
+        'region': Utils.get_region_by_id(user.bind.region_id),
+        'account_id': user.bind.account_id,
         'game_type': 'overall',
-        'language': Utils.get_language(user_local['language'])
+        'language': Utils.get_language(user.local.language)
     }
-    if user_local['algorithm']:
-        params['algo_type'] = user_local['algorithm']
+    if user.local.algorithm:
+        params['algo_type'] = user.local.algorithm
     st = time.time()
     result = await BaseAPI.get(
         path=path,
@@ -59,11 +55,8 @@ async def main(
         logging.error(f"API request failed, Error: {result['message']}")
         return result
     res_img = get_png(
-        result=result['data'],
-        platform=platform,
-        user_info=user_info,
-        user_bind=user_bind,
-        user_local=user_local
+        user=user,
+        result=result['data']
     )
     result = Picture.return_img(img=res_img)
     del res_img
@@ -71,22 +64,19 @@ async def main(
 
 @TimeFormat.cost_time_sync(message='Image generation completed')
 def get_png(
-    result: UserBaseResult,
-    platform: PlatformDict,
-    user_info: UserInfoDict,
-    user_bind: UserBindDict,
-    user_local: UserLocalDict
+    user: KokomiUser,
+    result: UserBaseResult
 ) -> str:
     # 画布宽度和高度
     width, height = 2428, 3350
     # 背景颜色（RGB）
-    background_color = Picture.hex_to_rgb(user_local['background'], 0)
+    background_color = Picture.hex_to_rgb(user.local.background, 0)
     # 创建画布
     canvas = Image.new("RGBA", (width, height), background_color)
     # TODO: 叠加主题背景
 
     # 叠加图片主体
-    content_png_path = os.path.join(ASSETS_DIR, 'content', user_local['content'], user_local['language'], 'basic.png')
+    content_png_path = os.path.join(ASSETS_DIR, 'content', user.local.content, user.local.language, 'basic.png')
     content_png = Image.open(content_png_path)
     canvas.alpha_composite(content_png, (0, 0))
     # TODO: 叠加图片主题图片
@@ -94,18 +84,19 @@ def get_png(
     res_img = canvas
     del canvas
     # 获取语言对应的文本文字
-    if user_local['language'] == 'cn':
+    if user.local.language == 'cn':
         content_text = ContentText_CN
-    elif user_local['language'] == 'en':
+    elif user.local.language == 'en':
         content_text = ContentText_EN
-    elif user_local['language'] == 'ja':
+    elif user.local.language == 'ja':
         content_text = ContentText_JA
     else:
+        # 必须确保后续程序执行中不会遇到不支持的语言
         raise ValueError("Invaild language.")
     # 获取不同主题的文字颜色
-    theme_text_color = ThemeTextColor(user_local['content'])
+    theme_text_color = ThemeTextColor(user.local.content)
     # 获取不同主题的评分颜色
-    theme_rating_color = ThemeRatingColor(user_local['content'])
+    theme_rating_color = ThemeRatingColor(user.local.content)
     # 需要叠加的 文字/矩形
     text_list = []
     box_list = []
@@ -179,7 +170,7 @@ def get_png(
     )
     # 用户总体数据页
     rating_class = result['statistics']['overall']['rating_class']
-    rating_png_path = os.path.join(ASSETS_DIR, r'content\rating\pr', user_local['language'], '{}.png'.format(rating_class))
+    rating_png_path = os.path.join(ASSETS_DIR, r'content\rating\pr', user.local.language, '{}.png'.format(rating_class))
     rating_png = Image.open(rating_png_path)
     res_img.paste(rating_png, (132, 627))
     del rating_png
@@ -302,7 +293,7 @@ def get_png(
         if temp_data['rating'] == '-2':
             str_pr = '-'
         else:
-            if user_local['language'] == 'cn':
+            if user.local.language == 'cn':
                 str_pr = rating_text + '(+'+str(temp_data['rating_next'])+')'
             else:
                 str_pr = '■ ' + temp_data['rating']
@@ -386,7 +377,7 @@ def get_png(
         if temp_data['rating'] == '-2':
             str_pr = '-'
         else:
-            if user_local['language'] == 'cn':
+            if user.local.language == 'cn':
                 str_pr = rating_text + '(+'+str(temp_data['rating_next'])+')'
             else:
                 str_pr = '■ ' + temp_data['rating']

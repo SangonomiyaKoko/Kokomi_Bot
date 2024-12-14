@@ -6,7 +6,7 @@ from datetime import datetime
 sys.path.append(r'F:\Kokomi_PJ_Bot')
 
 
-from scripts.main import KokomiBot
+from scripts.main import KokomiBot, Platform, UserBasic
 
 kokomi_sign = '''
 ┌────────────────────────────────────────────────────────────────┐
@@ -58,25 +58,13 @@ async def main():
                 break
             if not message:
                 continue
-            user_data = {
-                'id': user_id,
-                'cid': None,
-                'name': None,
-                'avatar': None
-            }
-            platform_data = {
-                'type': platform_type,
-                'id': None,
-                'cid': None,
-                'name': None,
-                'avatar': None,
-                'users': None
-            }
+            user = UserBasic(user_id,user_id)
+            platform = Platform(platform_type, 123, 123)
             start_time = time.time()
             return_result = await kokomi_bot.main(
                 message=message,
-                user_info=user_data,
-                platform=platform_data
+                user=user,
+                platform=platform
             )
             end_time = time.time()
             if return_result['type'] == 'img':
