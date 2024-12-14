@@ -31,7 +31,6 @@ class KokomiBot:
             data: 返回数据的内容
         '''
         kokomi_user = KokomiUser(platform,user)
-        try:
         user_binding_status = False
         logging.debug(f"Receive a message from {kokomi_user.platform.name}-{kokomi_user.basic.id} [{message}]")
         # 用户输入的消息按照空格切割成list
