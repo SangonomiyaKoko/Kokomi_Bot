@@ -3,10 +3,9 @@ from scripts.logs import logging
 from scripts.language import Message
 from scripts.select_func import SelectFunc
 from scripts.schemas import (
-    UserBindDict, UserLocalDict, KokomiUser, Platform, UserBasic, UserBind, UserLocal
+    KokomiUser, Platform, UserBasic
 )
 from scripts.common import (
-    Utils,
     UserLocalDB,
     ReadVersionFile
 )

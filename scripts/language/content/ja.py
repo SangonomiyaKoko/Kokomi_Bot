@@ -20,3 +20,11 @@ class ContentLanguage:
             return rating_text_list[rating_class], rating_len_list[rating_class]
         else:
             return rating_text_list[rating_class]
+
+    def get_rank_text(season_rank: int) -> str:
+        rank_text_dict = {
+            1: 'Gold',
+            2: 'Silver',
+            3: 'Bronze'
+        }
+        return rank_text_dict.get(season_rank)

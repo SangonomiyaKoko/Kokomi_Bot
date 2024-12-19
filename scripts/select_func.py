@@ -18,7 +18,60 @@ class SelectFunc:
 
     @classmethod
     def main(cls, user_binding_status: bool, message_list: list):
+        '''
+        /link
+            <link> <>
+            <link> <UserID>
+        /set
+            <set> <language> <LanguageList>
+            <set> <rating> <Show/Hide>
+            <set> <background> <HexColor>
+            <set> <theme> <Dark/Light>
+            <set> <picture> <PictureList>
+        /me
+            <me/overall>
+            <me/overall> <>
+        /signature
+            <signature/card>
+            <signature/card> <>
+        /lifetime
+            <lifetime>
+        /random
+            <pvp/random>
+            <pvp/random> <>
+        /ranked
+            <rank/ranked>
+            <rank/ranked> <>
+        /ranked [season]
+            <rank/ranked> <s><SeasonID>
+            <rank/ranked> <> <s><SeasonID>
+        /cb
+            <cb>
+            <cb> <>
+        /oper
+            <oper/operation>
+            <oper/operation> <>
+        /ship [shipname]
+            <ship> <ShipName>
+            <ship> <> <ShipName>
+        /ships [filters]
+            <ships> <Filters>
+            <ships> <> <Filters>
+        /clan
+            <clan> 
+            <clan> <>
+        /clan [season]
+            <clan> <s><SeasonID>
+            <clan> <> <s><SeasonID>
+        /clan history
+            <clan> <history>
+            <clan> <> <history>
+        /recent [RecentType] [DateNumber/DateRange]
+            <recent> [RecentType] [DateNumber/DateRange]
+            <recent> <> [RecentType] [DateNumber/DateRange]
+        '''
         # 以下为不需要用户绑定的指令
+        
         if (
             len(message_list) == 3 and
             message_list[0] == 'link'

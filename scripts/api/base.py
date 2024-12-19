@@ -1,5 +1,6 @@
 import httpx
 
+from scripts.logs import logging
 from scripts.config import api_settings
 from scripts.logs import ExceptionLogger
 from scripts.common import TimeFormat
@@ -17,6 +18,7 @@ class BaseAPI:
         headers = {
             'accept': 'application/json'
         }
+        logging.debug(f"GET {url}")
         async with httpx.AsyncClient() as client:
             res = await client.get(
                 url=url, 
@@ -41,6 +43,7 @@ class BaseAPI:
         headers = {
             'accept': 'application/json'
         }
+        logging.debug(f"POST {url}")
         async with httpx.AsyncClient() as client:
             res = await client.post(
                 url=url, 
@@ -66,6 +69,7 @@ class BaseAPI:
         headers = {
             'accept': 'application/json'
         }
+        logging.debug(f"PUT {url}")
         async with httpx.AsyncClient() as client:
             res = await client.put(
                 url=url, 
