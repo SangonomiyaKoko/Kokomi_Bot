@@ -45,12 +45,10 @@ async def main(
     }
     if user.local.algorithm:
         params['algo_type'] = user.local.algorithm
-    st = time.time()
     result = await BaseAPI.get(
         path=path,
         params=params
     )
-    et = time.time()
     if result['code'] != 1000:
         logging.error(f"API request failed, Error: {result['message']}")
         return result

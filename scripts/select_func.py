@@ -1,7 +1,8 @@
 from .common import JSONResponse, Utils
 from .resources import (
     overall,
-    bind
+    bind,
+    signature
 )
 
 class SelectFunc:
@@ -69,6 +70,9 @@ class SelectFunc:
         /recent [RecentType] [DateNumber/DateRange]
             <recent> [RecentType] [DateNumber/DateRange]
             <recent> <> [RecentType] [DateNumber/DateRange]
+        /recent ship <ShipName> [DateNumber/DateRange]
+        /recents [DateNumber/DateRange]
+
         '''
         # 以下为不需要用户绑定的指令
         
@@ -93,6 +97,13 @@ class SelectFunc:
             message_list[0] == 'me'
         ):
             callback_func = overall.main
+            extra_kwargs = {}
+            return cls.return_data(callback_func, extra_kwargs)
+        if (
+            len(message_list) == 1 and
+            message_list[0] == 'sign'
+        ):
+            callback_func = signature.main
             extra_kwargs = {}
             return cls.return_data(callback_func, extra_kwargs)
         if (

@@ -22,6 +22,17 @@ class UserClanDict(TypedDict):
     tag: str
     league: int
 
+class UserSignatureDict(TypedDict):
+    battles_count: str
+    win_rate: str
+    avg_damage: str
+    avg_frags: str
+    rating: str
+    win_rate_class: str
+    avg_damage_class: str
+    avg_frags_class: str
+    rating_class: int
+
 class UserOverallDict(TypedDict):
     battles_count: str
     win_rate: str
