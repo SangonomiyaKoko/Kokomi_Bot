@@ -20,13 +20,10 @@ pip install -r requirements.txt # 安装python依赖
 
 如果你是程序小白不清楚的话，不使用虚拟环境也是可以的
 
-## 下载静态图片资源
 
-此处后续为自动更新，目前未完成开发如有需要请联系开发者
+## 配置 config
 
-## 配置 env
-
-在项目文件内有一个 `.env.example` 的示例文件，复制并重名为 `.env`
+在项目文件内有一个 `app\config.yaml.example` 的示例文件，复制并重名为 `config.yaml`
 
 然后按照自己的需求修改配置项目
 
