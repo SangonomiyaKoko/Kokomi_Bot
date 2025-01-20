@@ -1,0 +1,12 @@
+{
+  "status": "ok",
+  "code": 1000,
+  "message": "Success",
+  "data": {
+    "language": "cn",
+    "algorithm": "pr",
+    "background": "#F8F9FB",
+    "content": "light",
+    "theme": "default"
+  }
+}

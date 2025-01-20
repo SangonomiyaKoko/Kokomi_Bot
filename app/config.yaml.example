@@ -1,0 +1,15 @@
+API:
+  API_URL: "https://api.example.com"     # KokomiAPI地址
+  API_TYPE: "REST"
+  API_USERNAME: "user"
+  API_PASSWORD: "password"
+  REQUEST_TIMEOUT: 10
+
+BOT:
+  LOG_LEVEL: "debug"        # 日志等级 debug/info
+  USE_MOCK: false           # debug用，默认为false
+  RETURN_PIC_TYPE: "png"    # 返回图片格式 png/webp
+  SHOW_DOG_TAG: true        # 是否显示用户狗牌
+  SHOW_CLAN_TAG: true       # 是否显示工会段位
+  SHOW_CUSTOM_TAG: true     # 是否显示自定义狗牌
+  BOT_INFO: "ABC"           # Bot底部Footer文字

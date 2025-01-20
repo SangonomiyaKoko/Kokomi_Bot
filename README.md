@@ -33,3 +33,10 @@ pip install -r requirements.txt # 安装python依赖
 ## 启动测试
 
 运行 test.py 文件，输入指令能够成功生成图片则说明运行成功
+
+## 项目中使用的第三方包
+
+- pillow: 核心模块，用于实现图片处理和生成
+- colorlog: 输出日志
+- httpx: 异步网络请求
+- pydantic: 数据验证

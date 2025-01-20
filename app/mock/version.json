@@ -1,0 +1,9 @@
+{
+  "status": "ok",
+  "code": 1000,
+  "message": "Success",
+  "data": {
+    "code": "5.0.0.bate1",
+    "image": "5.0.0.bate1"
+  }
+}

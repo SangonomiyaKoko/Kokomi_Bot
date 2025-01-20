@@ -1,0 +1,9 @@
+{
+  "status": "ok",
+  "code": 1000,
+  "message": "Success",
+  "data": {
+    "region_id": 1,
+    "account_id": 2023619512
+  }
+}
