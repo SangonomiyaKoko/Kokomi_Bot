@@ -20,7 +20,6 @@ pip install -r requirements.txt # 安装python依赖
 
 如果你是程序小白不清楚的话，不使用虚拟环境也是可以的
 
-
 ## 配置 config
 
 在项目文件内有一个 `app\config.yaml.example` 的示例文件，复制并重名为 `config.yaml`

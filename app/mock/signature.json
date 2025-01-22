@@ -1,0 +1,51 @@
+{
+  "status": "ok",
+  "code": 1000,
+  "message": "Success",
+  "data": {
+    "user": {
+      "id": 2023619512,
+      "region": 1,
+      "name": "SangonomiyaKokomi_",
+      "karma": 0,
+      "crated_at": 1560486244,
+      "actived_at": 1736682186,
+      "dog_tag": {
+        "texture_id": 0,
+        "symbol_id": 4224043952,
+        "border_color_id": 0,
+        "background_color_id": 0,
+        "background_id": 0
+      }
+    },
+    "clan": {
+      "id": 2000015816,
+      "tag": "TIF-K",
+      "league": 0
+    },
+    "statistics": {
+      "random": {
+        "battles_count": "6 513",
+        "win_rate": "58.45%",
+        "avg_damage": "77 594",
+        "avg_frags": "0.90",
+        "rating": "1 889",
+        "win_rate_class": 6,
+        "avg_damage_class": 7,
+        "avg_frags_class": 6,
+        "rating_class": 6
+      },
+      "ranked": {
+        "battles_count": "1 222",
+        "win_rate": "56.14%",
+        "avg_damage": "75 472",
+        "avg_frags": "0.79",
+        "rating": "1 732",
+        "win_rate_class": 6,
+        "avg_damage_class": 5,
+        "avg_frags_class": 5,
+        "rating_class": 5
+      }
+    }
+  }
+}

@@ -3,9 +3,9 @@ import time
 from PIL import Image
 from typing_extensions import TypedDict
 
-from ..config import ASSETS_DIR
+from ..config import ASSETS_DIR, bot_settings
 from ..logs import logging
-from ..api import BaseAPI
+from ..api import BaseAPI, Mock
 from ..logs import ExceptionLogger
 from ..common import (
     Utils, GameData, ThemeTextColor, ThemeRatingColor, TimeFormat
@@ -41,10 +41,14 @@ async def main(
     }
     if user.local.algorithm:
         params['algo_type'] = user.local.algorithm
-    result = await BaseAPI.get(
-        path=path,
-        params=params
-    )
+    if bot_settings.USE_MOCK:
+        result = Mock.read_data('signature.json')
+        logging.debug('Using MOCK, skip network requests')
+    else:
+        result = await BaseAPI.get(
+            path=path,
+            params=params
+        )
     if result['code'] != 1000:
         logging.error(f"API request failed, Error: {result['message']}")
         return result

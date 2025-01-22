@@ -8,7 +8,7 @@ from datetime import datetime
 
 from app import KokomiBot, Platform, UserBasic
 
-check_memory = True
+check_memory = True  # 用于检查是否有内存泄漏问题
 
 if check_memory:
     import psutil
@@ -40,6 +40,7 @@ Usage:
   <start> <command> [params]
 
 Commands:
+  /test                               Test
   /link <region> <ign>                Link to your game account
   /me                                 Overall 
   /set language <cn/en/ja>            Change language
