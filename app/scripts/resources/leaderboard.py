@@ -21,9 +21,10 @@ from ..schemas import (
 
 class OverallDict(TypedDict):
     overall: UserOverallDict
-    battle_type: ResultBattleTypeDict
-    ship_type: ResultShipTypeDict
-    chart_data: dict
+    ship_data: dict
+    ship_info: dict
+    rank_data: dict
+    leaderboard: list
 
 class UserBaseResult(TypedDict):
     user: UserBasicDict
@@ -46,7 +47,7 @@ async def main(
         params['algo_type'] = user.local.algorithm
     
     if bot_settings.USE_MOCK:
-        result = Mock.read_data('basic.json')
+        result = Mock.read_data('rank_user1.json')
         logging.debug('Using MOCK, skip network requests')
     else:
         result = await BaseAPI.get(
