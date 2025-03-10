@@ -3,6 +3,8 @@ from .resources import (
     overall,
     bind,
     signature,
+    rank_user,
+    rank_page,
     test
 )
 
@@ -102,6 +104,22 @@ class SelectFunc:
             message_list[0] == 'me'
         ):
             callback_func = overall.main
+            extra_kwargs = {}
+            return cls.return_data(callback_func, extra_kwargs)
+        if (
+            len(message_list) == 2 and
+            message_list[0] == 'me' and
+            message_list[1] == 'leader'
+        ):
+            callback_func = rank_page.main
+            extra_kwargs = {}
+            return cls.return_data(callback_func, extra_kwargs)
+        if (
+            len(message_list) == 2 and
+            message_list[0] == 'me' and
+            message_list[1] == 'leader2'
+        ):
+            callback_func = rank_user.main
             extra_kwargs = {}
             return cls.return_data(callback_func, extra_kwargs)
         if (

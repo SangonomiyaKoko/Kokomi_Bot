@@ -2,7 +2,7 @@ from .utils import Utils
 from .time_format import TimeFormat
 from .const import GameData
 from .version import ReadVersionFile
-from .theme import ThemeTextColor, ThemeRatingColor
+from .theme import ThemeTextColor, ThemeRatingColor, ThemeClanColor, ThemeRegionColor
 from .response import ResponseDict, JSONResponse
 
 __all__ = [
@@ -13,5 +13,7 @@ __all__ = [
     'JSONResponse',
     'ReadVersionFile',
     'ThemeTextColor',
-    'ThemeRatingColor'
+    'ThemeRatingColor',
+    'ThemeClanColor',
+    'ThemeRegionColor'
 ]
