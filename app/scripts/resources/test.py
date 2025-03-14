@@ -12,18 +12,19 @@ from ..image import (
 from ..schemas import KokomiUser
 
 @ExceptionLogger.handle_program_exception_async
-async def main(user: KokomiUser) -> dict:
+async def main(user: KokomiUser, test_msg: str) -> dict:
     res_img = get_png(
-        user=user
+        user=user,
+        test_msg = test_msg
     )
     result = Picture.return_img(img=res_img)
     del res_img
     return result
 
 @TimeFormat.cost_time_sync(message='Image generation completed')
-def get_png(user: KokomiUser) -> str:
+def get_png(user: KokomiUser, test_msg: str) -> str:
     # 画布宽度和高度
-    width, height = 150, 50
+    width, height = 150, 75
     # 背景颜色（RGBA）
     background_color = Picture.hex_to_rgb(user.local.background, 0)
     # 创建画布
@@ -42,6 +43,15 @@ def get_png(user: KokomiUser) -> str:
             fill=theme_text_color.TextThemeColor2,
             font_index=1,
             font_size=50
+        )
+    )
+    text_list.append(
+        Text_Data(
+            xy=(0,50),
+            text=test_msg,
+            fill=theme_text_color.TextThemeColor3,
+            font_index=1,
+            font_size=25
         )
     )
     res_img = Picture.add_box(box_list, res_img)

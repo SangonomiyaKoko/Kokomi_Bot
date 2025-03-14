@@ -36,11 +36,8 @@ class UserBaseResult(TypedDict):
 async def main(
     user: KokomiUser
 ) -> dict:
-    path = '/r/user/account/'
+    path = '/api/v1/robot/leaderboard/user/{}/{}/{}/{}/'
     params = {
-        'region': Utils.get_region_by_id(user.bind.region_id),
-        'account_id': user.bind.account_id,
-        'game_type': 'overall',
         'language': Utils.get_language(user.local.language)
     }
     if user.local.algorithm:

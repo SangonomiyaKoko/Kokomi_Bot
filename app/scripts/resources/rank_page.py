@@ -34,14 +34,15 @@ class UserBaseResult(TypedDict):
 
 @ExceptionLogger.handle_program_exception_async
 async def main(
-    user: KokomiUser
+    user: KokomiUser,
+    region_idx: int,
+    ship_id: int
 ) -> dict:
-    path = '/r/user/account/'
+    path = f'/api/v1/robot/leaderboard/page/{region_idx}/{ship_id}/'
     params = {
-        'region': Utils.get_region_by_id(user.bind.region_id),
-        'account_id': user.bind.account_id,
-        'game_type': 'overall',
-        'language': Utils.get_language(user.local.language)
+        'language': Utils.get_language(user.local.language),
+        'page_idx': 1,
+        'page_size': 50
     }
     if user.local.algorithm:
         params['algo_type'] = user.local.algorithm

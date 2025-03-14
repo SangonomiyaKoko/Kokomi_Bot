@@ -10,23 +10,25 @@ from ..schemas import KokomiUser
 async def post_bind(
     user: KokomiUser,
     region_id: int,
+    account_id: int,
     nickname: str
 ) -> dict:
-    result = await BasicAPI.search_user(region_id, nickname)
-    if result['code'] != 1000:
-        return result
-    if len(result['data']) != 1:
-        return JSONResponse.API_9003_NameNotFound
     data = {
         'platform': user.platform.name,
         'user_id': user.basic.id,
-        'region_id': result['data'][0]['region_id'],
-        'account_id': result['data'][0]['account_id']
+        'region_id': region_id,
+        'account_id': account_id
     }
     result = await BindAPI.post_user_bind(data)
     if result['code'] != 1000:
         return result
-    return JSONResponse.API_9005_LinkSuccess
+    result = JSONResponse.API_9005_LinkSuccess
+    result['data'] = {
+        'region_id': region_id,
+        'account_id': account_id,
+        'nickname': nickname
+    }
+    return result
 
 @ExceptionLogger.handle_program_exception_async
 async def update_language(

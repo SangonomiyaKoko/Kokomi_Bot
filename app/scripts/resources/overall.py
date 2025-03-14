@@ -35,7 +35,7 @@ class UserBaseResult(TypedDict):
 async def main(
     user: KokomiUser
 ) -> dict:
-    path = '/r/user/account/'
+    path = '/api/v1/robot/user/account/'
     params = {
         'region': Utils.get_region_by_id(user.bind.region_id),
         'account_id': user.bind.account_id,

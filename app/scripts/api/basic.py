@@ -14,7 +14,7 @@ REGION_LIST = {
 class BasicAPI:
     async def get_bot_version():
         "从服务器端获取当前bot的最新版本"
-        path = '/r/version/'
+        path = '/api/v1/robot/version/'
         if bot_settings.USE_MOCK:
             result = Mock.read_data('version.json')
             logging.debug('Using MOCK, skip network requests')
@@ -25,7 +25,7 @@ class BasicAPI:
     async def search_user(region_id: int, name: str):
         "获取用户名称搜索结果"
         region = REGION_LIST.get(region_id)
-        path = '/p/search/user/'
+        path = '/api/v1/platform/search/user/'
         params = {
             'region': region,
             'nickname': name,
@@ -35,10 +35,21 @@ class BasicAPI:
         result = await BaseAPI.get(path, params)
         return result
     
+    async def check_user(region_id: int, account_id: str):
+        "获取用户名称搜索结果"
+        region = REGION_LIST.get(region_id)
+        path = '/api/v1/platform/check/user/'
+        params = {
+            'region': region,
+            'account_id': account_id
+        }
+        result = await BaseAPI.get(path, params)
+        return result
+    
     async def search_clan(region_id: int, tag: str):
         "获取工会名称搜索结果"
         region = REGION_LIST.get(region_id)
-        path = '/p/search/clan/'
+        path = '/api/v1/platform/search/clan/'
         params = {
             'region': region,
             'tag': tag,
