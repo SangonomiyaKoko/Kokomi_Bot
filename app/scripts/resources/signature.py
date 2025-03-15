@@ -1,5 +1,4 @@
 import os
-import time
 from PIL import Image
 from typing_extensions import TypedDict
 
@@ -49,8 +48,10 @@ async def main(
             path=path,
             params=params
         )
+    if 2000 <= result['code'] <= 9999:
+        logging.error(f"API Error, Error: {result['message']}")
+        return result
     if result['code'] != 1000:
-        logging.error(f"API request failed, Error: {result['message']}")
         return result
     res_img = get_png(
         user=user,

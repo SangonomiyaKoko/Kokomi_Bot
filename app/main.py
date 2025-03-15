@@ -3,7 +3,8 @@ from .scripts.logs import logging
 from .scripts.language import Message
 from .scripts.common import ReadVersionFile
 from .scripts.command import select_func
-from .scripts.db import UserLocalDB
+from .scripts.db import UserLocalManager
+from .permission import get_user_level
 from .scripts.schemas import (
     KokomiUser, Platform, UserBasic
 )
@@ -28,7 +29,8 @@ class KokomiBot:
             data: 返回数据的内容
         '''
         kokomi_user = KokomiUser(platform,user)
-        user_binding_status = False
+        user_level = get_user_level(kokomi_user.basic.cid)
+        kokomi_user.set_user_level(user_level)
         logging.debug(f"Receive a message from {kokomi_user.platform.name}-{kokomi_user.basic.id} [{message}]")
         # # 用户输入的消息按照空格切割成list
         # message_list = message.split(' ')
@@ -41,8 +43,8 @@ class KokomiBot:
         #     del message_list[0]
         # if EN_STARTWITH in message_list[0]:
         #     message_list[0] = message_list[0].replace(EN_STARTWITH,'')
+        user_local = UserLocalManager.get_user_local(kokomi_user)
         user_bind = await BindAPI.get_user_bind(kokomi_user)
-        user_local = UserLocalDB.get_user_local(kokomi_user)
         if user_bind['code'] != 1000:
             # 获取用户绑定信息失败
             return self.__process_result(
@@ -50,10 +52,7 @@ class KokomiBot:
                 result = user_bind
             )
         elif user_bind['data']:
-            user_binding_status = True
             kokomi_user.bind.set_user_bind(user_bind['data'])
-        else:
-            user_binding_status = False
         logging.debug(str(user_bind['data']))
         if user_local['code'] != 1000:
             # 获取用户本地信息失败

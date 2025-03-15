@@ -1,7 +1,7 @@
 
 from ..logs import ExceptionLogger
 from ..api import BasicAPI, BindAPI
-from ..common import JSONResponse
+from ..schemas import JSONResponse
 from ..db import UserLocalDB
 from ..schemas import KokomiUser
 

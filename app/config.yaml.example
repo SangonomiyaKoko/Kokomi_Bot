@@ -13,3 +13,6 @@ BOT:
   SHOW_CLAN_TAG: true       # 是否显示工会段位
   SHOW_CUSTOM_TAG: true     # 是否显示自定义狗牌
   BOT_INFO: "ABC"           # Bot底部Footer文字
+  ROOT_USERS: ["3197206779"]  # Root用户，必须是str
+  ADMINS_USERS: ["2041283903"]    # 管理员用户，必须是str
+

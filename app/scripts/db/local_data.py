@@ -7,9 +7,16 @@ from ..logs import ExceptionLogger, logging
 from ..schemas import KokomiUser
 
 class UserLocalDB:
-    def __create_db():
-        db_path = os.path.join(DATA_DIR, 'local.db')
-        conn = sqlite3.connect(db_path)
+    def __init__(self):
+        self.db_path = os.path.join(DATA_DIR, 'local.db')
+        self.__check_db()
+
+    def __check_db(self):
+        if os.path.exists(self.db_path) is False:
+            self.__create_db()
+
+    def __create_db(self):
+        conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         table_create_query = f'''
         CREATE TABLE users (
@@ -36,19 +43,17 @@ class UserLocalDB:
         cursor.close()
         conn.close()
 
-    @classmethod
     @ExceptionLogger.handle_database_exception_sync
-    def get_user_local(cls, kokomi_user: KokomiUser):
+    def get_user_local(self, kokomi_user: KokomiUser):
         if bot_settings.USE_MOCK:
             result = Mock.read_data('local.json')
             logging.debug('Using MOCK, skip network requests')
             return result
         user_id = kokomi_user.basic.id
         platform_type = kokomi_user.platform.name
-        db_path = os.path.join(DATA_DIR, 'local.db')
-        if os.path.exists(db_path) is False:
-            cls.__create_db()
-        conn = sqlite3.connect(database=db_path)
+        if os.path.exists(self.db_path) is False:
+            self.__create_db()
+        conn = sqlite3.connect(database=self.db_path)
         cursor = conn.cursor()
         cursor.execute(f'''
             SELECT language, algorithm, background, content, theme
@@ -91,15 +96,13 @@ class UserLocalDB:
         conn.close()
         return {'status': 'ok','code': 1000,'message': 'Success','data': data}
 
-    @classmethod
     @ExceptionLogger.handle_database_exception_sync
-    def update_language(cls, user: KokomiUser, language: str):
+    def update_language(self, user: KokomiUser, language: str):
         user_id = user.basic.id
         platform_type = user.platform.name
-        db_path = os.path.join(DATA_DIR, 'local.db')
-        if os.path.exists(db_path) is False:
-            cls.__create_db()
-        conn = sqlite3.connect(database=db_path)
+        if os.path.exists(self.db_path) is False:
+            self.__create_db()
+        conn = sqlite3.connect(database=self.db_path)
         cursor = conn.cursor()
         cursor.execute(f'''
             UPDATE users SET language = '{language}'
@@ -110,15 +113,13 @@ class UserLocalDB:
         conn.close()
         return {'status': 'ok','code': 1000,'message': 'Success','data': None}
 
-    @classmethod
     @ExceptionLogger.handle_database_exception_sync
-    def update_algorithm(cls, user: KokomiUser, algorithm: str):
+    def update_algorithm(self, user: KokomiUser, algorithm: str):
         user_id = user.basic.id
         platform_type = user.platform.name
-        db_path = os.path.join(DATA_DIR, 'local.db')
-        if os.path.exists(db_path) is False:
-            cls.__create_db()
-        conn = sqlite3.connect(database=db_path)
+        if os.path.exists(self.db_path) is False:
+            self.__create_db()
+        conn = sqlite3.connect(database=self.db_path)
         cursor = conn.cursor()
         cursor.execute(f'''
             UPDATE users SET algorithm = '{algorithm}'

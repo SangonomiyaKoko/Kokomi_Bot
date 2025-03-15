@@ -1,7 +1,8 @@
 # 解析指令参数的方法
+import re
 
 from ...api import BasicAPI
-from ...common import JSONResponse
+from ...schemas import JSONResponse
 
 def get_region_id_from_aid(account_id: int):
     account_id_len = len(str(account_id))
@@ -38,6 +39,11 @@ def get_region_id_from_aid(account_id: int):
     ):
         return 5
     return None
+
+def extract_mention_id(text: str) -> str | None:
+    """从 @ 中提取 ID"""
+    match = re.search(r"<@!([a-zA-Z0-9]+)>", text)
+    return match.group(1) if match else None
 
 def get_region_id_from_input(input: str) -> int | None:
     "处理用户输入的region参数"

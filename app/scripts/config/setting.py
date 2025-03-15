@@ -23,6 +23,7 @@ class API_Settings:
 
 class BOT_Settings:
     def __init__(self, config_data):
+        self.PLATFORM: str = config_data.get("PLATFORM", "KokomiBot")
         self.LOG_LEVEL: Literal['debug', 'info'] = config_data.get("LOG_LEVEL", "debug")
         self.USE_MOCK: bool = config_data.get("USE_MOCK", False)
         self.RETURN_PIC_TYPE: Literal['png', 'webp'] = config_data.get("RETURN_PIC_TYPE", "png")
@@ -30,6 +31,8 @@ class BOT_Settings:
         self.SHOW_CLAN_TAG: bool = config_data.get("SHOW_CLAN_TAG", False)
         self.SHOW_CUSTOM_TAG: bool = config_data.get("SHOW_CUSTOM_TAG", False)
         self.BOT_INFO: str = config_data.get("BOT_INFO", "No bot information available")
+        self.ROOT_USERS: list = config_data.get("ROOT_USER", [])
+        self.ADMINS_USERS: list = config_data.get("ADMINS_USER", [])
 
     def __repr__(self):
         return (

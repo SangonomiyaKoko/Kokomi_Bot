@@ -20,7 +20,6 @@ class BaseAPI:
         headers = {
             'accept': 'application/json'
         }
-        logging.debug(f"GET {url}")
         async with httpx.AsyncClient() as client:
             res = await client.get(
                 url=url, 
@@ -28,6 +27,7 @@ class BaseAPI:
                 timeout=api_settings.REQUEST_TIMEOUT
             )
             request_code = res.status_code
+            logging.debug(f"GET {url} {request_code}")
             result = res.json()
         if request_code == 200:
             return result
@@ -45,7 +45,6 @@ class BaseAPI:
         headers = {
             'accept': 'application/json'
         }
-        logging.debug(f"POST {url}")
         async with httpx.AsyncClient() as client:
             res = await client.post(
                 url=url, 
@@ -54,6 +53,7 @@ class BaseAPI:
                 timeout=api_settings.REQUEST_TIMEOUT
             )
             request_code = res.status_code
+            logging.debug(f"POST {url} {request_code}")
             result = res.json()
         if request_code == 200:
             return result
@@ -71,7 +71,6 @@ class BaseAPI:
         headers = {
             'accept': 'application/json'
         }
-        logging.debug(f"PUT {url}")
         async with httpx.AsyncClient() as client:
             res = await client.put(
                 url=url, 
@@ -80,6 +79,7 @@ class BaseAPI:
                 timeout=api_settings.REQUEST_TIMEOUT
             )
             request_code = res.status_code
+            logging.debug(f"PUT {url} {request_code}")
             result = res.json()
         if request_code == 200:
             return result

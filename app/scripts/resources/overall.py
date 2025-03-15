@@ -53,8 +53,10 @@ async def main(
             path=path,
             params=params
         )
+    if 2000 <= result['code'] <= 9999:
+        logging.error(f"API Error, Error: {result['message']}")
+        return result
     if result['code'] != 1000:
-        logging.error(f"API request failed, Error: {result['message']}")
         return result
     res_img = get_png(
         user=user,
@@ -170,7 +172,7 @@ def get_png(
             font_size=55
         )
     )
-    creat_time = TimeFormat.get_strftime(result['user']['region'], result['user']['crated_at'], "%Y-%m-%d")
+    creat_time = TimeFormat.get_strftime(result['user']['region'], result['user']['created_at'], "%Y-%m-%d")
     text_list.append(
         Text_Data(
             xy=(169+w_2+30, 448),

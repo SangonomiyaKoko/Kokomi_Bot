@@ -13,7 +13,7 @@ class UserBasicDict(TypedDict):
     region: int
     name: str
     karma: int
-    crated_at: int
+    created_at: int
     actived_at: int
     dog_tag: Union[Dict, None]
 

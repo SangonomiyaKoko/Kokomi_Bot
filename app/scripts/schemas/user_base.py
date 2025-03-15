@@ -25,11 +25,16 @@ class UserBasic:
         self.cid = cid    # 原始用户id，处理@查询请求中，可能需要的对原始用户id的溯源
         self.name = None
         self.avatar = None
+        self.level = 2
     
     def set_user_info(self, name: str, avatar: str):
         "写入用户详细数据"
         self.name = name
         self.avatar = avatar
+
+    def set_user_level(self, level: int):
+        "写入用户的权限等级"
+        self.level = level
 
 class UserBind:
     "用户绑定信息类"
@@ -90,6 +95,10 @@ class KokomiUser:
         self.basic = user_basic
         self.bind = UserBind()
         self.local = UserLocal(platform)
+
+    def set_user_level(self, user_level: int):
+        "更新用户的等级权限"
+        self.basic.set_user_level(user_level)
 
     def set_user_bind(self, user_bind: UserBindDict):
         "更新用户的bind数据"
