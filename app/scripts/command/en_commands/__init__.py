@@ -1,1 +1,1 @@
-from .commands import *
+from .commands import *    # 注册指令

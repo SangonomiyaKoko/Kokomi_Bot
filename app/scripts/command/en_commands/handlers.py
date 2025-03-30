@@ -2,7 +2,7 @@
 from typing import Callable, Dict, Tuple, Optional, Any, Union, Awaitable
 
 from ...resources import (
-    test, bind, overall
+    test, bind, overall, clear
 )
 from ...schemas import KokomiUser
 
@@ -28,11 +28,27 @@ async def handle_test(
         (None, None) or 
         (None, dixt)
     """
-    if test_msg == '' or test_msg == None:
+    if raw_args == '' or raw_args == None:
         test_msg = '123456789'
     else:
         test_msg = raw_args
     return test.main, {'test_msg': test_msg}
+
+async def handel_cls(
+    user: KokomiUser, 
+    raw_args: str
+) -> Tuple[Optional[Callable[[Any], dict]], Optional[Dict[str, Any]]]:
+    """绑定指令
+    
+    包含指令：
+        - /cls
+
+    返回值：
+        (callback_func, extra_kwargs) or 
+        (None, None) or 
+        (None, dixt)
+    """
+    return clear.main, {}
 
 async def handle_bind(
     user: KokomiUser, 
@@ -85,6 +101,56 @@ async def handle_bind(
         params['nickname'] = search_result['data'][0]['name']
     return bind.post_bind, params
 
+async def handle_lang(
+    user: KokomiUser, 
+    raw_args: str
+) -> tuple[Optional[Callable[..., Awaitable[Dict[str, Any]]]], Union[Dict[str, Any], None]]:
+    """绑定指令
+    
+    包含指令：
+        - /lang <cn/en/ja>
+
+    返回值：
+        (callback_func, extra_kwargs) or 
+        (None, None) or 
+        (None, dict)
+    """
+    if raw_args == '':
+        return None, None
+    if raw_args not in ['cn', 'en', 'ja']:
+        return None, None
+    params = {
+        'language': raw_args
+    }
+    return bind.update_language, params
+
+async def handle_algo(
+    user: KokomiUser, 
+    raw_args: str
+) -> tuple[Optional[Callable[..., Awaitable[Dict[str, Any]]]], Union[Dict[str, Any], None]]:
+    """绑定指令
+    
+    包含指令：
+        - /algo <default/none>
+
+    返回值：
+        (callback_func, extra_kwargs) or 
+        (None, None) or 
+        (None, dict)
+    """
+    if raw_args == '':
+        return None, None
+    algo_dict = {
+        'default': 'pr',
+        'none': ''
+    }
+    if raw_args not in algo_dict:
+        return None, None
+    params = {
+        'algorithm': algo_dict.get(raw_args)
+    }
+    return bind.update_algorithm, params
+
 async def handle_basic(
     user: KokomiUser, 
     raw_args: str
@@ -97,7 +163,7 @@ async def handle_basic(
     返回值：
         (callback_func, extra_kwargs) or 
         (None, None) or 
-        (None, dixt)
+        (None, dict)
     """
     if raw_args == '':
         return overall.main, None
@@ -119,6 +185,7 @@ async def handle_basic(
         params['account_id'] = account_id
         params['region_id'] = region_id
         user.set_user_bind(params)
+        return overall.main, None
     else:
         parts = raw_args.split(maxsplit=1)
         if len(parts) == 1:

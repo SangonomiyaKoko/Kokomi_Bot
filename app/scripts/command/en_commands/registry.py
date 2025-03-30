@@ -7,13 +7,13 @@ from ...logs import logging
 
 class CommandRegistry:
     """ 管理指令注册和解析 """
-    COMMANDS = {}  # 存储指令 -> (处理函数, 所需权限)
+    COMMANDS = {}  # 存储指令 -> (处理函数, 所需权限，是否需要绑定)
 
     @staticmethod
-    def command_handler(command, permission_level: int):
+    def command_handler(command, permission_level: int, requires_binding: bool):
         """ 注册指令，并支持自定义参数解析 """
         def decorator(func):
-            CommandRegistry.COMMANDS[command] = (func, permission_level)
+            CommandRegistry.COMMANDS[command] = (func, permission_level, requires_binding)
             @wraps(func)
             def wrapper(*args, **kwargs):
                 return func(*args, **kwargs)
@@ -21,7 +21,7 @@ class CommandRegistry:
         return decorator
 
     @staticmethod
-    def return_data(callback_func, extra_kwargs: dict | None):
+    def return_data(callback_func, extra_kwargs: dict | None, requires_binding: bool):
         """ 统一返回数据格式 """
         return {
             'status': 'ok',
@@ -29,7 +29,8 @@ class CommandRegistry:
             'message': 'Success',
             'data': {
                 'callback_func': callback_func,
-                'extra_kwargs': extra_kwargs if extra_kwargs else {}
+                'extra_kwargs': extra_kwargs if extra_kwargs else {},
+                'requires_binding': requires_binding
             }
         }
 
@@ -38,10 +39,10 @@ class CommandRegistry:
         """ 解析用户输入，匹配指令 """
         parts = user_input.strip().split(maxsplit=1)  # 分割指令和参数
         command = parts[0]
-        logging.debug(f'Extract keywords： {command}')
+        logging.debug(f'Extract keywords: {command}')
         raw_args = parts[1] if len(parts) > 1 else ""
         if command in cls.COMMANDS:
-            handle_func, permission_level = cls.COMMANDS[command]
+            handle_func, permission_level, requires_binding = cls.COMMANDS[command]
             if user.basic.level not in permission_level:
                 # 用户权限不足
                 if len(permission_level) == 1 and permission_level[0] == 1:
@@ -57,6 +58,6 @@ class CommandRegistry:
             elif not callback_func and extra_kwargs:
                 return extra_kwargs
             else:
-                return cls.return_data(callback_func, extra_kwargs)
+                return cls.return_data(callback_func, extra_kwargs, requires_binding)
 
         return JSONResponse.API_10004_CommandNotFound

@@ -25,8 +25,7 @@ tier_dict = {
     11: '★',
 }
 
-ship_info = json.load(
-            open(os.path.join(file_path, 'json', 'ship_name_main.json'), "r", encoding="utf-8"))
+ship_info = json.load(open(os.path.join(file_path, 'json', 'ship_name_main.json'), "r", encoding="utf-8"))
 img_jpg_path = os.path.join(file_path, 'bg_2.png')
 img_jpg = Image.open(img_jpg_path)
 i = 1

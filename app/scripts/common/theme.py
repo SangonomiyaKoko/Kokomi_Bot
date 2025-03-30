@@ -22,15 +22,15 @@ class ThemeRatingColor:
     def __init__(self, theme: Literal['dark', 'light']):
         if theme.lower() == "dark":
             self.RatingThemeColor = [
-                (127, 127, 127),
-                (205, 51, 51),
-                (254, 121, 3),
-                (255, 193, 7),
-                (78, 206, 0),
-                (10, 145, 0),
-                (52, 186, 211),
-                (200, 45, 200),
-                (147, 50, 212)
+                (105, 105, 105),
+                (125, 0, 0),
+                (168, 66, 0),
+                (183, 170, 0),
+                (99, 140, 11),
+                (0, 113, 48),
+                (0, 117, 169),
+                (234, 63, 224),
+                (151, 38, 176)
             ]
         elif theme.lower() == "light":
             self.RatingThemeColor = [
@@ -41,8 +41,8 @@ class ThemeRatingColor:
                 (68, 179, 0),
                 (49, 128, 0),
                 (52, 186, 211),
-                (121, 61, 182),
-                (88, 43, 128)
+                (211, 33, 213),
+                (115, 13, 189)
             ]
         else:
             raise ValueError("Invalid theme. Please choose 'dark' or 'light'.")

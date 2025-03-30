@@ -1,5 +1,5 @@
 from .scripts.api import BindAPI, BasicAPI
-from .scripts.logs import logging
+from .scripts.logs import logging, message_logger
 from .scripts.language import Message
 from .scripts.common import ReadVersionFile
 from .scripts.command import select_func
@@ -29,62 +29,64 @@ class KokomiBot:
             data: 返回数据的内容
         '''
         kokomi_user = KokomiUser(platform,user)
+        message_logger.debug(f"Receive | FROM={kokomi_user.platform.name.upper()} UID={kokomi_user.basic.id} MSG=\'{message}\'")
+        # 以下为Bot的中间件0
         user_level = get_user_level(kokomi_user.basic.cid)
         kokomi_user.set_user_level(user_level)
-        logging.debug(f"Receive a message from {kokomi_user.platform.name}-{kokomi_user.basic.id} [{message}]")
-        # # 用户输入的消息按照空格切割成list
-        # message_list = message.split(' ')
-        # # 删除触发词
-        # CN_STARTWITH = 'wws'
-        # EN_STARTWITH = '/'
-        # if message_list[0] == CN_STARTWITH:
-        #     del message_list[0]
-        # if EN_STARTWITH == message_list[0]:
-        #     del message_list[0]
-        # if EN_STARTWITH in message_list[0]:
-        #     message_list[0] = message_list[0].replace(EN_STARTWITH,'')
+        # 获取用户的本地数据库信息
         user_local = UserLocalManager.get_user_local(kokomi_user)
-        user_bind = await BindAPI.get_user_bind(kokomi_user)
-        if user_bind['code'] != 1000:
-            # 获取用户绑定信息失败
-            return self.__process_result(
-                language = kokomi_user.local.language,
-                result = user_bind
-            )
-        elif user_bind['data']:
-            kokomi_user.bind.set_user_bind(user_bind['data'])
-        logging.debug(str(user_bind['data']))
         if user_local['code'] != 1000:
             # 获取用户本地信息失败
             return self.__process_result(
+                kokomi_user = kokomi_user,
                 language = kokomi_user.local.language,
                 result = user_local
             )
         else:
-            kokomi_user.local.set_user_local(user_local['data'])
-
+            kokomi_user.set_user_local(user_local['data'])
         logging.debug(str(user_local['data']))
+        # 指令解析
         select_result = await select_func(kokomi_user, message)
+        if select_result['status'] == 'error':
+            logging.error(str(select_result))
         if select_result['code'] == 1000:
             generate_func = select_result['data']['callback_func']
+            requires_binding = select_result['data']['requires_binding']
+            # 需要绑定但是没有查询账号的信息则去请求绑定数据
+            if requires_binding and not kokomi_user.check_user_bind():
+                user_bind = await BindAPI.get_user_bind(kokomi_user)
+                if user_bind['code'] != 1000:
+                    # 获取用户绑定信息失败
+                    return self.__process_result(
+                        kokomi_user = kokomi_user,
+                        language = kokomi_user.local.language,
+                        result = user_bind
+                    )
+                elif user_bind['data']:
+                    kokomi_user.set_user_bind(user_bind['data'])
+                logging.debug(str(user_bind['data']))
+            # 调用相关resources的函数，请求接口获取数据或生成图片
             generate_result = await generate_func(
                 user = kokomi_user,
                 **select_result['data']['extra_kwargs']
             )
             logging.debug(str(generate_result))
             return self.__process_result(
+                kokomi_user = kokomi_user,
                 language = kokomi_user.local.language,
                 result = generate_result
             )
         else:
             return self.__process_result(
+                kokomi_user = kokomi_user,
                 language = kokomi_user.local.language,
                 result = select_result
             )
 
-    def __process_result(self, language: str, result: dict):
+    def __process_result(self, kokomi_user: KokomiUser, language: str, result: dict):
         if result['code'] == 1000:
             # 正常结果，返回图片
+            message_logger.debug(f"Return | TO={kokomi_user.platform.name.upper()} UID={kokomi_user.basic.id} RID={kokomi_user.bind.region_id} MSG=Image")
             return {
                 'type': 'img',
                 'data': result['data']['img']
@@ -95,6 +97,7 @@ class KokomiBot:
                 language = language,
                 result = result
             )
+            message_logger.debug(f"Return | TO={kokomi_user.platform.name.upper()} UID={kokomi_user.basic.id} RID={kokomi_user.bind.region_id} MSG=\'{msg}\'")
             return {
                 'type': 'msg',
                 'data': msg

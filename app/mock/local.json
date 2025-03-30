@@ -5,8 +5,8 @@
   "data": {
     "language": "cn",
     "algorithm": "pr",
-    "background": "#F8F9FB",
-    "content": "light",
+    "background": "#313131",
+    "content": "dark",
     "theme": "default"
   }
 }

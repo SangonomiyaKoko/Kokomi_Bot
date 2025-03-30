@@ -12,7 +12,7 @@ class ImageDB:
         self.folder_path = os.path.join(ASSETS_DIR)
         self.db_path = os.path.join(DATA_DIR, 'image.lmab')
         # 创建或打开一个 LMDB 数据库
-        self.env = lmdb.open(self.db_path, map_size=100 * 1024 * 1024)  # 1GB 的最大数据库大小
+        self.env = lmdb.open(self.db_path, map_size=100 * 1024 * 1024)  # 100MB 的最大数据库大小
         self._load_existing_data()
 
     def _load_existing_data(self):

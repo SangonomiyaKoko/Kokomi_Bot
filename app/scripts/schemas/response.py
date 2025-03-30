@@ -19,8 +19,15 @@ class JSONResponse:
     API_9006_ChangeSuccess = {'status': 'ok', 'code': 9006, 'message': 'ChangeSuccess', 'data': None}
     API_9007_InvaildParams = {'status': 'ok', 'code': 9007, 'message': 'InvaildParams', 'data': None}
 
-    API_10001_RootRequired = {'status': 'ok','code': 10001,'message': 'RootRequired','data': None}
-    API_10002_AdminOrRootRequired = {'status': 'ok','code': 10002,'message': 'AdminOrRootRequired','data': None}
-    API_10003_UserNotBound = {'status': 'ok', 'code': 10003, 'message': 'UserNotBound', 'data': None}
-    API_10004_CommandNotFound = {'status': 'ok', 'code': 10004, 'message': 'CommandNotFound', 'data': None}
-    API_10005_InvalidArgs = {'status': 'ok', 'code': 10005, 'message': 'InvalidArgs', 'data': None}
+    API_10001_RootRequired = ResponseDict(status='ok', code=10001, message='RootRequired')
+    API_10002_AdminOrRootRequired = ResponseDict(status='ok', code=10002, message='AdminOrRootRequired')
+    API_10003_UserNotBound = ResponseDict(status='ok', code=10003, message='UserNotBound')
+    API_10004_CommandNotFound = ResponseDict(status='ok', code=10004, message='CommandNotFound')
+    API_10005_InvalidArgs = ResponseDict(status='ok', code=10005, message='InvalidArgs')
+    API_10006_ClearCacheSuccess = ResponseDict(status='ok', code=10006, message='ClearCacheSuccess')
+    API_10007_SaveImageFailed = ResponseDict(status='ok', code=10007, message='SaveImageFailed')
+    API_10008_ImageResourceMissing = ResponseDict(status='ok', code=10008, message='ImageResourceMissing')
+    API_10009_ImageTooLarge = ResponseDict(status='ok', code=10009, message='ImageTooLarge')
+
+
+

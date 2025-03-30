@@ -46,6 +46,12 @@ class UserBind:
         self.region_id = user_bind['region_id']
         self.account_id = user_bind['account_id']
     
+    def is_user_binding(self):
+        if self.account_id and self.region_id:
+            return True
+        else:
+            return False
+    
 class UserLocal:
     "用户本地信息类"
     def __init__(self, platform: Platform):
@@ -77,6 +83,11 @@ class UserLocal:
             'content': 'light',
             'theme': 'default'
         }
+        # defaults = {
+        #     'background': '#313131',
+        #     'content': 'dark',
+        #     'theme': 'default'
+        # }
         return defaults.get(key)
 
     def set_user_local(self, user_local: UserLocalDict):
@@ -103,6 +114,10 @@ class KokomiUser:
     def set_user_bind(self, user_bind: UserBindDict):
         "更新用户的bind数据"
         self.bind.set_user_bind(user_bind)
+    
+    def check_user_bind(self):
+        "检查用户的bind数据是否存在"
+        return self.bind.is_user_binding()
     
     def set_user_local(self, user_local: UserLocalDict):
         "更新用户的local数据"
