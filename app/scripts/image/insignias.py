@@ -21,6 +21,73 @@ dir_list = [
 
 
 class Insignias:
+    def get_insignias(
+        region_id: int,
+        account_id: str,
+        clan_id: str,
+        response: str
+    ):
+        result = []
+        operator = Utils.get_operator_by_id(region_id)
+        dog_tag_json = os.path.join(ASSETS_DIR, 'json', operator, 'dog_tags.json')
+        temp = open(dog_tag_json, "r", encoding="utf-8")
+        dog_tag_data = json.load(temp)
+        temp.close()
+        background_id = dog_tag_data.get(str(response['background_id']), None)
+        symbol_id = dog_tag_data.get(str(response['symbol_id']), None)
+        if (
+            (
+                background_id == None and 
+                symbol_id == None
+            ) or (
+                background_id != None and 
+                symbol_id == None
+            )
+        ):
+            return []
+        if background_id in dir_list:
+            if symbol_id == None:
+                return []
+            texture_id = dog_tag_data[str(response['texture_id'])][6:]
+            background_color_id = GameData.background_color[str(response['background_color_id'])]
+            background_png_name = f'{background_id}_background_{texture_id}_{background_color_id}'
+            background_png_path = os.path.join(ASSETS_DIR, r'components\insignias\background', f'{background_png_name}.png')
+            if not os.path.exists(background_png_path):
+                return []
+            else:
+                result.append(background_png_path)
+            border_color_id = GameData.border_color[str(response['border_color_id'])]
+            border_png_name = f'{background_id}_border_{border_color_id}'
+            border_png_path = os.path.join(ASSETS_DIR, r'components\insignias\background', f'{border_png_name}.png')
+            if not os.path.exists(border_png_path):
+                return []
+            else:
+                result.append(border_png_path)
+            symbol_png_path = os.path.join(ASSETS_DIR, r'components\insignias\symbol', operator, f'{symbol_id}.png')
+            if not os.path.exists(symbol_png_path):
+                return []
+            else:
+                result.append(symbol_png_path)
+        elif background_id == None and symbol_id != None:
+            symbol_png_path = os.path.join(ASSETS_DIR, r'components\insignias\symbol', operator, f'{symbol_id}.png')
+            if not os.path.exists(symbol_png_path):
+                return []
+            else:
+                result.append(symbol_png_path)
+        else:
+            background_png_path = os.path.join(ASSETS_DIR, r'components\insignias\background', f'{background_id}.png')
+            if not os.path.exists(border_png_path):
+                return []
+            else:
+                result.append(border_png_path)
+            symbol_png_path = os.path.join(ASSETS_DIR, r'components\insignias\symbol', operator, f'{symbol_id}.png')
+            if not os.path.exists(symbol_png_path):
+                return []
+            else:
+                result.append(symbol_png_path)
+        return result
+
+    
     def add_user_insignias(
         img: Image,
         region_id: int,

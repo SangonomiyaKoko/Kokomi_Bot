@@ -124,6 +124,52 @@ async def handle_lang(
     }
     return bind.update_language, params
 
+async def handle_content(
+    user: KokomiUser, 
+    raw_args: str
+) -> tuple[Optional[Callable[..., Awaitable[Dict[str, Any]]]], Union[Dict[str, Any], None]]:
+    """绑定指令
+    
+    包含指令：
+        - /mode <dark/light>
+
+    返回值：
+        (callback_func, extra_kwargs) or 
+        (None, None) or 
+        (None, dict)
+    """
+    if raw_args == '':
+        return None, None
+    if raw_args not in ['dark', 'light']:
+        return None, None
+    params = {
+        'content': raw_args
+    }
+    return bind.update_content, params
+
+async def handle_theme(
+    user: KokomiUser, 
+    raw_args: str
+) -> tuple[Optional[Callable[..., Awaitable[Dict[str, Any]]]], Union[Dict[str, Any], None]]:
+    """绑定指令
+    
+    包含指令：
+        - /theme <default/mavuika/furina>
+
+    返回值：
+        (callback_func, extra_kwargs) or 
+        (None, None) or 
+        (None, dict)
+    """
+    if raw_args == '':
+        return None, None
+    if raw_args not in ['default', 'mavuika', 'furina']:
+        return None, None
+    params = {
+        'theme': raw_args
+    }
+    return bind.update_theme, params
+
 async def handle_algo(
     user: KokomiUser, 
     raw_args: str

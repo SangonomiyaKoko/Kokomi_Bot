@@ -1,9 +1,9 @@
 import os
 import sqlite3
 
-from ..config import DATA_DIR, bot_settings
+from ..config import DATA_DIR
 from ..api import Mock
-from ..logs import ExceptionLogger, logging
+from ..logs import ExceptionLogger
 from ..schemas import KokomiUser
 
 class UserLocalDB:
@@ -42,10 +42,10 @@ class UserLocalDB:
     @ExceptionLogger.handle_database_exception_sync
     def get_user_local(self, kokomi_user: KokomiUser):
         """获取用户本地设置或初始化用户数据"""
-        if bot_settings.USE_MOCK:
-            result = Mock.read_data('local.json')
-            logging.debug('Using MOCK, skip network requests')
-            return result
+        # if bot_settings.USE_MOCK:
+        #     result = Mock.read_data('local.json')
+        #     logging.debug('Using MOCK, skip network requests')
+        #     return result
 
         user_id = kokomi_user.basic.id
         platform_type = kokomi_user.platform.name
@@ -133,6 +133,60 @@ class UserLocalDB:
                 UPDATE users SET algorithm = ?
                 WHERE platform = ? AND user_id = ?;
             ''', (algorithm, platform_type, user_id))
+            conn.commit()
+
+        return {'status': 'ok', 'code': 1000, 'message': 'Success', 'data': None}
+
+    @ExceptionLogger.handle_database_exception_sync
+    def update_content(self, user: KokomiUser, content: str):
+        """更新用户content主题设置"""
+        user_id = user.basic.id
+        platform_type = user.platform.name
+
+        if not os.path.exists(self.db_path):
+            self.__create_db()
+
+        background = {
+            'dark': '#313131',
+            'light': '#F8F9FB'
+        }
+
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                UPDATE users SET background = ?, content = ?
+                WHERE platform = ? AND user_id = ?;
+            ''', (background.get(content), content, platform_type, user_id))
+            conn.commit()
+
+        return {'status': 'ok', 'code': 1000, 'message': 'Success', 'data': None}
+    
+    @ExceptionLogger.handle_database_exception_sync
+    def update_theme(self, user: KokomiUser, theme: str):
+        """更新用户theme主题设置"""
+        user_id = user.basic.id
+        platform_type = user.platform.name
+
+        if not os.path.exists(self.db_path):
+            self.__create_db()
+
+        background = {
+            'mavuika': ['dark', '#313131'],
+            'furina': ['light', '#F8F9FB']
+        }
+        content = background.get(theme, None)
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            if theme != 'defualt':
+                cursor.execute('''
+                    UPDATE users SET background = ?, content = ?, theme = ?
+                    WHERE platform = ? AND user_id = ?;
+                ''', (content[1], content[0], theme, platform_type, user_id))
+            else:
+                cursor.execute('''
+                    UPDATE users SET theme = ?
+                    WHERE platform = ? AND user_id = ?;
+                ''', (theme, platform_type, user_id))
             conn.commit()
 
         return {'status': 'ok', 'code': 1000, 'message': 'Success', 'data': None}

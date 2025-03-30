@@ -256,7 +256,8 @@ class ImageDrawManager(ContextDecorator):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         """离开上下文时执行操作并保存资源"""
-        self.image.close()  # 释放图片资源
+        if self.image:
+            self.image.close()  # 释放图片资源
 
     def add_text(self, operation: TextOperation):
         """写入文字到图片"""
@@ -285,7 +286,6 @@ class ImageDrawManager(ContextDecorator):
         """
         # 叠加前景图到背景图
         self.image.paste(fg, position)
-        return self.image  # 返回叠加后的图片
 
     def composite_alpha(
         self, 
@@ -309,10 +309,9 @@ class ImageDrawManager(ContextDecorator):
             fg = fg.convert("RGBA")
 
         # 叠加前景图到背景图，并保留透明度效果
-        self.image = self.image.alpha_composite(fg, position)
-        return self.image  # 返回叠加后的图片
+        self.image.alpha_composite(fg, position)
     
-    def get_text_width(self, text: str, font: ImageFont.FreeTypeFont) -> float:
+    def get_text_width(self, text: str, font_index: int, font_size: int) -> float:
         """
         计算指定文本的像素宽度。
 
@@ -323,6 +322,11 @@ class ImageDrawManager(ContextDecorator):
         返回:
             float: 文本的像素宽度。
         """
+        if self.design_mode == 'ps':
+            size = int(self.design_ppi / 72 * font_size)
+        else:
+            size = int(72 / 72 * font_size)
+        font = font_manager.get_font(font_index, size)
         return font.getlength(text)
     
     def get_text_bbox(self, text: str, font: ImageFont.FreeTypeFont) -> tuple[int, int, int, int]:
@@ -372,10 +376,10 @@ class ImageDrawManager(ContextDecorator):
         text = str(operation.text)
         # 对于不同对齐模式下的文字x坐标的处理
         if operation.align == 'center':
-            text_wight = self.get_text_width(text=text, font=font)
+            text_wight = self._get_text_length(text=text, font=font)
             xy = [operation.position[0] - text_wight/2, operation.position[1]]
         elif operation.align == 'right':
-            text_wight = self.get_text_width(text=text, font=font)
+            text_wight = self._get_text_length(text=text, font=font)
             xy = [operation.position[0] - text_wight, operation.position[1]]
         else:
             xy = [operation.position[0], operation.position[1]]
@@ -385,6 +389,19 @@ class ImageDrawManager(ContextDecorator):
             fill=operation.color, 
             font=font
         )
+    
+    def _get_text_length(self, text: str, font: ImageFont.FreeTypeFont) -> float:
+        """
+        计算指定文本的像素宽度。
+
+        参数:
+            text (str): 需要计算宽度的文本内容。
+            font (ImageFont.FreeTypeFont): 使用的字体对象。
+
+        返回:
+            float: 文本的像素宽度。
+        """
+        return font.getlength(text)
 
     def _draw_rectangle(self, operation: RectangleOperation):
         """执行绘制矩形的操作，支持圆角和直角矩形"""

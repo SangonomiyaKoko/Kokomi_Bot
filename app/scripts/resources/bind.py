@@ -35,7 +35,7 @@ async def update_language(
     user: KokomiUser,
     language: str
 ) -> dict:
-    result = UserLocalDB.update_language(user,language)
+    result = UserLocalDB().update_language(user,language)
     if result['code'] != 1000:
         return result
     else:
@@ -46,7 +46,29 @@ async def update_algorithm(
     user: KokomiUser,
     algorithm: str
 ) -> dict:
-    result = UserLocalDB.update_algorithm(user,algorithm)
+    result = UserLocalDB().update_algorithm(user,algorithm)
+    if result['code'] != 1000:
+        return result
+    else:
+        return JSONResponse.API_9006_ChangeSuccess
+    
+@ExceptionLogger.handle_program_exception_async
+async def update_content(
+    user: KokomiUser,
+    content: str
+) -> dict:
+    result = UserLocalDB().update_content(user,content)
+    if result['code'] != 1000:
+        return result
+    else:
+        return JSONResponse.API_9006_ChangeSuccess
+    
+@ExceptionLogger.handle_program_exception_async
+async def update_theme(
+    user: KokomiUser,
+    theme: str
+) -> dict:
+    result = UserLocalDB().update_theme(user,theme)
     if result['code'] != 1000:
         return result
     else:

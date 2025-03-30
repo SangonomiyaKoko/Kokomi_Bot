@@ -5,17 +5,21 @@ from .handlers import (
     handle_bind,
     handle_basic,
     handle_lang,
-    handle_algo
+    handle_algo,
+    handle_content,
+    handle_theme
 )
 
 # 注册指令
 commands = [
     ("/test", [0, 1], False, handle_test),
     ("/cls", [0, 1], False, handel_cls),
-    # ("/link", [0, 1, 2], False, handle_bind),
-    # ("/basic", [0, 1, 2], True, handle_basic),
-    # ("/lang", [0, 1, 2], False, handle_lang),
-    # ("/algo", [0, 1, 2], False, handle_algo),
+    ("/link", [0, 1, 2], False, handle_bind),
+    ("/basic", [0, 1, 2], True, handle_basic),
+    ("/lang", [0, 1, 2], False, handle_lang),
+    ("/algo", [0, 1, 2], False, handle_algo),
+    ("/mode", [0, 1, 2], False, handle_content),
+    ("/theme", [0, 1, 2], False, handle_theme),
 ]
 
 for cmd, perm, bind, func in commands:
