@@ -13,7 +13,7 @@ python -m venv .venv  # 创建虚拟环境
 
 .venv/Scripts/activate  # 激活虚拟环境
 
-pip install -r requirements.txt # 安装python依赖
+pip install -r requirements-dev.txt # 安装python依赖
 ```
 
 注意，如果使用了虚拟环境，请务必确保后续的依赖安装和程序运行都在虚拟环境内

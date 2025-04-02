@@ -41,10 +41,10 @@ Usage:
 
 Commands:
   /test                               Test
-  /link <region> <ign>                Link to your game account
-  /me                                 Overall 
-  /set language <cn/en/ja>            Change language
-  /set rating <show/hide>             Show or hide personal rating
+  /cls                                Clear temp png file
+  /admin                              Admin func
+  /link <IGN/AID>                     Link to your game account
+  /basic <IGN/AID>                    Overall
 '''
 
 
