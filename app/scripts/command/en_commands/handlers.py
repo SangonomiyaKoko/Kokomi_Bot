@@ -2,7 +2,7 @@
 from typing import Callable, Dict, Tuple, Optional, Any, Union, Awaitable
 
 from ...resources import (
-    test, bind, overall, clear
+    test, bind, overall, clear, admin
 )
 from ...schemas import KokomiUser
 
@@ -14,7 +14,7 @@ from .parsers import (
     check_user
 )
 
-async def handle_test(
+async def handler_test(
     user: KokomiUser, 
     raw_args: str
 ) -> Tuple[Optional[Callable[[Any], dict]], Optional[Dict[str, Any]]]:
@@ -34,7 +34,24 @@ async def handle_test(
         test_msg = raw_args
     return test.main, {'test_msg': test_msg}
 
-async def handel_cls(
+async def handler_admin(
+    user: KokomiUser, 
+    raw_args: str
+) -> Tuple[Optional[Callable[[Any], dict]], Optional[Dict[str, Any]]]:
+    """测试功能
+    
+    包含指令：
+        - /admin
+
+    返回值：
+        (callback_func, extra_kwargs) or 
+        (None, None) or 
+        (None, dixt)
+    """
+    
+    return admin.main, {}
+
+async def handler_cls(
     user: KokomiUser, 
     raw_args: str
 ) -> Tuple[Optional[Callable[[Any], dict]], Optional[Dict[str, Any]]]:
@@ -50,7 +67,7 @@ async def handel_cls(
     """
     return clear.main, {}
 
-async def handle_bind(
+async def handler_bind(
     user: KokomiUser, 
     raw_args: str
 ) -> Tuple[Optional[Callable[[Any], dict]], Optional[Dict[str, Any]]]:
@@ -101,7 +118,7 @@ async def handle_bind(
         params['nickname'] = search_result['data'][0]['name']
     return bind.post_bind, params
 
-async def handle_lang(
+async def handler_lang(
     user: KokomiUser, 
     raw_args: str
 ) -> tuple[Optional[Callable[..., Awaitable[Dict[str, Any]]]], Union[Dict[str, Any], None]]:
@@ -124,7 +141,7 @@ async def handle_lang(
     }
     return bind.update_language, params
 
-async def handle_content(
+async def handler_content(
     user: KokomiUser, 
     raw_args: str
 ) -> tuple[Optional[Callable[..., Awaitable[Dict[str, Any]]]], Union[Dict[str, Any], None]]:
@@ -147,7 +164,7 @@ async def handle_content(
     }
     return bind.update_content, params
 
-async def handle_theme(
+async def handler_theme(
     user: KokomiUser, 
     raw_args: str
 ) -> tuple[Optional[Callable[..., Awaitable[Dict[str, Any]]]], Union[Dict[str, Any], None]]:
@@ -170,7 +187,7 @@ async def handle_theme(
     }
     return bind.update_theme, params
 
-async def handle_algo(
+async def handler_algo(
     user: KokomiUser, 
     raw_args: str
 ) -> tuple[Optional[Callable[..., Awaitable[Dict[str, Any]]]], Union[Dict[str, Any], None]]:
@@ -197,7 +214,7 @@ async def handle_algo(
     }
     return bind.update_algorithm, params
 
-async def handle_basic(
+async def handler_basic(
     user: KokomiUser, 
     raw_args: str
 ) -> tuple[Optional[Callable[..., Awaitable[Dict[str, Any]]]], Union[Dict[str, Any], None]]:

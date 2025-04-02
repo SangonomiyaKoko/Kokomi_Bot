@@ -1,3 +1,17 @@
+#
+# KokomiBot.
+# $Id$
+#
+# the Image class wrapper
+#
+# partial release history:
+# 2024-12-30 main   Created
+#
+#
+# See the README file for information on usage and redistribution.
+#
+
+
 from .scripts.api import BindAPI, BasicAPI
 from .scripts.logs import logging, message_logger
 from .scripts.language import Message
@@ -29,7 +43,13 @@ class KokomiBot:
             data: 返回数据的内容
         '''
         kokomi_user = KokomiUser(platform,user)
-        message_logger.debug(f"Receive | FROM={kokomi_user.platform.name.upper()} UID={kokomi_user.basic.id} MSG=\'{message}\'")
+        log_data = {
+            'type': 1,
+            'cid': kokomi_user.platform.id,
+            'uid': kokomi_user.basic.id,
+            'msg': message
+        }
+        message_logger.debug(str(log_data))
         # 以下为Bot的中间件0
         user_level = get_user_level(kokomi_user.basic.cid)
         kokomi_user.set_user_level(user_level)
@@ -86,7 +106,16 @@ class KokomiBot:
     def __process_result(self, kokomi_user: KokomiUser, language: str, result: dict):
         if result['code'] == 1000:
             # 正常结果，返回图片
-            message_logger.debug(f"Return | TO={kokomi_user.platform.name.upper()} UID={kokomi_user.basic.id} RID={kokomi_user.bind.region_id} MSG=Image")
+            log_data = {
+                'type': 0,
+                'cid': kokomi_user.platform.id,
+                'uid': kokomi_user.basic.id,
+                'rid': kokomi_user.bind.region_id,
+                'aid': kokomi_user.bind.account_id,
+                'return': 'img',
+                'data': result['data']['img']
+            }
+            message_logger.debug(str(log_data))
             return {
                 'type': 'img',
                 'data': result['data']['img']
@@ -97,7 +126,16 @@ class KokomiBot:
                 language = language,
                 result = result
             )
-            message_logger.debug(f"Return | TO={kokomi_user.platform.name.upper()} UID={kokomi_user.basic.id} RID={kokomi_user.bind.region_id} MSG=\'{msg}\'")
+            log_data = {
+                'type': 0,
+                'cid': kokomi_user.platform.id,
+                'uid': kokomi_user.basic.id,
+                'rid': kokomi_user.bind.region_id,
+                'aid': kokomi_user.bind.account_id,
+                'return': 'msg',
+                'data': msg
+            }
+            message_logger.debug(str(log_data))
             return {
                 'type': 'msg',
                 'data': msg

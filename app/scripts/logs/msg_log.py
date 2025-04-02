@@ -17,8 +17,8 @@ message_logger = logging.getLogger('MessageLogger')
 message_logger.setLevel(logging.DEBUG)
 
 # 配置日志格式
-log_format = '%(asctime)s - Message - %(message)s'
-formatter = logging.Formatter(log_format)
+log_format = '%(asctime)s [MSG] | %(message)s'
+formatter = logging.Formatter(log_format, datefmt='%H:%M:%S')
 
 # 创建一个FileHandler，将日志写入指定的文件
 file_handler = logging.FileHandler(log_filename)

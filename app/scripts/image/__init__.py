@@ -1,10 +1,10 @@
-from .generation import ImageHandler, ImageDrawManager, TextOperation, RectangleOperation
-from .insignias import Insignias
 from .fonts import font_manager
+from .operations import TextOperation, RectangleOperation
+from .manager import ImageDrawManager
+from .handler import ImageHandler
 
 
 __all__ = [
-    'Insignias',
     'font_manager',
     'ImageHandler', 
     'ImageDrawManager',

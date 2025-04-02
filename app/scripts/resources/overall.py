@@ -7,10 +7,10 @@ from ..api import BaseAPI, Mock
 from ..logs import ExceptionLogger
 from ..language import Content
 from ..common import (
-    Utils, GameData, ThemeTextColor, ThemeRatingColor, TimeFormat, ReadVersionFile
+    Insignias, Utils, GameData, ThemeTextColor, ThemeRatingColor, TimeFormat, ReadVersionFile
 )
 from ..image import (
-    Insignias, ImageDrawManager, ImageHandler, TextOperation as Text, RectangleOperation as Rectangle
+    ImageDrawManager, ImageHandler, TextOperation as Text, RectangleOperation as Rectangle
 )
 from ..schemas import (
     KokomiUser, UserBasicDict, UserClanDict, UserOverallDict,
@@ -86,29 +86,17 @@ def get_png(
         if user.local.theme != 'default':
             theme_png_path = os.path.join(ASSETS_DIR, 'theme', user.local.theme, f'{user.local.content}_basic.png')
             if os.path.exists(theme_png_path):
-                theme_png = ImageHandler.open_image(theme_png_path)
-                if type(theme_png) == dict:
-                    return theme_png
-                image_manager.composite_alpha(theme_png, (0, 0))
-                theme_png.close()
+                image_manager.composite_alpha(theme_png_path, (0, 0))
             else:
                 ...
     
         # 叠加图片主体
         content_png_path = os.path.join(ASSETS_DIR, 'content', user.local.content, user.local.language, 'basic.png')
-        content_png = ImageHandler.open_image(content_png_path)
-        if type(content_png) == dict:
-            return content_png
-        image_manager.composite_alpha(content_png, (0, 0))
-        content_png.close()
+        image_manager.composite_alpha(content_png_path, (0, 0))
 
         # Header用户信息条
         header_png_path = os.path.join(ASSETS_DIR, r'components\header', f'{user.local.content}.png')
-        header_png = ImageHandler.open_image(header_png_path)
-        if type(header_png) == dict:
-            return header_png
-        image_manager.composite_alpha(header_png, (97, 130))
-        header_png.close()
+        image_manager.composite_alpha(header_png_path, (97, 130))
         image_manager.add_text(
             Text(
                 text=result['user']['name'],
@@ -120,12 +108,7 @@ def get_png(
         )
         region = Utils.get_region_by_id(result['user']['region'])
         region_png_path = os.path.join(ASSETS_DIR, r'components\region', f'{region}.png')
-        region_png = ImageHandler.open_image(region_png_path)
-        if type(region_png) == dict:
-            return region_png
-        region_png = ImageHandler.resize_image(region_png, (76, 42))
-        image_manager.composite_alpha(region_png, (81+97, 142+130))
-        region_png.close()
+        image_manager.composite_alpha(region_png_path, (81+97, 142+130), resize_size=(76, 42))
         image_manager.add_text(
             Text(
                 text=region.upper(),
@@ -195,11 +178,7 @@ def get_png(
         # Content用户总体数据页
         rating_class = result['statistics']['overall']['rating_class']
         rating_png_path = os.path.join(ASSETS_DIR, r'content\rating\pr', user.local.language, user.local.content, '{}.png'.format(rating_class))
-        rating_png= ImageHandler.open_image(rating_png_path)
-        if type(rating_png) == dict:
-            return rating_png
-        image_manager.composite_paste(rating_png, (132, 627))
-        rating_png.close()
+        image_manager.composite_paste(rating_png_path, (132, 627))
         if bot_settings.SHOW_DOG_TAG:
             if result['user']['dog_tag'] == [] or result['user']['dog_tag'] == {}:
                 pass
@@ -211,12 +190,7 @@ def get_png(
                     response = result['user']['dog_tag']
                 )
                 for insignias_png_path in insignias_png_path_list:
-                    insignias_png= ImageHandler.open_image(insignias_png_path)
-                    if type(insignias_png) == dict:
-                        return insignias_png
-                    insignias_png = ImageHandler.resize_image(insignias_png, (419, 419))
-                    image_manager.composite_alpha(insignias_png, (1912, 129))
-                    insignias_png.close()
+                    image_manager.composite_alpha(insignias_png_path, (1912, 129), resize_size=(419, 419))
         if result['statistics']['overall']['rating_class'] == 9:
             rating_next_text = content_text.RatingNextText_2 + ':    +' + str(result['statistics']['overall']['rating_next'])
         else:
@@ -510,11 +484,7 @@ def get_png(
             i += 1
         # Footer底部信息条
         footer_png_path = os.path.join(ASSETS_DIR, r'components\footer', f'{user.local.content}.png')
-        footer_png = ImageHandler.open_image(footer_png_path)
-        if type(footer_png) == dict:
-            return footer_png
-        image_manager.composite_alpha(footer_png, (97, 3220))
-        footer_png.close()
+        image_manager.composite_alpha(footer_png_path, (97, 3220))
         image_manager.add_text(
             Text(
                 text=bot_settings.BOT_INFO,
