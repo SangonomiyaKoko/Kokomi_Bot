@@ -1,18 +1,19 @@
 API:
-  API_URL: "http://127.0.0.1:8080"     # KokomiAPI地址
+  API_URL: "http://127.0.0.1:8080"
   API_TYPE: "REST"
   API_USERNAME: "user"
   API_PASSWORD: "password"
   REQUEST_TIMEOUT: 10
 
 BOT:
-  LOG_LEVEL: "debug"        # 日志等级 debug/info
-  USE_MOCK: true            # debug用，默认为false
-  RETURN_PIC_TYPE: "png"    # 返回图片格式 png/webp
-  SHOW_DOG_TAG: true        # 是否显示用户狗牌
-  SHOW_CLAN_TAG: true       # 是否显示工会段位
-  SHOW_CUSTOM_TAG: true     # 是否显示自定义狗牌
-  BOT_INFO: "Kokomi Platform  |  WoWS-Stats-Bot"    # Bot底部Footer文字
-  ROOT_USERS: ["3197206779"]      # Root用户，必须是str
-  ADMINS_USERS: ["2041283903"]    # 管理员用户，必须是str
+  PLATFORM: "KokomiBot-Bate"
+  LOG_LEVEL: "debug"
+  USE_MOCK: true
+  RETURN_PIC_TYPE: "png"
+  SHOW_DOG_TAG: true
+  SHOW_CLAN_TAG: false
+  SHOW_CUSTOM_TAG: true
+  BOT_INFO: "Kokomi Platform  |  WoWS-Stats-Bot"
+  ROOT_USERS: ["1"]
+  ADMINS_USERS: ["1"]
 
