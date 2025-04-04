@@ -94,7 +94,7 @@ def get_png(
         content_png_path = os.path.join(ASSETS_DIR, 'content', user.local.content, user.local.language, 'basic.png')
         image_manager.composite_alpha(content_png_path, (0, 0))
 
-        # Header用户信息条
+        # ===================== Header组件 =====================
         header_png_path = os.path.join(ASSETS_DIR, r'components\header', f'{user.local.content}.png')
         image_manager.composite_alpha(header_png_path, (97, 130))
         image_manager.add_text(
@@ -175,7 +175,7 @@ def get_png(
                 color=theme_text_color.TextThemeColor2
             )
         )
-        # Content用户总体数据页
+        # ===================== Overall组件 =====================
         rating_class = result['statistics']['overall']['rating_class']
         rating_png_path = os.path.join(ASSETS_DIR, r'content\rating\pr', user.local.language, user.local.content, '{}.png'.format(rating_class))
         image_manager.composite_paste(rating_png_path, (132, 627))
@@ -277,7 +277,7 @@ def get_png(
                 align='center'
             )
         )
-        # 战斗类型数据页
+        # ===================== BattleType组件 =====================
         i = 0
         for index in ['pvp_solo', 'pvp_div2', 'pvp_div3', 'rank_solo']:
             x0 = 0
@@ -361,7 +361,7 @@ def get_png(
                 )
             )
             i += 1
-        # 船只类型数据页
+        ## ===================== ShipType组件 =====================
         i = 0
         for index in ['AirCarrier', 'Battleship', 'Cruiser', 'Destroyer', 'Submarine']:
             x0 = 0
@@ -445,7 +445,7 @@ def get_png(
                 )
             )
             i += 1
-        # 条形图数据
+        # ===================== 图表组件 =====================
         max_num = 0
         num_list = []
         for _, num in result['statistics']['chart_data'].items():
@@ -482,7 +482,7 @@ def get_png(
                 )
             )
             i += 1
-        # Footer底部信息条
+        # ===================== Footer组件 =====================
         footer_png_path = os.path.join(ASSETS_DIR, r'components\footer', f'{user.local.content}.png')
         image_manager.composite_alpha(footer_png_path, (97, 3220))
         image_manager.add_text(
@@ -512,6 +512,7 @@ def get_png(
                 color=theme_text_color.TextThemeColor4
             )
         )
+        # 提交操作并返回渲染好的图片
         image_manager.execute_operations()
         res_img = image_manager.get_image()
         result = ImageHandler.save_image(res_img)
