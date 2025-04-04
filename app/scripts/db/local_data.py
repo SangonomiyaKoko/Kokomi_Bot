@@ -171,6 +171,7 @@ class UserLocalDB:
             self.__create_db()
 
         background = {
+            'default': ['light', '#F8F9FB'],
             'mavuika': ['dark', '#313131'],
             'furina': ['light', '#F8F9FB']
         }

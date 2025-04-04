@@ -116,3 +116,15 @@ class Utils:
             5: 'cn'
         }
         return region_dict.get(region_id)
+    
+    def get_level_color(level: int | None):
+        if not level:
+            return (145, 145, 145)
+        elif level >= 17:
+            return (196, 144, 191)
+        elif level >= 13:
+            return (141, 150, 203)
+        elif level >= 10:
+            return (137, 201, 151)
+        else:
+            return (246, 179, 127)

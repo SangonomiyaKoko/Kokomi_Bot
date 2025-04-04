@@ -83,8 +83,7 @@ async def handler_bind(
     """
     params = {
         'region_id': None,
-        'account_id': None,
-        'nickname': None
+        'account_id': None
     }
     if raw_args == '':
         return None, None
@@ -94,12 +93,6 @@ async def handler_bind(
         region_id = get_region_id_from_aid(account_id)
         if not region_id:
             return None, None
-        check_result = await check_user(region_id=region_id,account_id=account_id)
-        if check_result['code'] == 1001:
-            return None, None
-        if check_result['code'] != 1000:
-            return None, check_result
-        params['nickname'] = check_result['data']['name']
         params['account_id'] = account_id
         params['region_id'] = region_id
     else:
@@ -115,7 +108,6 @@ async def handler_bind(
             return None, search_result
         params['account_id'] = search_result['data'][0]['account_id']
         params['region_id'] = search_result['data'][0]['region_id']
-        params['nickname'] = search_result['data'][0]['name']
     return bind.post_bind, params
 
 async def handler_lang(

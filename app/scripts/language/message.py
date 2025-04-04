@@ -16,10 +16,5 @@ class Message:
         if language_data.get(result['code']):
             return_msg = language_data.get(result['code'])
         else:
-            return_msg = result['message']
-        
-        if result['code'] == 9005:
-            bind_user_region = Utils.get_region_by_id(result['data']['region_id']).title()
-            bind_user_name = result['data']['nickname']
-            return_msg += f' |  {bind_user_region} - {bind_user_name}'
+            return_msg = '[UndefinedMSG] ' + result['message']
         return return_msg

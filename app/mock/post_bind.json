@@ -1,0 +1,25 @@
+{
+  "status": "ok",
+  "code": 1000,
+  "message": "Success",
+  "data": {
+    "user": {
+      "id": 2023619512,
+      "region": 1,
+      "name": "SangonomiyaKokomi_",
+      "hidden": false,
+      "level": 17,
+      "dog_tag": {
+        "texture_id": 0,
+        "symbol_id": 4224043952,
+        "border_color_id": 0,
+        "background_color_id": 0,
+        "background_id": 0
+      }
+    },
+    "func": {
+      "recent": true,
+      "recents": false
+    }
+  }
+}
