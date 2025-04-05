@@ -1,14 +1,10 @@
 import os
 
-from ..logs import ExceptionLogger, logging
-from ..api import BindAPI, Mock
-from ..schemas import JSONResponse
-from ..db import UserLocalDB
+from ..logs import ExceptionLogger
 from ..schemas import KokomiUser
-from ..config import ASSETS_DIR, bot_settings
-from ..language import Content
+from ..config import ASSETS_DIR
 from ..common import (
-    Insignias, Utils, ThemeTextColor, TimeFormat
+    TimeFormat
 )
 from ..image import (
     ImageDrawManager, ImageHandler, TextOperation as Text, RectangleOperation as Rectangle
@@ -32,7 +28,7 @@ def get_png(user: KokomiUser) -> str:
     # 背景颜色（RGBA）
     # background_color = Utils.hex_to_rgb(user.local.background, 255)
     # 创建画布
-    bg_png_path = os.path.join(ASSETS_DIR, r'content\default', user.local.language, f'theme.png')
+    bg_png_path = os.path.join(ASSETS_DIR, 'content', 'default', user.local.language, f'theme.png')
     res_img = ImageHandler.open_image(bg_png_path)
     # 需要叠加的 文字/矩形
     with ImageDrawManager(res_img, 'ps', 72) as image_manager:

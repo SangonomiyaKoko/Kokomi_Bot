@@ -95,7 +95,7 @@ def get_png(
         image_manager.composite_alpha(content_png_path, (0, 0))
 
         # ===================== Header组件 =====================
-        header_png_path = os.path.join(ASSETS_DIR, r'components\header', f'{user.local.content}.png')
+        header_png_path = os.path.join(ASSETS_DIR, 'components', 'header', f'{user.local.content}.png')
         image_manager.composite_alpha(header_png_path, (97, 130))
         image_manager.add_text(
             Text(
@@ -107,7 +107,7 @@ def get_png(
             )
         )
         region = Utils.get_region_by_id(result['user']['region'])
-        region_png_path = os.path.join(ASSETS_DIR, r'components\region', f'{region}.png')
+        region_png_path = os.path.join(ASSETS_DIR, 'components', 'region', f'{region}.png')
         image_manager.composite_alpha(region_png_path, (81+97, 142+130), resize_size=(76, 42))
         image_manager.add_text(
             Text(
@@ -177,7 +177,7 @@ def get_png(
         )
         # ===================== Overall组件 =====================
         rating_class = result['statistics']['overall']['rating_class']
-        rating_png_path = os.path.join(ASSETS_DIR, r'content\rating\pr', user.local.language, user.local.content, '{}.png'.format(rating_class))
+        rating_png_path = os.path.join(ASSETS_DIR, 'content', 'rating', 'pr', user.local.language, user.local.content, '{}.png'.format(rating_class))
         image_manager.composite_paste(rating_png_path, (132, 627))
         if bot_settings.SHOW_DOG_TAG:
             if result['user']['dog_tag'] == [] or result['user']['dog_tag'] == {}:
@@ -483,7 +483,7 @@ def get_png(
             )
             i += 1
         # ===================== Footer组件 =====================
-        footer_png_path = os.path.join(ASSETS_DIR, r'components\footer', f'{user.local.content}.png')
+        footer_png_path = os.path.join(ASSETS_DIR, 'components', 'footer', f'{user.local.content}.png')
         image_manager.composite_alpha(footer_png_path, (97, 3220))
         image_manager.add_text(
             Text(

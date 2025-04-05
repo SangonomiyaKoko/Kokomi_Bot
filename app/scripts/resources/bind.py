@@ -137,8 +137,8 @@ def get_png(user: KokomiUser, result: dict) -> str:
                 color=theme_text_color.TextThemeColor4
             )
         )
-        ok_png_path = os.path.join(ASSETS_DIR, r'components\icon', 'ok.png')
-        error_png_path = os.path.join(ASSETS_DIR, r'components\icon', 'error.png')
+        ok_png_path = os.path.join(ASSETS_DIR, 'components', 'icon', 'ok.png')
+        error_png_path = os.path.join(ASSETS_DIR, 'components', 'icon', 'error.png')
         ok_color = (137, 201 ,151)
         error_color = (246, 179, 127)
         if result['user']['hidden']:

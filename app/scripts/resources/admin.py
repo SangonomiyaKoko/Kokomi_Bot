@@ -39,7 +39,7 @@ async def main(user: KokomiUser) -> dict:
 
 @TimeFormat.cost_time_sync(message='Image generation completed')
 def get_png(user: KokomiUser, result: dict) -> str:
-    background_path = os.path.join(ASSETS_DIR, r'content\other', 'admin.png')
+    background_path = os.path.join(ASSETS_DIR, 'content', 'other', 'admin.png')
     res_img = ImageHandler.open_image(background_path)
     if type(res_img) == dict:
         return res_img
