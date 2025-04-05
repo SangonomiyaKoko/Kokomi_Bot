@@ -2,7 +2,7 @@
 from typing import Callable, Dict, Tuple, Optional, Any, Union, Awaitable
 
 from ...resources import (
-    test, bind, overall, clear, admin
+    test, bind, overall, clear, admin, theme
 )
 from ...schemas import KokomiUser
 
@@ -171,7 +171,7 @@ async def handler_theme(
         (None, dict)
     """
     if raw_args == '':
-        return None, None
+        return theme.main, {}
     if raw_args not in ['default', 'mavuika', 'furina']:
         return None, None
     params = {
