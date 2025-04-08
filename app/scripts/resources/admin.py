@@ -1,5 +1,5 @@
 import os
-from ..logs import ExceptionLogger
+from ..logs import ExceptionLogger, LogReader
 from ..common import (
     TimeFormat, Utils
 )
@@ -18,6 +18,7 @@ async def main(user: KokomiUser) -> dict:
     # 平台名称可以通过user.platform.name获取
     # bot版本可以从from .scripts.common import ReadVersionFile获取
     # 关于bot的今日请求数据，是通过bot的log文件获取，log文件按日期储存，直接读取当日文件然后遍历即可
+    # TODO: 关于log解析及读取部分，请来LogReader类中实现 `app\scripts\logs\log_reader.py`
     '''
     日志文件会自动记录在log\message\YYYY-MM-DD.log文件内，示例如下
     19:39:41 [MSG] | {'type': 1, 'cid': 123, 'uid': '1', 'msg': '/basic'}
