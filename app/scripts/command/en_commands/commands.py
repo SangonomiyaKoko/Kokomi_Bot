@@ -3,6 +3,7 @@ from .handlers import (
     handler_cls,
     handler_test,
     handler_bind,
+    handler_help,
     handler_basic,
     handler_lang,
     handler_algo,
@@ -13,10 +14,11 @@ from .handlers import (
 
 # 注册指令
 commands = [
-    ("/test", [0, 1], False, handler_test),
+    ("/test", [0, 1, 2], False, handler_test),
     ("/cls", [0, 1], False, handler_cls),
     ("/admin", [0, 1], False, handler_admin),
     ("/link", [0, 1, 2], False, handler_bind),
+    ("/help", [0, 1, 2], False, handler_help),
     ("/basic", [0, 1, 2], True, handler_basic),
     ("/lang", [0, 1, 2], False, handler_lang),
     ("/algo", [0, 1, 2], False, handler_algo),

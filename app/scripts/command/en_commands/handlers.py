@@ -2,7 +2,7 @@
 from typing import Callable, Dict, Tuple, Optional, Any, Union, Awaitable
 
 from ...resources import (
-    test, bind, overall, clear, admin, theme, alias
+    test, bind, overall, clear, admin, theme, alias, help
 )
 from ...schemas import KokomiUser, JSONResponse
 
@@ -33,6 +33,22 @@ async def handler_test(
     else:
         test_msg = raw_args
     return test.main, {'test_msg': test_msg}
+
+async def handler_help(
+    user: KokomiUser, 
+    raw_args: str
+) -> Tuple[Optional[Callable[[Any], dict]], Optional[Dict[str, Any]]]:
+    """help文档
+    
+    包含指令：
+        - /help
+
+    返回值：
+        (callback_func, extra_kwargs) or 
+        (None, None) or 
+        (None, dict)
+    """
+    return help.help, {}
 
 async def handler_admin(
     user: KokomiUser, 
