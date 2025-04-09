@@ -2,17 +2,17 @@
 
 > Use `-h` or `help` after a command to view detailed help, e.g., `/stat help`
 
-| Command  | Description                        | Notes                      | Link                   |
-| -------- | ---------------------------------- | -------------------------- | ---------------------- |
-| `/cls`   | Clear cache files                  | Admin only                 | [Jump](#cls-command)   |
-| `/admin` | View bot running status            | Admin only                 | [Jump](#admin-command) |
-| `/link`  | Link game account (UID or IGN)     | Supports UID or IGN format | [Jump](#link-command)  |
-| `/alias` | Manage aliases (list/add/delete)   | Use `list`, `del`, `add`   | [Jump](#alias-command) |
-| `/lang`  | Switch display language            | Supports `cn`, `en`, `ja`  | [Jump](#lang-command)  |
-| `/algo`  | Set scoring algorithm              | Use `default` or `none`    | [Jump](#algo-command)  |
-| `/mode`  | Switch image display mode          | Use `light` / `dark`       | [Jump](#mode-command)  |
-| `/theme` | Set or view available image themes | Supports various themes    | [Jump](#theme-command) |
-| `/stat`  | Query battle stats (user & mode)   | Can specify battle mode    | [Jump](#stat-command)  |
+| Command  | Description                        | Notes                      | Link                         |
+| -------- | ---------------------------------- | -------------------------- | ---------------------------- |
+| `/cls`   | Clear cache files                  | Admin only                 | [Jump](#cls-command-guide)   |
+| `/admin` | View bot running status            | Admin only                 | [Jump](#admin-command-guide) |
+| `/link`  | Link game account (UID or IGN)     | Supports UID or IGN format | [Jump](#link-command-guide)  |
+| `/alias` | Manage aliases (list/add/delete)   | Use `list`, `del`, `add`   | [Jump](#alias-command-guide) |
+| `/lang`  | Switch display language            | Supports `cn`, `en`, `ja`  | [Jump](#lang-command-guide)  |
+| `/algo`  | Set scoring algorithm              | Use `default` or `none`    | [Jump](#algo-command-guide)  |
+| `/mode`  | Switch image display mode          | Use `light` / `dark`       | [Jump](#mode-command-guide)  |
+| `/theme` | Set or view available image themes | Supports various themes    | [Jump](#theme-command-guide) |
+| `/stat`  | Query battle stats (user & mode)   | Can specify battle mode    | [Jump](#stat-command-guide)  |
 
 ## `/cls` Command Guide
 
