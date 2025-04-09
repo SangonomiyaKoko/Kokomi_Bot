@@ -211,9 +211,9 @@ Two usage modes:
 
 ### 🔧 Parameter Description
 
-| Parameter | Required | Description                     |
-| --------- | -------- | ------------------------------- |
-| `theme`    | ✅       | Enter theme code or use `list` to view available ones |
+| Parameter | Required | Description                                           |
+| --------- | -------- | ----------------------------------------------------- |
+| `theme`   | ✅       | Enter theme code or use `list` to view available ones |
 
 ### 📌 Examples
 
@@ -221,5 +221,70 @@ Two usage modes:
 /theme list
 /theme mygo
 ```
+
+---
+
+## `/stat` Command Guide
+
+**Check a user’s battle performance stats. Supports summary view and filtering by game mode.**
+
+### 🧩 Command Format
+
+```bash
+/stat player:[user param] mode:[mode param]
+```
+
+### 🔧 Parameter Description
+
+| Name     | Required | Description                                                                                                                                                    |
+| -------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `player` | Optional | Specifies the account to query. Supports the following:<br>1. `Server IGN` (space-separated)<br>2. UID<br>3. @user with bound account<br>4. Alias via `/alias` |
+| `mode`   | Optional | View stats for a specific game mode. If omitted, general stats will be shown. See list below for supported modes.                                              |
+
+#### Supported Mode Parameters
+
+| Mode Param     | Description                           |
+| -------------- | ------------------------------------- |
+| `random`       | Random battles                        |
+| `ranked`       | Ranked battles                        |
+| `solo`         | Solo queue (random)                   |
+| `div2`         | 2-player division (random)            |
+| `div3`         | 3-player division (random)            |
+| `AirCarrier`   | Aircraft carrier (random)             |
+| `Battleship`   | Battleship (random)                   |
+| `Cruiser`      | Cruiser (random)                      |
+| `Destroyer`    | Destroyer (random)                    |
+| `Submarine`    | Submarine (random)                    |
+| `SurfaceShips` | Surface ships only (no carriers/subs) |
+
+### 📌 Examples
+
+```bash
+# Example 1: View your own general stats
+/stat
+
+# Example 2: View your PVP stats
+/stat pvp
+
+# Example 3: View another user’s stats by IGN
+/stat asia SangonomiyaKokomi_
+
+# Example 4: Query by UID
+/stat 2023123456
+
+# Example 5: Query via @mention
+/stat @Someone
+
+# Example 6: Query via alias (e.g., "myfriend")
+/stat myfriend
+
+# Example 7: View someone's Ranked stats
+/stat asia SangonomiyaKokomi_ rank
+```
+
+### 💡 Notes
+
+- Parameter order matters: **user comes first, then mode**
+- You can only provide one `user` and one `mode` parameter
 
 ---

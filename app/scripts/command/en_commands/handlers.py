@@ -312,7 +312,7 @@ async def handler_basic(
         'account_id': None
     }
     filter_dict = {
-        'pvp': 'random', 'pvp': 'random', '随机': 'random', 'ランダム戦': 'random',
+        'pvp': 'random', 'random': 'random', '随机': 'random', 'ランダム戦': 'random',
         'rank': 'ranked', 'ranked': 'rankded', '排位': 'ranked', 'ランク戦': 'ranked',
         'solo': 'pvp_solo', '单野': 'pvp_solo', 'div2': 'pvp_div2', '双排': 'pvp_div2',
         'div3': 'pvp_div3', '三排': 'pvp_div3', 'cv': 'AirCarrier', 'bb': 'Battleship',
