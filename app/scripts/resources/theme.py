@@ -43,8 +43,8 @@ def get_png(user: KokomiUser) -> str:
             theme_index = {
                 'xnn': 2,
                 'mygo': 3,
-                'mavuika': 4,
-                'furina': 5
+                'mavuika': 5,
+                'furina': 4
             }
             index = theme_index.get(user.local.theme)
         
