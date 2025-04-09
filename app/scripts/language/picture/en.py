@@ -31,3 +31,12 @@ class ContentLanguage(ContentLanguageBase):
             3: 'Bronze'
         }
         return rank_text_dict.get(season_rank)
+    
+    def get_basic_type_text(filte_type: str) -> str:
+        filter_type_dict = {
+            'pvp': 'Random All', 'rank': 'Ranked All', 'pvp_solo': 'Solo Random', 
+            'pvp_div2': 'Div2 Random', 'pvp_div3': 'Div3 Random','AirCarrier': 'AirCarrier Random',
+            'Battleship': 'Battleship Random','Cruiser': 'Cruiser Random','Destroyer': 'Destroyer Random',
+            'Submarine': 'Submarine Random','SurfaceShips': 'SurfaceShips Random'
+        }
+        return filter_type_dict.get(filte_type)

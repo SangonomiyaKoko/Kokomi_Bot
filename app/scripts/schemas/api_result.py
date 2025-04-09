@@ -52,6 +52,11 @@ class ResultBattleTypeDict:
     pvp_div3: Optional[UserOverallDict]
     rank_solo: Optional[UserOverallDict]
 
+class BasicBattleTypeDict:
+    solo: Optional[UserOverallDict]
+    dvi2: Optional[UserOverallDict]
+    div3: Optional[UserOverallDict]
+
 class ResultShipTypeDict:
     AirCarrier: UserOverallDict
     Battleship: UserOverallDict

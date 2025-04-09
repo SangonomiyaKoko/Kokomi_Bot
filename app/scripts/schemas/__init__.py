@@ -1,6 +1,6 @@
 from .response import JSONResponse, ResponseDict
 from .type_dict import UserBindDict, PlatformDict, UserInfoDict, UserLocalDict
-from .api_result import UserBasicDict, UserClanDict, UserOverallDict, ResultBattleTypeDict, ResultShipTypeDict, UserSignatureDict
+from .api_result import UserBasicDict, UserClanDict, UserOverallDict, ResultBattleTypeDict, ResultShipTypeDict, UserSignatureDict, BasicBattleTypeDict
 from .user_base import KokomiUser, Platform, UserBasic, UserBind, UserLocal
 
 __all__ = [
@@ -20,5 +20,6 @@ __all__ = [
     'UserOverallDict',
     'UserSignatureDict',
     'ResultBattleTypeDict', 
-    'ResultShipTypeDict'
+    'ResultShipTypeDict',
+    'BasicBattleTypeDict'
 ]

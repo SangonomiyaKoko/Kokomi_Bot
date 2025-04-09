@@ -1,0 +1,176 @@
+{
+  "status": "ok",
+  "code": 1000,
+  "message": "Success",
+  "data": {
+    "user": {
+      "id": 1053231216,
+      "region": 3,
+      "name": "Cantarella__Fisalia",
+      "karma": 75,
+      "created_at": 1666174342,
+      "actived_at": 1743909283,
+      "dog_tag": {
+        "texture_id": 0,
+        "symbol_id": 4221946800,
+        "border_color_id": 0,
+        "background_color_id": 0,
+        "background_id": 0
+      }
+    },
+    "clan": {
+      "id": null,
+      "tag": null,
+      "league": 5
+    },
+    "statistics": {
+      "overall": {
+        "battles_count": "687",
+        "win_rate": "71.03%",
+        "avg_damage": "152 054",
+        "avg_frags": "1.61",
+        "avg_exp": "1 761",
+        "rating": "2 884",
+        "rating_next": "366",
+        "win_rate_class": 8,
+        "avg_damage_class": 8,
+        "avg_frags_class": 7,
+        "rating_class": 8
+      },
+      "battle_type": {
+        "pvp_solo": {
+          "battles_count": "447",
+          "win_rate": "66.89%",
+          "avg_damage": "143 380",
+          "avg_frags": "1.52",
+          "avg_exp": "1 696",
+          "rating": "2 710",
+          "rating_next": "260",
+          "win_rate_class": 7,
+          "avg_damage_class": 8,
+          "avg_frags_class": 7,
+          "rating_class": 8
+        },
+        "pvp_div2": {
+          "battles_count": "152",
+          "win_rate": "74.34%",
+          "avg_damage": "159 780",
+          "avg_frags": "1.68",
+          "avg_exp": "1 812",
+          "rating": "3 054",
+          "rating_next": "604",
+          "win_rate_class": 8,
+          "avg_damage_class": 8,
+          "avg_frags_class": 7,
+          "rating_class": 8
+        },
+        "pvp_div3": {
+          "battles_count": "88",
+          "win_rate": "86.36%",
+          "avg_damage": "182 769",
+          "avg_frags": "1.99",
+          "avg_exp": "2 001",
+          "rating": "3 475",
+          "rating_next": "1025",
+          "win_rate_class": 8,
+          "avg_damage_class": 8,
+          "avg_frags_class": 8,
+          "rating_class": 8
+        },
+        "rank_solo": {
+          "battles_count": "645",
+          "win_rate": "72.87%",
+          "avg_damage": "108 932",
+          "avg_frags": "1.55",
+          "avg_exp": "1 560",
+          "rating": "2 955",
+          "rating_next": "505",
+          "win_rate_class": 8,
+          "avg_damage_class": 8,
+          "avg_frags_class": 7,
+          "rating_class": 8
+        }
+      },
+      "ship_type": {
+        "AirCarrier": {
+          "battles_count": "16",
+          "win_rate": "43.75%",
+          "avg_damage": "173 682",
+          "avg_frags": "1.19",
+          "avg_exp": "1 375",
+          "rating": "2 169",
+          "rating_next": "281",
+          "win_rate_class": 1,
+          "avg_damage_class": 8,
+          "avg_frags_class": 5,
+          "rating_class": 7
+        },
+        "Battleship": {
+          "battles_count": "352",
+          "win_rate": "73.01%",
+          "avg_damage": "182 255",
+          "avg_frags": "1.81",
+          "avg_exp": "1 834",
+          "rating": "2 617",
+          "rating_next": "167",
+          "win_rate_class": 8,
+          "avg_damage_class": 8,
+          "avg_frags_class": 7,
+          "rating_class": 8
+        },
+        "Cruiser": {
+          "battles_count": "108",
+          "win_rate": "74.07%",
+          "avg_damage": "159 788",
+          "avg_frags": "1.64",
+          "avg_exp": "1 807",
+          "rating": "2 491",
+          "rating_next": "41",
+          "win_rate_class": 8,
+          "avg_damage_class": 8,
+          "avg_frags_class": 7,
+          "rating_class": 8
+        },
+        "Destroyer": {
+          "battles_count": "66",
+          "win_rate": "75.76%",
+          "avg_damage": "146 804",
+          "avg_frags": "1.97",
+          "avg_exp": "1 818",
+          "rating": "4 234",
+          "rating_next": "1784",
+          "win_rate_class": 8,
+          "avg_damage_class": 8,
+          "avg_frags_class": 8,
+          "rating_class": 8
+        },
+        "Submarine": {
+          "battles_count": "145",
+          "win_rate": "64.83%",
+          "avg_damage": "72 981",
+          "avg_frags": "1.01",
+          "avg_exp": "1 565",
+          "rating": "3 292",
+          "rating_next": "842",
+          "win_rate_class": 7,
+          "avg_damage_class": 8,
+          "avg_frags_class": 8,
+          "rating_class": 8
+        }
+      },
+      "chart_data": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 17,
+        "7": 0,
+        "8": 58,
+        "9": 37,
+        "10": 484,
+        "11": 91
+      }
+    }
+  }
+}

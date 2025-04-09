@@ -213,7 +213,7 @@ async def handler_basic(
     """绑定指令
     
     包含指令：
-        - /basic [@/IGN/AID]
+        - /basic [@/IGN/AID] [BattleType]    # 注释中简写为BT
 
     返回值：
         (callback_func, extra_kwargs) or 
@@ -226,40 +226,108 @@ async def handler_basic(
         'region_id': None,
         'account_id': None
     }
-    if raw_args.isdigit():
-        # 通过UID绑定
-        account_id = int(raw_args)
-        region_id = get_region_id_from_aid(account_id)
-        if not region_id:
-            return None, None
-        check_result = await check_user(region_id=region_id,account_id=account_id)
-        if check_result['code'] == 1001:
-            return None, None
-        if check_result['code'] != 1000:
-            return None, check_result
-        params['account_id'] = account_id
-        params['region_id'] = region_id
-        user.set_user_bind(params)
-        return overall.main, None
-    else:
-        parts = raw_args.split(maxsplit=1)
-        if len(parts) == 1:
+    filter_dict = {
+        'pvp': 'random', 'pvp': 'random', '随机': 'random', 'ランダム戦': 'random',
+        'rank': 'ranked', 'ranked': 'rankded', '排位': 'ranked', 'ランク戦': 'ranked',
+        'solo': 'pvp_solo', '单野': 'pvp_solo', 'div2': 'pvp_div2', '双排': 'pvp_div2',
+        'div3': 'pvp_div3', '三排': 'pvp_div3', 'cv': 'AirCarrier', 'bb': 'Battleship',
+        'ca': 'Cruiser', 'cl': 'Cruiser', 'dd': 'Destroyer', 'ss': 'Submarine', 'sub': 'Submarine',
+        '航母': 'AirCarrier', '战列': 'Battleship', '巡洋': 'Cruiser', '驱逐': 'Destroyer', 
+        '潜艇': 'Submarine', '水下小人': 'Submarine', '空中小人': 'AirCarrier', 'surface': 'SurfaceShips', 
+        '水面': 'SurfaceShips'
+    }
+    args_list = raw_args.split(' ')
+    args_len = len(args_list)
+    if args_len == 1:
+        # 长度为1只有三种形式 /basic @ | /basic AID | /basic BT
+        if '@' in args_list[0] or '!' in args_list[0]:
             # 通过解析@字符串的方式
-            match = extract_mention_id(parts[0])
+            match = extract_mention_id(args_list[0])
             if match:
                 user.basic.id = match
             else:
                 return None, None
-        else:
-            # 通过 IGN 方式
-            region_id = get_region_id_from_input(parts[0])
+            if args_list[1] in filter_dict:
+                return overall.main, {'filter_type': filter_dict.get(args_list[0])}
+            else:
+                return None, None
+        elif args_list[0].isdigit():
+            # 通过UID绑定
+            account_id = int(args_list[0])
+            region_id = get_region_id_from_aid(account_id)
             if not region_id:
                 return None, None
-            search_result = await search_user(region_id=region_id, nickname=parts[1])
+            check_result = await check_user(region_id=region_id,account_id=account_id)
+            if check_result['code'] == 1001:
+                return None, None
+            if check_result['code'] != 1000:
+                return None, check_result
+            params['account_id'] = account_id
+            params['region_id'] = region_id
+            user.set_user_bind(params)
+            return overall.main, None
+        else:
+            if args_list[0] in filter_dict:
+                return overall.main, {'filter_type': filter_dict.get(args_list[0])}
+            else:
+                return None, None
+    elif args_len == 2:
+        # 长度为1只有三种形式 /basic @ BT | /basic AID BT | /basic IGN
+        if '@' in args_list[0] or '!' in args_list[0]:
+            # 通过解析@字符串的方式
+            match = extract_mention_id(args_list[0])
+            if match:
+                user.basic.id = match
+            else:
+                return None, None
+            if args_list[1] in filter_dict:
+                return overall.main, {'filter_type': filter_dict.get(args_list[0])}
+            else:
+                return None, None
+        elif args_list[0].isdigit():
+            # 通过UID绑定
+            account_id = int(args_list[0])
+            region_id = get_region_id_from_aid(account_id)
+            if not region_id:
+                return None, None
+            check_result = await check_user(region_id=region_id,account_id=account_id)
+            if check_result['code'] == 1001:
+                return None, None
+            if check_result['code'] != 1000:
+                return None, check_result
+            params['account_id'] = account_id
+            params['region_id'] = region_id
+            user.set_user_bind(params)
+            if args_list[1] in filter_dict:
+                return overall.main, {'filter_type': filter_dict.get(args_list[0])}
+            else:
+                return None, None
+        else:
+            # 通过 IGN 方式
+            region_id = get_region_id_from_input(args_list[0])
+            if not region_id:
+                return None, None
+            search_result = await search_user(region_id=region_id, nickname=args_list[1])
             if search_result['code'] != 1000:
                 return None, search_result
             params['account_id'] = search_result['data'][0]['account_id']
             params['region_id'] = search_result['data'][0]['region_id']
             user.set_user_bind(params)
-        return overall.main, None
-    
+    elif args_len == 3:
+        # 长度为1只有一种形式 /basic IGN BT
+        # 通过 IGN 方式
+        region_id = get_region_id_from_input(args_list[0])
+        if not region_id:
+            return None, None
+        search_result = await search_user(region_id=region_id, nickname=args_list[1])
+        if search_result['code'] != 1000:
+            return None, search_result
+        params['account_id'] = search_result['data'][0]['account_id']
+        params['region_id'] = search_result['data'][0]['region_id']
+        user.set_user_bind(params)
+        if args_list[2] in filter_dict:
+            return overall.main, {'filter_type': filter_dict.get(args_list[2])}
+        else:
+            return None, None
+    else:
+        return None, None

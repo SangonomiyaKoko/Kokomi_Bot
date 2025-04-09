@@ -14,3 +14,6 @@ class ContentLanguageBase:
 
     def get_rank_text():
         raise NotImplementedError("Subclasses should implement this method")
+    
+    def get_basic_type_text():
+        raise NotImplementedError("Subclasses should implement this method")

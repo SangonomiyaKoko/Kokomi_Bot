@@ -31,3 +31,12 @@ class ContentLanguage(ContentLanguageBase):
             3: '青铜联盟'
         }
         return rank_text_dict.get(season_rank)
+    
+    def get_basic_type_text(filte_type: str) -> str:
+        filter_type_dict = {
+            'pvp': '随机总体', 'rank': '排位总体', 'pvp_solo': '随机-单野', 
+            'pvp_div2': '随机-双排', 'pvp_div3': '随机-三排','AirCarrier': '随机-航母',
+            'Battleship': '随机-战列','Cruiser': '随机-巡洋','Destroyer': '随机-驱逐',
+            'Submarine': '随机-潜艇','SurfaceShips': '随机-水面船只'
+        }
+        return filter_type_dict.get(filte_type)

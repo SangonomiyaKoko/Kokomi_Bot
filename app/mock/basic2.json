@@ -1,0 +1,165 @@
+{
+  "status": "ok",
+  "code": 1000,
+  "message": "Success",
+  "data": {
+    "user": {
+      "id": 1053231216,
+      "region": 3,
+      "name": "Cantarella__Fisalia",
+      "karma": 75,
+      "created_at": 1666174342,
+      "actived_at": 1743909283,
+      "dog_tag": {
+        "texture_id": 0,
+        "symbol_id": 4221946800,
+        "border_color_id": 0,
+        "background_color_id": 0,
+        "background_id": 0
+      }
+    },
+    "clan": {
+      "id": null,
+      "tag": null,
+      "league": 5
+    },
+    "statistics": {
+      "data_type": "SurfaceShips",
+      "overall": {
+        "battles_count": "526",
+        "win_rate": "73.57%",
+        "avg_damage": "173 193",
+        "avg_frags": "1.79",
+        "avg_exp": "1 826",
+        "rating": "2 794",
+        "rating_next": "456",
+        "win_rate_class": 8,
+        "avg_damage_class": 8,
+        "avg_frags_class": 7,
+        "rating_class": 8
+      },
+      "battle_type": {
+        "solo": {
+          "battles_count": "309",
+          "win_rate": "70.23%",
+          "avg_damage": "169 563",
+          "avg_frags": "1.74",
+          "avg_exp": "1 768",
+          "rating": "2 499",
+          "rating_next": "49",
+          "win_rate_class": 8,
+          "avg_damage_class": 8,
+          "avg_frags_class": 7,
+          "rating_class": 8
+        },
+        "div2": {
+          "battles_count": "135",
+          "win_rate": "72.59%",
+          "avg_damage": "169 452",
+          "avg_frags": "1.73",
+          "avg_exp": "1 822",
+          "rating": "2 981",
+          "rating_next": "531",
+          "win_rate_class": 8,
+          "avg_damage_class": 8,
+          "avg_frags_class": 7,
+          "rating_class": 8
+        },
+        "div3": {
+          "battles_count": "82",
+          "win_rate": "87.80%",
+          "avg_damage": "193 034",
+          "avg_frags": "2.07",
+          "avg_exp": "2 055",
+          "rating": "3 596",
+          "rating_next": "1146",
+          "win_rate_class": 8,
+          "avg_damage_class": 8,
+          "avg_frags_class": 8,
+          "rating_class": 8
+        },
+        "rank_solo": {}
+      },
+      "ship_type": {
+        "AirCarrier": {
+          "battles_count": "-",
+          "win_rate": "-",
+          "avg_damage": "-",
+          "avg_frags": "-",
+          "avg_exp": "-",
+          "rating": "-1",
+          "rating_next": "1",
+          "win_rate_class": 0,
+          "avg_damage_class": 0,
+          "avg_frags_class": 0,
+          "rating_class": 0
+        },
+        "Battleship": {
+          "battles_count": "352",
+          "win_rate": "73.01%",
+          "avg_damage": "182 255",
+          "avg_frags": "1.81",
+          "avg_exp": "1 834",
+          "rating": "2 617",
+          "rating_next": "167",
+          "win_rate_class": 8,
+          "avg_damage_class": 8,
+          "avg_frags_class": 7,
+          "rating_class": 8
+        },
+        "Cruiser": {
+          "battles_count": "108",
+          "win_rate": "74.07%",
+          "avg_damage": "159 788",
+          "avg_frags": "1.64",
+          "avg_exp": "1 807",
+          "rating": "2 491",
+          "rating_next": "41",
+          "win_rate_class": 8,
+          "avg_damage_class": 8,
+          "avg_frags_class": 7,
+          "rating_class": 8
+        },
+        "Destroyer": {
+          "battles_count": "66",
+          "win_rate": "75.76%",
+          "avg_damage": "146 804",
+          "avg_frags": "1.97",
+          "avg_exp": "1 818",
+          "rating": "4 234",
+          "rating_next": "1784",
+          "win_rate_class": 8,
+          "avg_damage_class": 8,
+          "avg_frags_class": 8,
+          "rating_class": 8
+        },
+        "Submarine": {
+          "battles_count": "-",
+          "win_rate": "-",
+          "avg_damage": "-",
+          "avg_frags": "-",
+          "avg_exp": "-",
+          "rating": "-1",
+          "rating_next": "1",
+          "win_rate_class": 0,
+          "avg_damage_class": 0,
+          "avg_frags_class": 0,
+          "rating_class": 0
+        }
+      },
+      "chart_data": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 6,
+        "9": 37,
+        "10": 392,
+        "11": 91
+      }
+    }
+  }
+}
