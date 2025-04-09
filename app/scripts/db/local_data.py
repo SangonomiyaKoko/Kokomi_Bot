@@ -1,4 +1,5 @@
 import os
+import json
 import sqlite3
 
 from ..config import DATA_DIR
@@ -37,6 +38,18 @@ class UserLocalDB:
             );
             '''
             cursor.execute(table_create_query)
+            table_create_query = '''
+            CREATE TABLE alias (
+                id          INTEGER     PRIMARY KEY AUTOINCREMENT,
+                platform    TEXT        NOT NULL,
+                user_id     TEXT        NOT NULL,
+                alias_list  TEXT        DEFAULT NULL,
+                created_at  TIMESTAMP   DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                updated_at  IMESTAMP,
+                UNIQUE(platform, user_id)
+            );
+            '''
+            cursor.execute(table_create_query)
             conn.commit()
 
     @ExceptionLogger.handle_database_exception_sync
@@ -56,7 +69,19 @@ class UserLocalDB:
 
         # 使用with语句管理数据库连接和游标
         with sqlite3.connect(self.db_path) as conn:
+            result = {
+                'config': None,
+                'alias': None
+            }
             cursor = conn.cursor()
+            cursor.execute('''
+                SELECT alias_list FROM alias 
+                WHERE platform = ? AND user_id = ?;
+            ''', (platform_type, user_id))
+            alias = cursor.fetchone()
+            if alias:
+                result['alias'] = json.loads(alias)
+
             cursor.execute('''
                 SELECT language, algorithm, background, content, theme
                 FROM users 
@@ -80,6 +105,7 @@ class UserLocalDB:
                     platform_type, user_id, data['language'], data['algorithm'], 
                     data['background'], data['content'], data['theme']
                 ))
+                result['config'] = data
             else:
                 # 更新查询次数
                 data = {
@@ -94,10 +120,10 @@ class UserLocalDB:
                     SET query_count = query_count + 1, updated_at = CURRENT_TIMESTAMP
                     WHERE platform = ? AND user_id = ?;
                 ''', (platform_type, user_id))
-
+                result['config'] = data
             conn.commit()
 
-        return {'status': 'ok', 'code': 1000, 'message': 'Success', 'data': data}
+        return {'status': 'ok', 'code': 1000, 'message': 'Success', 'data': result}
 
     @ExceptionLogger.handle_database_exception_sync
     def update_language(self, user: KokomiUser, language: str):
@@ -173,7 +199,9 @@ class UserLocalDB:
         background = {
             'default': ['light', '#F8F9FB'],
             'mavuika': ['dark', '#313131'],
-            'furina': ['light', '#F8F9FB']
+            'furina': ['light', '#F8F9FB'],
+            'mygo': ['dark', '#313131'],
+            'xnn': ['light', '#F8F9FB']
         }
         content = background.get(theme, None)
         with sqlite3.connect(self.db_path) as conn:
@@ -189,5 +217,66 @@ class UserLocalDB:
                     WHERE platform = ? AND user_id = ?;
                 ''', (theme, platform_type, user_id))
             conn.commit()
+
+        return {'status': 'ok', 'code': 1000, 'message': 'Success', 'data': None}
+
+    @ExceptionLogger.handle_database_exception_sync
+    def add_alias(self, user: KokomiUser, alias_data: dict):
+        """更新用户alias表"""
+        user_id = user.basic.id
+        platform_type = user.platform.name
+
+        if not os.path.exists(self.db_path):
+            self.__create_db()
+
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                SELECT alias_list FROM alias 
+                WHERE platform = ? AND user_id = ?;
+            ''', (platform_type, user_id))
+            alias = cursor.fetchone()
+            if alias:
+                alias_list: list = json.loads(alias)
+                alias_list.append(alias_data)
+            else:
+                alias_list = [alias_data]
+            cursor.execute('''
+                INSERT OR REPLACE INTO alias (platform, user_id, alias_list)
+                VALUES (?, ?, ?);
+            ''', (platform_type, user_id, json.dumps(alias_list)))
+            conn.commit()
+
+        return {'status': 'ok', 'code': 1000, 'message': 'Success', 'data': None}
+
+    @ExceptionLogger.handle_database_exception_sync
+    def del_alias(self, user: KokomiUser, alias_index: int):
+        """更新用户alias表"""
+        user_id = user.basic.id
+        platform_type = user.platform.name
+
+        if not os.path.exists(self.db_path):
+            self.__create_db()
+
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                SELECT alias_list FROM alias 
+                WHERE platform = ? AND user_id = ?;
+            ''', (platform_type, user_id))
+            alias = cursor.fetchone()
+            if alias:
+                alias_list: list = json.loads(alias)
+                if 0 <= alias_index < len(alias_index):
+                    alias_list.pop(alias_index)
+                    cursor.execute('''
+                        UPDATE alias SET alias_list = ?
+                        WHERE platform = ? AND user_id = ?;
+                    ''', (json.dumps(alias_list), platform_type, user_id))
+                    conn.commit()
+                else:
+                    pass
+            else:
+                pass
 
         return {'status': 'ok', 'code': 1000, 'message': 'Success', 'data': None}

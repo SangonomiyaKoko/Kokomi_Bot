@@ -28,6 +28,13 @@ class JSONResponse:
     API_10007_SaveImageFailed = ResponseDict(status='ok', code=10007, message='SaveImageFailed')
     API_10008_ImageResourceMissing = ResponseDict(status='ok', code=10008, message='ImageResourceMissing')
     API_10009_ImageTooLarge = ResponseDict(status='ok', code=10009, message='ImageTooLarge')
+    API_10010_AliasAddedSuccessfully = ResponseDict(status='ok', code=10010, message='AliasAddedSuccessfully')
+    API_10011_AliasDeletedSuccessfully = ResponseDict(status='ok', code=10011, message='AliasDeletedSuccessfully')
+    API_10012_AliasNotSet = ResponseDict(status='ok', code=10012, message='AliasNotSet')
+    API_10013_AliasCannotBeNumericOnly = ResponseDict(status='ok', code=10013, message='AliasCannotBeNumericOnly')
+    API_10014_AliasTooLong = ResponseDict(status='error', code=10014, message='AliasTooLong')
+
+
 
 
 

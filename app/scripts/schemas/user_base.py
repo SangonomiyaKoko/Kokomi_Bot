@@ -61,6 +61,7 @@ class UserLocal:
         self.background = self.__get_default_picture('background')
         self.content = self.__get_default_picture('content')
         self.theme = self.__get_default_picture('theme')
+        self.alias_list = None
 
     @staticmethod
     def __get_default_algorithm() -> str:
@@ -92,11 +93,12 @@ class UserLocal:
 
     def set_user_local(self, user_local: UserLocalDict):
         "使用用户数据覆写属性值"
-        self.language = user_local['language']
-        self.algorithm = user_local['algorithm']
-        self.background = user_local['background']
-        self.content = user_local['content']
-        self.theme = user_local['theme']
+        self.language = user_local['config']['language']
+        self.algorithm = user_local['config']['algorithm']
+        self.background = user_local['config']['background']
+        self.content = user_local['config']['content']
+        self.theme = user_local['config']['theme']
+        self.alias_list = user_local['alias']
 
 class KokomiUser:
     "继承自Platform类和UserBasic类"

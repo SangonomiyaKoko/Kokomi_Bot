@@ -1,4 +1,4 @@
-from typing import Literal, Union, Dict, List
+from typing import Literal, Union, Dict, List, Optional
 from typing_extensions import TypedDict
 
 
@@ -21,9 +21,13 @@ class UserBindDict(TypedDict):
     region_id: Literal[1, 2, 3, 4, 5]
     account_id: int
 
-class UserLocalDict(TypedDict):
+class UserLocalConfigDict(TypedDict):
     language: Literal['cn', 'en', 'ja']
     algorithm: Literal['pr', None]
     background: str
     content: Literal['dark', 'light']
     theme: str
+
+class UserLocalDict(TypedDict):
+    config: UserLocalConfigDict
+    alias: Optional[List]

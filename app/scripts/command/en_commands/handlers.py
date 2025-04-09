@@ -2,9 +2,9 @@
 from typing import Callable, Dict, Tuple, Optional, Any, Union, Awaitable
 
 from ...resources import (
-    test, bind, overall, clear, admin, theme
+    test, bind, overall, clear, admin, theme, alias
 )
-from ...schemas import KokomiUser
+from ...schemas import KokomiUser, JSONResponse
 
 from .parsers import (
     get_region_id_from_aid,
@@ -26,7 +26,7 @@ async def handler_test(
     返回值：
         (callback_func, extra_kwargs) or 
         (None, None) or 
-        (None, dixt)
+        (None, dict)
     """
     if raw_args == '' or raw_args == None:
         test_msg = '123456789'
@@ -46,7 +46,7 @@ async def handler_admin(
     返回值：
         (callback_func, extra_kwargs) or 
         (None, None) or 
-        (None, dixt)
+        (None, dict)
     """
     
     return admin.main, {}
@@ -63,7 +63,7 @@ async def handler_cls(
     返回值：
         (callback_func, extra_kwargs) or 
         (None, None) or 
-        (None, dixt)
+        (None, dict)
     """
     return clear.main, {}
 
@@ -79,7 +79,7 @@ async def handler_bind(
     返回值：
         (callback_func, extra_kwargs) or 
         (None, None) or 
-        (None, dixt)
+        (None, dict)
     """
     params = {
         'region_id': None,
@@ -109,6 +109,91 @@ async def handler_bind(
         params['account_id'] = search_result['data'][0]['account_id']
         params['region_id'] = search_result['data'][0]['region_id']
     return bind.post_bind, params
+
+async def handler_alias(
+    user: KokomiUser, 
+    raw_args: str
+) -> Tuple[Optional[Callable[[Any], dict]], Optional[Dict[str, Any]]]:
+    """绑定指令
+    
+    包含指令：
+        - /alias list
+        - /alias add <alias> <IGN/AID>
+        - /alias del <alias_index>
+
+    返回值：
+        (callback_func, extra_kwargs) or 
+        (None, None) or 
+        (None, dict)
+    """
+    alias_data = {
+        'alias': None,
+        'region_id': None,
+        'account_id': None,
+        'nickname': None
+    }
+    if raw_args == '':
+        return None, None
+    if raw_args == 'list':
+        # list
+        return alias.alias_list, None
+    args_list = raw_args.split(' ')
+    args_len = len(args_list)
+    if args_list[0] == 'del':
+        # del
+        if (
+            args_len == 2 and 
+            args_list[1].isdigit() and
+            0 <= int(args_list[1]) - 1 < len(user.local.alias_list)
+        ):
+            return alias.del_alias, {'alias_index': int(args_list[1]) - 1}
+        else:
+            return None, None
+    elif args_list[0] == 'add':
+        # add
+        if args_len == 4:
+            # 通过IGN方式
+            alias_data['alias'] = args_list[1]
+            if args_list[1].isdigit():
+                return None, JSONResponse.API_10013_AliasCannotBeNumericOnly
+            if len(args_list[1]) >= 10:
+                return None, JSONResponse.API_10014_AliasTooLong
+            region_id = get_region_id_from_input(args_list[2])
+            if not region_id:
+                return None, None
+            search_result = await search_user(region_id=region_id, nickname=args_list[3])
+            if search_result['code'] != 1000:
+                return None, search_result
+            alias_data['account_id'] = search_result['data'][0]['account_id']
+            alias_data['region_id'] = search_result['data'][0]['region_id']
+            alias_data['nickname'] = search_result['data'][0]['name']
+            return alias.add_alias, {'alias_data': alias_data}
+        elif args_len == 3:
+            # 通过AID方式
+            alias_data['alias'] = args_list[1]
+            if args_list[1].isdigit():
+                return None, JSONResponse.API_10013_AliasCannotBeNumericOnly
+            if len(args_list[1]) >= 10:
+                return None, JSONResponse.API_10014_AliasTooLong
+            if not args_list[2].isdigit():
+                return None, None
+            account_id = int(args_list[2])
+            region_id = get_region_id_from_aid(account_id)
+            if not region_id:
+                return None, None
+            check_result = await check_user(region_id=region_id,account_id=account_id)
+            if check_result['code'] == 1001:
+                return None, None
+            if check_result['code'] != 1000:
+                return None, check_result
+            alias_data['account_id'] = search_result['data']['account_id']
+            alias_data['region_id'] = search_result['data']['region_id']
+            alias_data['nickname'] = search_result['data']['name']
+            return alias.add_alias, {'alias_data': alias_data}
+        else:
+            return None, None
+    else:
+        return None, None
 
 async def handler_lang(
     user: KokomiUser, 
@@ -247,8 +332,8 @@ async def handler_basic(
                 user.basic.id = match
             else:
                 return None, None
-            if args_list[1] in filter_dict:
-                return overall.main, {'filter_type': filter_dict.get(args_list[0])}
+            if args_list[1].lower() in filter_dict:
+                return overall.main, {'filter_type': filter_dict.get(args_list[0].lower())}
             else:
                 return None, None
         elif args_list[0].isdigit():
@@ -267,8 +352,8 @@ async def handler_basic(
             user.set_user_bind(params)
             return overall.main, None
         else:
-            if args_list[0] in filter_dict:
-                return overall.main, {'filter_type': filter_dict.get(args_list[0])}
+            if args_list[0].lower() in filter_dict:
+                return overall.main, {'filter_type': filter_dict.get(args_list[0].lower())}
             else:
                 return None, None
     elif args_len == 2:
@@ -280,8 +365,8 @@ async def handler_basic(
                 user.basic.id = match
             else:
                 return None, None
-            if args_list[1] in filter_dict:
-                return overall.main, {'filter_type': filter_dict.get(args_list[0])}
+            if args_list[1].lower() in filter_dict:
+                return overall.main, {'filter_type': filter_dict.get(args_list[1].lower())}
             else:
                 return None, None
         elif args_list[0].isdigit():
@@ -298,8 +383,8 @@ async def handler_basic(
             params['account_id'] = account_id
             params['region_id'] = region_id
             user.set_user_bind(params)
-            if args_list[1] in filter_dict:
-                return overall.main, {'filter_type': filter_dict.get(args_list[0])}
+            if args_list[1].lower() in filter_dict:
+                return overall.main, {'filter_type': filter_dict.get(args_list[1].lower())}
             else:
                 return None, None
         else:
@@ -325,8 +410,8 @@ async def handler_basic(
         params['account_id'] = search_result['data'][0]['account_id']
         params['region_id'] = search_result['data'][0]['region_id']
         user.set_user_bind(params)
-        if args_list[2] in filter_dict:
-            return overall.main, {'filter_type': filter_dict.get(args_list[2])}
+        if args_list[2].lower() in filter_dict:
+            return overall.main, {'filter_type': filter_dict.get(args_list[2].lower())}
         else:
             return None, None
     else:
