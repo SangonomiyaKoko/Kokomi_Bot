@@ -1,32 +1,18 @@
 # Command List
 
-> DocsTemple
+> Use `-h` or `help` after a command to view detailed help, e.g., `/stat help`
 
-## `/` Command Guide
-
-**.**
-
-> 🔐 Only available to users with admin privileges.
-
-### 🧩 Command Format
-
-```bash
-/
-```
-
-### 🔧 Parameter Description
-
-No parameters
-
-### 📌 Examples
-
-```bash
-/
-```
-
-### 💡 Notes
-
-- ***
+| Command  | Description                        | Notes                      | Link                   |
+| -------- | ---------------------------------- | -------------------------- | ---------------------- |
+| `/cls`   | Clear cache files                  | Admin only                 | [Jump](#cls-command)   |
+| `/admin` | View bot running status            | Admin only                 | [Jump](#admin-command) |
+| `/link`  | Link game account (UID or IGN)     | Supports UID or IGN format | [Jump](#link-command)  |
+| `/alias` | Manage aliases (list/add/delete)   | Use `list`, `del`, `add`   | [Jump](#alias-command) |
+| `/lang`  | Switch display language            | Supports `cn`, `en`, `ja`  | [Jump](#lang-command)  |
+| `/algo`  | Set scoring algorithm              | Use `default` or `none`    | [Jump](#algo-command)  |
+| `/mode`  | Switch image display mode          | Use `light` / `dark`       | [Jump](#mode-command)  |
+| `/theme` | Set or view available image themes | Supports various themes    | [Jump](#theme-command) |
+| `/stat`  | Query battle stats (user & mode)   | Can specify battle mode    | [Jump](#stat-command)  |
 
 ## `/cls` Command Guide
 
@@ -105,6 +91,54 @@ No parameters
 # Example 2: Link with Server and IGN
 /link asia SangonomiyaKokomi_
 ```
+
+---
+
+## `/alias` Command Guide
+
+**Used to manage user account aliases to simplify future queries.**
+
+Supports adding, deleting, and viewing aliases. Once set, you can use the alias instead of UID or IGN to quickly query stats and other data.
+
+### 🧩 Command Format
+
+```bash
+# View aliases
+/alias list
+# Delete alias
+/alias del index:<index>
+# Add alias
+/alias add alias:<alias> player:<player identifier>
+```
+
+### 🔧 Parameter Description
+
+| Parameter | Required | Description                                                           |
+| --------- | -------- | --------------------------------------------------------------------- |
+| `index`   | ✅       | The number of the alias to be deleted                                 |
+| `alias`   | ✅       | The alias name. Must not be purely numeric and max 15 characters long |
+| `player`  | ✅       | Game UID or `Server IGN` format (space-separated)                     |
+
+### 📌 Examples
+
+```bash
+# View current aliases
+/alias list
+
+# Delete the second alias
+/alias del 2
+
+# Add an alias for UID
+/alias add myfriend 2023619512
+
+# Add an alias for server + IGN
+/alias add captain asia SangonomiyaKokomi_
+```
+
+### 💡 Notes
+
+- Alias must not exceed 15 characters.
+- Alias **cannot be purely numeric** to avoid confusion with UID.
 
 ---
 

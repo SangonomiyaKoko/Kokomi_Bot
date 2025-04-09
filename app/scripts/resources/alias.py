@@ -14,6 +14,18 @@ from ..image import (
     ImageDrawManager, ImageHandler, TextOperation as Text, RectangleOperation as Rectangle
 )
 
+
+
+@ExceptionLogger.handle_program_exception_async
+async def help(user: KokomiUser) -> dict:
+    help_png_path = os.path.join(ASSETS_DIR, 'docs', user.local.content, user.local.language, 'alias.png')
+    if os.path.exists(help_png_path):
+        res_img = ImageHandler.open_image(help_png_path)
+        result = ImageHandler.save_image(res_img)
+    else:
+        result = JSONResponse.API_10008_ImageResourceMissing
+    return result
+
 @ExceptionLogger.handle_program_exception_async
 async def add_alias(
     user: KokomiUser,

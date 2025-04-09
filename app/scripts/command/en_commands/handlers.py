@@ -48,7 +48,8 @@ async def handler_admin(
         (None, None) or 
         (None, dict)
     """
-    
+    if raw_args == '-h' or raw_args == 'help':
+        return admin.help, {}
     return admin.main, {}
 
 async def handler_cls(
@@ -65,6 +66,8 @@ async def handler_cls(
         (None, None) or 
         (None, dict)
     """
+    if raw_args == '-h' or raw_args == 'help':
+        return clear.help, {}
     return clear.main, {}
 
 async def handler_bind(
@@ -81,6 +84,8 @@ async def handler_bind(
         (None, None) or 
         (None, dict)
     """
+    if raw_args == '-h' or raw_args == 'help':
+        return bind.help, {}
     params = {
         'region_id': None,
         'account_id': None
@@ -126,6 +131,8 @@ async def handler_alias(
         (None, None) or 
         (None, dict)
     """
+    if raw_args == '-h' or raw_args == 'help':
+        return alias.help, {}
     alias_data = {
         'alias': None,
         'region_id': None,
@@ -209,6 +216,8 @@ async def handler_lang(
         (None, None) or 
         (None, dict)
     """
+    if raw_args == '-h' or raw_args == 'help':
+        return bind.lang_help, {}
     if raw_args == '':
         return None, None
     if raw_args not in ['cn', 'en', 'ja']:
@@ -232,6 +241,8 @@ async def handler_content(
         (None, None) or 
         (None, dict)
     """
+    if raw_args == '-h' or raw_args == 'help':
+        return bind.mode_help, {}
     if raw_args == '':
         return None, None
     if raw_args not in ['dark', 'light']:
@@ -255,6 +266,8 @@ async def handler_theme(
         (None, None) or 
         (None, dict)
     """
+    if raw_args == '-h' or raw_args == 'help':
+        return theme.help, {}
     if raw_args == '':
         return theme.main, {}
     if raw_args not in ['default', 'mavuika', 'furina']:
@@ -278,6 +291,8 @@ async def handler_algo(
         (None, None) or 
         (None, dict)
     """
+    if raw_args == '-h' or raw_args == 'help':
+        return bind.algo_help, {}
     if raw_args == '':
         return None, None
     algo_dict = {
@@ -305,6 +320,8 @@ async def handler_basic(
         (None, None) or 
         (None, dict)
     """
+    if raw_args == '-h' or raw_args == 'help':
+        return overall.help, {}
     if raw_args == '':
         return overall.main, None
     params = {

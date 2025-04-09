@@ -16,6 +16,16 @@ from ..image import (
 
 
 @ExceptionLogger.handle_program_exception_async
+async def help(user: KokomiUser) -> dict:
+    help_png_path = os.path.join(ASSETS_DIR, 'docs', user.local.content, user.local.language, 'link.png')
+    if os.path.exists(help_png_path):
+        res_img = ImageHandler.open_image(help_png_path)
+        result = ImageHandler.save_image(res_img)
+    else:
+        result = JSONResponse.API_10008_ImageResourceMissing
+    return result
+
+@ExceptionLogger.handle_program_exception_async
 async def post_bind(
     user: KokomiUser,
     region_id: int,
@@ -42,7 +52,6 @@ async def post_bind(
         result=result['data']
     )
     return result
-
 
 @TimeFormat.cost_time_sync(message='Image generation completed')
 def get_png(user: KokomiUser, result: dict) -> str:
@@ -220,6 +229,16 @@ def get_png(user: KokomiUser, result: dict) -> str:
         return result
 
 @ExceptionLogger.handle_program_exception_async
+async def lang_help(user: KokomiUser) -> dict:
+    help_png_path = os.path.join(ASSETS_DIR, 'docs', user.local.content, user.local.language, 'lang.png')
+    if os.path.exists(help_png_path):
+        res_img = ImageHandler.open_image(help_png_path)
+        result = ImageHandler.save_image(res_img)
+    else:
+        result = JSONResponse.API_10008_ImageResourceMissing
+    return result
+
+@ExceptionLogger.handle_program_exception_async
 async def update_language(
     user: KokomiUser,
     language: str
@@ -231,6 +250,16 @@ async def update_language(
         return JSONResponse.API_9006_ChangeSuccess
 
 @ExceptionLogger.handle_program_exception_async
+async def algo_help(user: KokomiUser) -> dict:
+    help_png_path = os.path.join(ASSETS_DIR, 'docs', user.local.content, user.local.language, 'algo.png')
+    if os.path.exists(help_png_path):
+        res_img = ImageHandler.open_image(help_png_path)
+        result = ImageHandler.save_image(res_img)
+    else:
+        result = JSONResponse.API_10008_ImageResourceMissing
+    return result
+
+@ExceptionLogger.handle_program_exception_async
 async def update_algorithm(
     user: KokomiUser,
     algorithm: str
@@ -240,7 +269,17 @@ async def update_algorithm(
         return result
     else:
         return JSONResponse.API_9006_ChangeSuccess
-    
+
+@ExceptionLogger.handle_program_exception_async
+async def mode_help(user: KokomiUser) -> dict:
+    help_png_path = os.path.join(ASSETS_DIR, 'docs', user.local.content, user.local.language, 'mode.png')
+    if os.path.exists(help_png_path):
+        res_img = ImageHandler.open_image(help_png_path)
+        result = ImageHandler.save_image(res_img)
+    else:
+        result = JSONResponse.API_10008_ImageResourceMissing
+    return result
+
 @ExceptionLogger.handle_program_exception_async
 async def update_content(
     user: KokomiUser,

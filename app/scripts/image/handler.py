@@ -42,7 +42,7 @@ class ImageHandler:
 
 
     @staticmethod
-    def open_image(path: str) -> Image.Image | dict:
+    def open_image(path: str) -> Image.Image:
         """打开图片文件
 
         注意，如果没有文件会抛出异常，请根据实际功能自行判断是否需要捕获

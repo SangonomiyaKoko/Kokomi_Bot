@@ -14,7 +14,8 @@ from ..image import (
 )
 from ..schemas import (
     KokomiUser, UserBasicDict, UserClanDict, UserOverallDict,
-    ResultShipTypeDict, ResultBattleTypeDict, BasicBattleTypeDict
+    ResultShipTypeDict, ResultBattleTypeDict, BasicBattleTypeDict,
+    JSONResponse
 )
 
 
@@ -41,6 +42,16 @@ class UserBaseResult2(TypedDict):
     clan: UserClanDict
     statistics: OverallDict2
 
+
+@ExceptionLogger.handle_program_exception_async
+async def help(user: KokomiUser) -> dict:
+    help_png_path = os.path.join(ASSETS_DIR, 'docs', user.local.content, user.local.language, 'stat.png')
+    if os.path.exists(help_png_path):
+        res_img = ImageHandler.open_image(help_png_path)
+        result = ImageHandler.save_image(res_img)
+    else:
+        result = JSONResponse.API_10008_ImageResourceMissing
+    return result
 
 @ExceptionLogger.handle_program_exception_async
 async def main(

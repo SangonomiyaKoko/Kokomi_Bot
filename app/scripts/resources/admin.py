@@ -6,9 +6,19 @@ from ..common import (
 from ..image import (
     ImageDrawManager, ImageHandler, TextOperation as Text, RectangleOperation as Rectangle
 )
-from ..schemas import KokomiUser
+from ..schemas import KokomiUser, JSONResponse
 from ..config import ASSETS_DIR
 
+
+@ExceptionLogger.handle_program_exception_async
+async def help(user: KokomiUser) -> dict:
+    help_png_path = os.path.join(ASSETS_DIR, 'docs', user.local.content, user.local.language, 'admin.png')
+    if os.path.exists(help_png_path):
+        res_img = ImageHandler.open_image(help_png_path)
+        result = ImageHandler.save_image(res_img)
+    else:
+        result = JSONResponse.API_10008_ImageResourceMissing
+    return result
 
 @ExceptionLogger.handle_program_exception_async
 async def main(user: KokomiUser) -> dict:
@@ -42,8 +52,6 @@ async def main(user: KokomiUser) -> dict:
 def get_png(user: KokomiUser, result: dict) -> str:
     background_path = os.path.join(ASSETS_DIR, 'content', 'other', 'admin.png')
     res_img = ImageHandler.open_image(background_path)
-    if type(res_img) == dict:
-        return res_img
     # 由于当前功能是admin需要，所以暂时不兼容多语言和主题切换
     # 开始图片渲染流程
     with ImageDrawManager(res_img, 'ps', 300) as image_manager:
