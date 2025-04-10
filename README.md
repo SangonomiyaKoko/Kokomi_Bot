@@ -132,6 +132,8 @@ git pull origin main             # 拉取最新代码
 
 ![alt text](docs/image/sample.png)
 
+> 此处图片尺寸: 2235*422
+
 **获取方式**
 
 赞助后请私聊作者，并发送你希望绑定的图片与账号 ID
@@ -144,3 +146,11 @@ git pull origin main             # 拉取最新代码
 
 感谢每一位支持者的信任与鼓励！  
 我们会继续保持更新，持续优化体验，也欢迎加入开发或提出建议，让这个项目越来越完善
+
+## 许可证
+
+本项目采用 [知识共享署名-非商业性使用 4.0 国际许可协议](https://creativecommons.org/licenses/by-nc/4.0/deed.zh)进行许可。&#8203;:contentReference[oaicite:2]{index=2}
+
+[![知识共享许可协议](https://licensebuttons.net/l/by-nc/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc/4.0/deed.zh)
+
+
