@@ -79,7 +79,7 @@ class UserLocalDB:
                 WHERE platform = ? AND user_id = ?;
             ''', (platform_type, user_id))
             alias = cursor.fetchone()
-            if alias[0]:
+            if alias and alias[0]:
                 result['alias'] = json.loads(alias[0])
 
             cursor.execute('''
@@ -236,7 +236,7 @@ class UserLocalDB:
                 WHERE platform = ? AND user_id = ?;
             ''', (platform_type, user_id))
             alias = cursor.fetchone()
-            if alias[0]:
+            if alias and alias[0]:
                 alias_list: list = json.loads(alias[0])
                 alias_list.append(alias_data)
             else:
@@ -265,7 +265,7 @@ class UserLocalDB:
                 WHERE platform = ? AND user_id = ?;
             ''', (platform_type, user_id))
             alias = cursor.fetchone()
-            if alias[0]:
+            if alias and alias[0]:
                 alias_list: list = json.loads(alias[0])
                 if 0 <= alias_index < len(alias_list):
                     alias_list.pop(alias_index)
