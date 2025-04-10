@@ -12,9 +12,11 @@ class Message:
             'en': LANGUAGE_EN,
             'ja': LANGUAGE_JA
         }
-        language_data = language_dict[language]
+        language_data: dict = language_dict[language]
         if language_data.get(result['code']):
-            return_msg = language_data.get(result['code'])
+            return_msg: str = language_data.get(result['code'])
+            if result['code'] == 10005:
+                return_msg.replace('%s', result['data']['command'])
         else:
             return_msg = '[UndefinedMSG] ' + result['message']
         return return_msg

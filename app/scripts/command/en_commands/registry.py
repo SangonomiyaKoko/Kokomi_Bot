@@ -54,7 +54,11 @@ class CommandRegistry:
             callback_func, extra_kwargs = await handle_func(user=user, raw_args=raw_args)
             # 返回值为None表示参数解析失败，返回{}表示解析成功，但没有数据
             if not callback_func and not extra_kwargs:
-                return JSONResponse.API_10005_InvalidArgs
+                result = JSONResponse.API_10005_InvalidArgs
+                result['data'] = {
+                    'command': command
+                }
+                return result
             elif not callback_func and extra_kwargs:
                 return extra_kwargs
             else:
