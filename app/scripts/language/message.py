@@ -16,7 +16,7 @@ class Message:
         if language_data.get(result['code']):
             return_msg: str = language_data.get(result['code'])
             if result['code'] == 10005:
-                return_msg.replace('%s', result['data']['command'])
+                return_msg = return_msg.replace('%s', result['data']['command'])
         else:
             return_msg = '[UndefinedMSG] ' + result['message']
         return return_msg
