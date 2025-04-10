@@ -3,7 +3,6 @@
 import os
 import shutil
 import json
-file_path = os.path.dirname(__file__)
 '''
 接口返回值
 "dog_tag": {
@@ -52,60 +51,63 @@ id -> color
 }
 
 '''
-# E:\a_wws_unpack\as_unpack\gui\dogTags\big
-default_list = ['PCNA001', 'PCNA002', 'PCNA003', 'PCNA004', 'PCNA005', 'PCNA006', 'PCNA007', 'PCNA008', 'PCNA009', 'default_PCNA.png', 'default_PCNB.png']
-all_list = ['PCNA001', 'PCNA002', 'PCNA003', 'PCNA004', 'PCNA005', 'PCNA006', 'PCNA007', 'PCNA008', 'PCNA009', 'PCNT001', 'PCNT002', 'PCNT003', 'PCNT004']
-
-wg_file = os.path.join(file_path,'as_unpack','gui','dogTags','big')
-wg_list = os.listdir(wg_file)
-wg_list = [item for item in wg_list if item not in default_list]
-wg_file_list = []
-for index in wg_list:
-    if '.png' in index:
-        index = index.replace('.png','')
-    all_list.append(index)
-result = {}
-wg_data = json.load(
-    open(
-        os.path.join(file_path, 'as_unpack', 'GameParams-0.json'), 
-        "r", 
-        encoding="utf-8"
-    )
-)
-for index in all_list:
-    dogtag_id = wg_data[index]['id']
-    result[dogtag_id] = index
-
-with open(os.path.join(file_path, 'dog_tags_wg.json'), 'w', encoding='utf-8') as f:
-    f.write(json.dumps(result, ensure_ascii=False))
-f.close()
-
-
-
 
 default_list = ['PCNA001', 'PCNA002', 'PCNA003', 'PCNA004', 'PCNA005', 'PCNA006', 'PCNA007', 'PCNA008', 'PCNA009', 'default_PCNA.png', 'default_PCNB.png']
 all_list = ['PCNA001', 'PCNA002', 'PCNA003', 'PCNA004', 'PCNA005', 'PCNA006', 'PCNA007', 'PCNA008', 'PCNA009', 'PCNT001', 'PCNT002', 'PCNT003', 'PCNT004']
 
-ru_file = os.path.join(file_path,'ru_unpack','gui','dogTags','big')
-ru_list = os.listdir(ru_file)
-ru_list = [item for item in ru_list if item not in default_list]
-ru_file_list = []
-for index in ru_list:
-    if '.png' in index:
-        index = index.replace('.png','')
-    all_list.append(index)
-result = {}
-ru_data = json.load(
-    open(
-        os.path.join(file_path, 'ru_unpack', 'GameParams-0.json'), 
-        "r", 
-        encoding="utf-8"
-    )
-)
-for index in all_list:
-    dogtag_id = ru_data[index]['id']
-    result[dogtag_id] = index
+# 指定服务器及解包数据地址
+server = 'lesta'
 
-with open(os.path.join(file_path, 'dog_tags_lesta.json'), 'w', encoding='utf-8') as f:
-    f.write(json.dumps(result, ensure_ascii=False))
-f.close()
+bot_file_path = r'F:\Kokomi_PJ_Bot'
+if server == 'wg':
+    unpack_file_path = r'E:\a_wws_unpack\as_unpack'
+    op = 'WarGaming'
+else:
+    unpack_file_path = r'E:\a_wws_unpack\ru_unpack'
+    op = 'LestaGame'
+
+
+def find_new_keys(old_data, new_data):
+    new_items = {
+        key: new_data[key]
+        for key in new_data
+        if key not in old_data
+    }
+    for k, v in new_items.items():
+        print(f'新增 "{k}": "{v}"')
+        src = os.path.join(dog_tag_dir, f'{v}.png')
+        dst = os.path.join(bot_file_path, r'app\assets\components\insignias\symbol', op, f'{v}.png')
+        shutil.copy(src, dst)
+
+if __name__ == '__main__':
+    # wg数据处理，获取所有的图片
+    dog_tag_dir = os.path.join(unpack_file_path, 'gui', 'dogTags', 'big')
+    dog_tag_list = os.listdir(dog_tag_dir)
+    dog_tag_list = [item for item in dog_tag_list if item not in default_list]
+    for index in dog_tag_list:
+        if '.png' in index:
+            index = index.replace('.png','')
+        all_list.append(index)
+    # 从游戏解包数据中读取数据
+    new_josn_data = {}
+    wg_data = json.load(
+        open(
+            os.path.join(unpack_file_path, 'GameParams-0.json'), 
+            "r", 
+            encoding="utf-8"
+        )
+    )
+    for index in all_list:
+        dogtag_id = wg_data[index]['id']
+        new_josn_data[str(dogtag_id)] = index
+    
+    json_file_path = os.path.join(bot_file_path, r'app\assets\json', op, 'dog_tags.json')
+
+    with open(json_file_path, 'r', encoding='utf-8') as f:
+        old_json_data = json.load(f)
+
+    find_new_keys(old_json_data, new_josn_data)
+
+    with open(json_file_path, 'w', encoding='utf-8') as f:
+        f.write(json.dumps(new_josn_data, ensure_ascii=False))
+    f.close()
