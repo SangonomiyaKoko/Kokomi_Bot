@@ -88,7 +88,7 @@ class KokomiBot:
                     return self.__process_result(
                         kokomi_user = kokomi_user,
                         language = kokomi_user.local.language,
-                        result = JSONResponse.API_9001_UserNotLinked
+                        result = JSONResponse.API_10003_UserNotBound
                     )
                 logging.debug(str(user_bind['data']))
             # 调用相关resources的函数，请求接口获取数据或生成图片
