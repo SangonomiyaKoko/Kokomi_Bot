@@ -9,7 +9,8 @@ from .handlers import (
     handler_algo,
     handler_content,
     handler_theme,
-    handler_admin
+    handler_admin,
+    handler_alias
 )
 
 # 注册指令
@@ -19,11 +20,12 @@ commands = [
     ("/admin", [0, 1], False, handler_admin),
     ("/link", [0, 1, 2], False, handler_bind),
     ("/help", [0, 1, 2], False, handler_help),
-    ("/basic", [0, 1, 2], True, handler_basic),
+    ("/stat", [0, 1, 2], True, handler_basic),
     ("/lang", [0, 1, 2], False, handler_lang),
     ("/algo", [0, 1, 2], False, handler_algo),
     ("/mode", [0, 1, 2], False, handler_content),
     ("/theme", [0, 1, 2], False, handler_theme),
+    ("/alias", [0, 1, 2], False, handler_alias),
 ]
 
 for cmd, perm, bind, func in commands:

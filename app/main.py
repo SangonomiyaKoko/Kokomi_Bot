@@ -20,7 +20,7 @@ from .scripts.command import select_func
 from .scripts.db import UserLocalManager
 from .permission import get_user_level
 from .scripts.schemas import (
-    KokomiUser, Platform, UserBasic
+    KokomiUser, Platform, UserBasic, JSONResponse
 )
 
 
@@ -82,8 +82,14 @@ class KokomiBot:
                         language = kokomi_user.local.language,
                         result = user_bind
                     )
-                elif user_bind['data']:
+                if user_bind['data'] != None:
                     kokomi_user.set_user_bind(user_bind['data'])
+                else:
+                    return self.__process_result(
+                        kokomi_user = kokomi_user,
+                        language = kokomi_user.local.language,
+                        result = JSONResponse.API_9001_UserNotLinked
+                    )
                 logging.debug(str(user_bind['data']))
             # 调用相关resources的函数，请求接口获取数据或生成图片
             generate_result = await generate_func(

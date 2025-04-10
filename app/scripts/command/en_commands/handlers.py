@@ -209,9 +209,9 @@ async def handler_alias(
                 return None, None
             if check_result['code'] != 1000:
                 return None, check_result
-            alias_data['account_id'] = search_result['data']['account_id']
-            alias_data['region_id'] = search_result['data']['region_id']
-            alias_data['nickname'] = search_result['data']['name']
+            alias_data['account_id'] = check_result['data']['account_id']
+            alias_data['region_id'] = check_result['data']['region_id']
+            alias_data['nickname'] = check_result['data']['name']
             return alias.add_alias, {'alias_data': alias_data}
         else:
             return None, None
@@ -284,7 +284,7 @@ async def handler_theme(
     """
     if raw_args == '-h' or raw_args == 'help':
         return theme.help, {}
-    if raw_args == '':
+    if raw_args == 'list':
         return theme.main, {}
     if raw_args not in ['default', 'mavuika', 'furina']:
         return None, None
@@ -329,7 +329,7 @@ async def handler_basic(
     """绑定指令
     
     包含指令：
-        - /basic [@/IGN/AID] [BattleType]    # 注释中简写为BT
+        - /stat [@/IGN/AID] [BattleType]    # 注释中简写为BT
 
     返回值：
         (callback_func, extra_kwargs) or 
@@ -348,11 +348,12 @@ async def handler_basic(
         'pvp': 'random', 'random': 'random', '随机': 'random', 'ランダム戦': 'random',
         'rank': 'ranked', 'ranked': 'rankded', '排位': 'ranked', 'ランク戦': 'ranked',
         'solo': 'pvp_solo', '单野': 'pvp_solo', 'div2': 'pvp_div2', '双排': 'pvp_div2',
-        'div3': 'pvp_div3', '三排': 'pvp_div3', 'cv': 'AirCarrier', 'bb': 'Battleship',
-        'ca': 'Cruiser', 'cl': 'Cruiser', 'dd': 'Destroyer', 'ss': 'Submarine', 'sub': 'Submarine',
-        '航母': 'AirCarrier', '战列': 'Battleship', '巡洋': 'Cruiser', '驱逐': 'Destroyer', 
-        '潜艇': 'Submarine', '水下小人': 'Submarine', '空中小人': 'AirCarrier', 'surface': 'SurfaceShips', 
-        '水面': 'SurfaceShips'
+        'div3': 'pvp_div3', '三排': 'pvp_div3', 'aircarrier': 'aircarrier', 'cv': 'aircarrier', 
+        'battleship': 'battleship', 'bb': 'battleship', 'cruiser': 'cruiser', 'ca': 'cruiser', 
+        'cl': 'cruiser', 'destroyer': 'destroyer', 'dd': 'destroyer', 'ss': 'submarine', 
+        'sub': 'submarine', 'submarine': 'submarine', '航母': 'aircarrier', '战列': 'battleship', 
+        '巡洋': 'cruiser', '驱逐': 'destroyer', '潜艇': 'submarine', '水下小人': 'submarine', 
+        '空中小人': 'aircarrier', 'surface': 'surface_ships', '水面': 'surface_ships'
     }
     args_list = raw_args.split(' ')
     args_len = len(args_list)

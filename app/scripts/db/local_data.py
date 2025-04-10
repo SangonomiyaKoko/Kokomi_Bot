@@ -79,8 +79,8 @@ class UserLocalDB:
                 WHERE platform = ? AND user_id = ?;
             ''', (platform_type, user_id))
             alias = cursor.fetchone()
-            if alias:
-                result['alias'] = json.loads(alias)
+            if alias[0]:
+                result['alias'] = json.loads(alias[0])
 
             cursor.execute('''
                 SELECT language, algorithm, background, content, theme
@@ -180,9 +180,9 @@ class UserLocalDB:
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute('''
-                UPDATE users SET background = ?, content = ?
+                UPDATE users SET background = ?, content = ?, theme = ?
                 WHERE platform = ? AND user_id = ?;
-            ''', (background.get(content), content, platform_type, user_id))
+            ''', (background.get(content), content, 'default', platform_type, user_id))
             conn.commit()
 
         return {'status': 'ok', 'code': 1000, 'message': 'Success', 'data': None}
@@ -236,8 +236,8 @@ class UserLocalDB:
                 WHERE platform = ? AND user_id = ?;
             ''', (platform_type, user_id))
             alias = cursor.fetchone()
-            if alias:
-                alias_list: list = json.loads(alias)
+            if alias[0]:
+                alias_list: list = json.loads(alias[0])
                 alias_list.append(alias_data)
             else:
                 alias_list = [alias_data]
@@ -265,9 +265,9 @@ class UserLocalDB:
                 WHERE platform = ? AND user_id = ?;
             ''', (platform_type, user_id))
             alias = cursor.fetchone()
-            if alias:
-                alias_list: list = json.loads(alias)
-                if 0 <= alias_index < len(alias_index):
+            if alias[0]:
+                alias_list: list = json.loads(alias[0])
+                if 0 <= alias_index < len(alias_list):
                     alias_list.pop(alias_index)
                     cursor.execute('''
                         UPDATE alias SET alias_list = ?

@@ -75,10 +75,10 @@ class Insignias:
                 result.append(symbol_png_path)
         else:
             background_png_path = os.path.join(ASSETS_DIR, r'components\insignias\background', f'{background_id}.png')
-            if not os.path.exists(border_png_path):
+            if not os.path.exists(background_png_path):
                 return []
             else:
-                result.append(border_png_path)
+                result.append(background_png_path)
             symbol_png_path = os.path.join(ASSETS_DIR, r'components\insignias\symbol', operator, f'{symbol_id}.png')
             if not os.path.exists(symbol_png_path):
                 return []

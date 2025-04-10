@@ -63,7 +63,7 @@ async def alias_list(
 @TimeFormat.cost_time_sync(message='Image generation completed')
 def get_png(user: KokomiUser) -> str:
     # 画布宽度和高度
-    width, height = 1580, 260 + len(user.local.alias_list) * 100 + 70
+    width, height = 1580, 260 + len(user.local.alias_list) * 80 + 50
     # 背景颜色（RGBA）
     background_color = Utils.hex_to_rgb(user.local.background, 255)
     # 创建画布
@@ -83,7 +83,7 @@ def get_png(user: KokomiUser) -> str:
             image_manager.add_text(
                 Text(
                     text=str(i + 1),
-                    position=(148,64+50*i),
+                    position=(148,278+50*i),
                     font_index=1,
                     font_size=8,
                     color=theme_text_color.TextThemeColor3,
@@ -93,7 +93,7 @@ def get_png(user: KokomiUser) -> str:
             image_manager.add_text(
                 Text(
                     text=alias_data['alias'],
-                    position=(218,64+50*i),
+                    position=(218,278+50*i),
                     font_index=1,
                     font_size=8,
                     color=theme_text_color.TextThemeColor3,
@@ -103,7 +103,7 @@ def get_png(user: KokomiUser) -> str:
             image_manager.add_text(
                 Text(
                     text=Utils.get_region_by_id(alias_data['region_id']),
-                    position=(747,64+50*i),
+                    position=(747,278+50*i),
                     font_index=1,
                     font_size=8,
                     color=theme_text_color.TextThemeColor3,
@@ -113,7 +113,7 @@ def get_png(user: KokomiUser) -> str:
             image_manager.add_text(
                 Text(
                     text=alias_data['nickname'],
-                    position=(857,64+50*i),
+                    position=(857,278+50*i),
                     font_index=1,
                     font_size=8,
                     color=theme_text_color.TextThemeColor3,
