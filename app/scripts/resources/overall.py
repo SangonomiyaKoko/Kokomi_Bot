@@ -160,8 +160,8 @@ def get_png1(
             )
         )
         region = Utils.get_region_by_id(result['user']['region'])
-        region_png_path = os.path.join(ASSETS_DIR, 'components', 'region', f'{region}.png')
-        image_manager.composite_alpha(region_png_path, (81+97, 142+130), resize_size=(76, 42))
+        # region_png_path = os.path.join(ASSETS_DIR, 'components', 'region', f'{region}.png')
+        # image_manager.composite_alpha(region_png_path, (81+97, 142+130), resize_size=(76, 42))
         image_manager.add_text(
             Text(
                 text=region.upper(),
