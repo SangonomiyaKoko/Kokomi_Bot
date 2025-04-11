@@ -50,36 +50,36 @@ class Insignias:
             texture_id = dog_tag_data[str(response['texture_id'])][6:]
             background_color_id = GameData.background_color[str(response['background_color_id'])]
             background_png_name = f'{background_id}_background_{texture_id}_{background_color_id}'
-            background_png_path = os.path.join(ASSETS_DIR, r'components\insignias\background', f'{background_png_name}.png')
+            background_png_path = os.path.join(ASSETS_DIR, 'components', 'insignias', 'background', f'{background_png_name}.png')
             if not os.path.exists(background_png_path):
                 return []
             else:
                 result.append(background_png_path)
             border_color_id = GameData.border_color[str(response['border_color_id'])]
             border_png_name = f'{background_id}_border_{border_color_id}'
-            border_png_path = os.path.join(ASSETS_DIR, r'components\insignias\background', f'{border_png_name}.png')
+            border_png_path = os.path.join(ASSETS_DIR, 'components', 'insignias', 'background', f'{border_png_name}.png')
             if not os.path.exists(border_png_path):
                 return []
             else:
                 result.append(border_png_path)
-            symbol_png_path = os.path.join(ASSETS_DIR, r'components\insignias\symbol', operator, f'{symbol_id}.png')
+            symbol_png_path = os.path.join(ASSETS_DIR, 'components', 'insignias', 'symbol', operator, f'{symbol_id}.png')
             if not os.path.exists(symbol_png_path):
                 return []
             else:
                 result.append(symbol_png_path)
         elif background_id == None and symbol_id != None:
-            symbol_png_path = os.path.join(ASSETS_DIR, r'components\insignias\symbol', operator, f'{symbol_id}.png')
+            symbol_png_path = os.path.join(ASSETS_DIR, 'components', 'insignias', 'symbol', operator, f'{symbol_id}.png')
             if not os.path.exists(symbol_png_path):
                 return []
             else:
                 result.append(symbol_png_path)
         else:
-            background_png_path = os.path.join(ASSETS_DIR, r'components\insignias\background', f'{background_id}.png')
+            background_png_path = os.path.join(ASSETS_DIR, 'components', 'insignias', 'background', f'{background_id}.png')
             if not os.path.exists(background_png_path):
                 return []
             else:
                 result.append(background_png_path)
-            symbol_png_path = os.path.join(ASSETS_DIR, r'components\insignias\symbol', operator, f'{symbol_id}.png')
+            symbol_png_path = os.path.join(ASSETS_DIR, 'components', 'insignias', 'symbol', operator, f'{symbol_id}.png')
             if not os.path.exists(symbol_png_path):
                 return []
             else:
