@@ -118,6 +118,10 @@ git pull origin main             # 拉取最新代码
 
 ![alt text](docs/image/qrcode.jpg)
 
+你也可以通过 Patreon 支持我们持续开发与维护：
+
+👉 [https://patreon.com/Maoyu605](https://patreon.com/Maoyu605)
+
 ---
 
 ### 赞助小福利说明
