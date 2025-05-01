@@ -4,6 +4,7 @@ class ContentLanguage(ContentLanguageBase):
     Test = 'Test'
     UserClan = 'User\'s Clan'
     Createdat = 'Created at'
+    Activedat = 'Last Active at'
     DataType = ''
     RatingNextText_1 = 'Next level'
     RatingNextText_2 = 'Out of top rating'

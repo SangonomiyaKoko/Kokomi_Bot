@@ -4,6 +4,7 @@ class ContentLanguage(ContentLanguageBase):
     Test = 'テスト'
     UserClan = 'クラン'
     Createdat = '登録日'
+    Activedat = '最終アクティブ'
     DataType = ''
     RatingNextText_1 = '次の段階'
     RatingNextText_2 = '最高評価の外'

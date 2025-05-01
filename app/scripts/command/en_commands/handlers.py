@@ -2,7 +2,7 @@
 from typing import Callable, Dict, Tuple, Optional, Any, Union, Awaitable
 
 from ...resources import (
-    test, bind, overall, clear, admin, theme, alias, help
+    test, bind, overall, clear, admin, theme, alias, help, signature
 )
 from ...schemas import KokomiUser, JSONResponse
 
@@ -448,5 +448,72 @@ async def handler_basic(
             return overall.main, {'filter_type': filter_dict.get(args_list[2].lower())}
         else:
             return None, None
+    else:
+        return None, None
+    
+async def handler_card(
+    user: KokomiUser, 
+    raw_args: str
+) -> tuple[Optional[Callable[..., Awaitable[Dict[str, Any]]]], Union[Dict[str, Any], None]]:
+    """绑定指令
+    
+    包含指令：
+        - /card [@/IGN/AID]
+
+    返回值：
+        (callback_func, extra_kwargs) or 
+        (None, None) or 
+        (None, dict)
+    """
+    # if raw_args == '-h' or raw_args == 'help':
+    #     return overall.help, {}
+    if raw_args == '':
+        return signature.main, None
+    params = {
+        'region_id': None,
+        'account_id': None
+    }
+    args_list = raw_args.split(' ')
+    args_len = len(args_list)
+    if args_len == 1:
+        # 长度为1只有两种形式 /basic @ | /basic AID
+        if '@' in args_list[0] or '!' in args_list[0]:
+            # 通过解析@字符串的方式
+            match = extract_mention_id(args_list[0])
+            if match:
+                user.basic.id = match
+            else:
+                return None, None
+            return signature.main, None
+        elif args_list[0].isdigit():
+            # 通过UID绑定
+            account_id = int(args_list[0])
+            region_id = get_region_id_from_aid(account_id)
+            if not region_id:
+                return None, None
+            check_result = await check_user(region_id=region_id,account_id=account_id)
+            if check_result['code'] == 1001:
+                return None, None
+            if check_result['code'] != 1000:
+                return None, check_result
+            params['account_id'] = account_id
+            params['region_id'] = region_id
+            user.set_user_bind(params)
+            return signature.main, None
+        else:
+                return None, None
+    elif args_len == 2:
+        # 长度为2只有 /basic IGN
+        # 通过 IGN 方式
+        region_id = get_region_id_from_input(args_list[0])
+        if not region_id:
+            return None, None
+        search_result = await search_user(region_id=region_id, nickname=args_list[1])
+        if search_result['code'] != 1000:
+            return None, search_result
+        params['account_id'] = search_result['data'][0]['account_id']
+        params['region_id'] = search_result['data'][0]['region_id']
+        user.set_user_bind(params)
+        return signature.main, None
     else:
         return None, None

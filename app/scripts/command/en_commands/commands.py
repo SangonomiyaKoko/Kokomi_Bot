@@ -10,7 +10,8 @@ from .handlers import (
     handler_content,
     handler_theme,
     handler_admin,
-    handler_alias
+    handler_alias,
+    handler_card
 )
 
 # 注册指令
@@ -26,6 +27,7 @@ commands = [
     ("/mode", [0, 1, 2], False, handler_content),
     ("/theme", [0, 1, 2], False, handler_theme),
     ("/alias", [0, 1, 2], False, handler_alias),
+    ("/card", [0, 1, 2], True, handler_card)
 ]
 
 for cmd, perm, bind, func in commands:

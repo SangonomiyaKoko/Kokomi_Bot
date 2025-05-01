@@ -1,0 +1,95 @@
+{
+  "status": "ok",
+  "code": 1000,
+  "message": "Success",
+  "data": {
+    "user": {
+      "id": 2023619512,
+      "region": 1,
+      "name": "SangonomiyaKokomi_",
+      "karma": 0,
+      "level": 17,
+      "created_at": 1560486244,
+      "actived_at": 1745681729,
+      "dog_tag": {
+        "texture_id": 0,
+        "symbol_id": 4224043952,
+        "border_color_id": 0,
+        "background_color_id": 0,
+        "background_id": 0
+      }
+    },
+    "clan": {
+      "id": 2000015816,
+      "tag": "TIF-K",
+      "league": 0
+    },
+    "statistics": {
+      "total": {
+        "battles_count": "10 696",
+        "ships_count": "244",
+        "achievements_count": "5 375"
+      },
+      "stats": {
+        "random": {
+          "battles_count": "6 942",
+          "win_rate": "58.53%",
+          "avg_damage": "78 660",
+          "avg_frags": "0.92",
+          "rating": "1 937",
+          "win_rate_class": 6,
+          "avg_damage_class": 7,
+          "avg_frags_class": 6,
+          "rating_class": 6
+        },
+        "ranked": {
+          "battles_count": "1 235",
+          "win_rate": "56.11%",
+          "avg_damage": "75 472",
+          "avg_frags": "0.79",
+          "rating": "1 738",
+          "win_rate_class": 6,
+          "avg_damage_class": 5,
+          "avg_frags_class": 5,
+          "rating_class": 5
+        }
+      },
+      "record": {
+        "max_damage_dealt": {
+          "count": "355 078",
+          "tier": "Ⅹ",
+          "name": "岛风"
+        },
+        "max_exp": {
+          "count": "5 148",
+          "tier": "Ⅹ",
+          "name": "海豹"
+        },
+        "max_frags": {
+          "count": "10",
+          "tier": "Ⅰ",
+          "name": "伊利"
+        },
+        "max_planes_killed": {
+          "count": "84",
+          "tier": "Ⅹ",
+          "name": "朗纳尔"
+        }
+      },
+      "achievement": {
+        "ranked": {
+          "0": 0,
+          "1": 2,
+          "2": 6
+        },
+        "clan_battle": {
+          "0": 0,
+          "1": 3,
+          "2": 8,
+          "3": 14,
+          "4": 14
+        }
+      }
+    }
+  }
+}

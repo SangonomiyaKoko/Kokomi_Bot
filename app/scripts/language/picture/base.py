@@ -5,6 +5,7 @@ class ContentLanguageBase:
     Test = ''
     UserClan = ''
     Createdat = ''
+    Activedat = ''
     DataType = ''
     RatingNextText_1 = ''
     RatingNextText_2 = ''

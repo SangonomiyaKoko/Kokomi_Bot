@@ -116,6 +116,16 @@ class Utils:
             5: 'cn'
         }
         return region_dict.get(region_id)
+
+    def get_region_color(region_id: int):
+        region_dict = {
+            1: (234, 104, 162),
+            2: (0, 183, 238),
+            3: (50, 177, 108),
+            4: (248, 181, 81),
+            5: (137, 87, 161)
+        }
+        return region_dict.get(region_id)
     
     def get_level_color(level: int | None):
         if not level:

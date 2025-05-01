@@ -4,6 +4,7 @@ class ContentLanguage(ContentLanguageBase):
     Test = '测试'
     UserClan = '所属工会'
     Createdat = '注册时间'
+    Activedat = '上次活跃'
     DataType = ''
     RatingNextText_1 = '距离下一评级'
     RatingNextText_2 = '超出最高评级'
