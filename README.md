@@ -155,9 +155,19 @@ _个人定制的赞助金额任意，工会定制需要累计赞助 20 及以上
 
 赞助后请私聊作者，并发送你希望绑定的图片与账号 ID
 
-作者 QQ: 3197206779
+作者 QQ: 3197206779，通常在线时间：21:00~23:00
 
 > **由于作者当前处于备战考研阶段，如遇到消息未回等属于正常情况，多发几次消息提醒即可**
+
+```
+如果赞助后可以顺手为本项目或子项目点点star，可以额外获得一个名额，您可以将他赠与给您的游戏好友
+
+子项目1：https://github.com/SangonomiyaKoko/KokomiPJ_MainAPI
+子项目2：https://github.com/SangonomiyaKoko/KokomiPJ_WorkerAPI
+子项目3：https://github.com/SangonomiyaKoko/KokomiPJ_MainTask
+
+以上均为Bot后端的子项目
+```
 
 ---
 
