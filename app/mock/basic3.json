@@ -1,0 +1,228 @@
+{
+  "status": "ok",
+  "code": 1000,
+  "message": "Success",
+  "data": {
+    "type": "pvp",
+    "basic": {
+      "region": "asia",
+      "account_id": 2023619512,
+      "username": "SangonomiyaKokomi_",
+      "register_time": 1560486244,
+      "insignias": "0-4224043952-0-0-0",
+      "clan_id": 2000015816,
+      "clan_tag": "TIF-K",
+      "clan_league": 0
+    },
+    "statistics": {
+      "overall": {
+        "battles_count": "7 775",
+        "win_rate": "58.74%",
+        "avg_damage": "80 626",
+        "avg_frags": "0.94",
+        "avg_exp": "1 403",
+        "rating": "1 983",
+        "rating_next": "117",
+        "win_rate_class": 6,
+        "avg_damage_class": 7,
+        "avg_frags_class": 6,
+        "rating_class": 6
+      },
+      "battle_type": {
+        "pvp_solo": {
+          "battles_count": "4 915",
+          "win_rate": "55.34%",
+          "avg_damage": "78 624",
+          "avg_frags": "0.92",
+          "avg_exp": "1 368",
+          "rating": "1 982",
+          "rating_next": "118",
+          "win_rate_class": 6,
+          "avg_damage_class": 7,
+          "avg_frags_class": 6,
+          "rating_class": 6
+        },
+        "pvp_div2": {
+          "battles_count": "935",
+          "win_rate": "61.71%",
+          "avg_damage": "84 080",
+          "avg_frags": "0.95",
+          "avg_exp": "1 430",
+          "rating": "1 925",
+          "rating_next": "175",
+          "win_rate_class": 7,
+          "avg_damage_class": 7,
+          "avg_frags_class": 6,
+          "rating_class": 6
+        },
+        "pvp_div3": {
+          "battles_count": "1 925",
+          "win_rate": "65.97%",
+          "avg_damage": "84 061",
+          "avg_frags": "1.01",
+          "avg_exp": "1 481",
+          "rating": "2 020",
+          "rating_next": "80",
+          "win_rate_class": 7,
+          "avg_damage_class": 7,
+          "avg_frags_class": 7,
+          "rating_class": 6
+        }
+      },
+      "ship_type": {
+        "AirCarrier": {
+          "battles_count": "93",
+          "win_rate": "58.06%",
+          "avg_damage": "91 714",
+          "avg_frags": "0.88",
+          "avg_exp": "1 191",
+          "rating": "1 358",
+          "rating_next": "192",
+          "win_rate_class": 6,
+          "avg_damage_class": 5,
+          "avg_frags_class": 5,
+          "rating_class": 4
+        },
+        "Battleship": {
+          "battles_count": "1 052",
+          "win_rate": "57.60%",
+          "avg_damage": "98 182",
+          "avg_frags": "0.94",
+          "avg_exp": "1 305",
+          "rating": "1 723",
+          "rating_next": "27",
+          "win_rate_class": 6,
+          "avg_damage_class": 6,
+          "avg_frags_class": 6,
+          "rating_class": 5
+        },
+        "Cruiser": {
+          "battles_count": "2 397",
+          "win_rate": "55.57%",
+          "avg_damage": "80 911",
+          "avg_frags": "0.80",
+          "avg_exp": "1 237",
+          "rating": "1 519",
+          "rating_next": "31",
+          "win_rate_class": 6,
+          "avg_damage_class": 6,
+          "avg_frags_class": 5,
+          "rating_class": 4
+        },
+        "Destroyer": {
+          "battles_count": "2 038",
+          "win_rate": "60.35%",
+          "avg_damage": "62 393",
+          "avg_frags": "0.93",
+          "avg_exp": "1 338",
+          "rating": "1 742",
+          "rating_next": "8",
+          "win_rate_class": 7,
+          "avg_damage_class": 6,
+          "avg_frags_class": 6,
+          "rating_class": 5
+        },
+        "Submarine": {
+          "battles_count": "2 195",
+          "win_rate": "61.28%",
+          "avg_damage": "88 361",
+          "avg_frags": "1.11",
+          "avg_exp": "1 700",
+          "rating": "2 866",
+          "rating_next": "416",
+          "win_rate_class": 7,
+          "avg_damage_class": 8,
+          "avg_frags_class": 7,
+          "rating_class": 8
+        }
+      },
+      "record": {
+        "max_damage_dealt": 355078,
+        "max_frags": 10,
+        "max_exp": 5148,
+        "max_planes_killed": 84,
+        "max_scouting_damage": 306391,
+        "max_total_agro": 5637000
+      },
+      "chart": [
+        [
+          0,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          6,
+          2,
+          0
+        ],
+        [
+          12,
+          4,
+          12,
+          13,
+          0
+        ],
+        [
+          0,
+          19,
+          43,
+          41,
+          0
+        ],
+        [
+          8,
+          17,
+          115,
+          89,
+          22
+        ],
+        [
+          0,
+          78,
+          163,
+          62,
+          0
+        ],
+        [
+          50,
+          151,
+          256,
+          20,
+          67
+        ],
+        [
+          0,
+          122,
+          368,
+          126,
+          0
+        ],
+        [
+          23,
+          661,
+          1032,
+          1505,
+          2106
+        ],
+        [
+          0,
+          0,
+          396,
+          178,
+          0
+        ]
+      ]
+    }
+  }
+}
