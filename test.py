@@ -66,7 +66,7 @@ async def main():
     await kokomi_bot.init_bot()
     try:
         platform_type = 'qq_bot'
-        print(log_format() + "Default platform: " + platform_type.upper())
+        print(log_format() + "Current platform: " + platform_type.upper())
         user_id = input(log_format() + "Please enter ID >>> ")
         print(log_format() + "Enter `help` to show help or enter `quit` to exit.")
         while True:

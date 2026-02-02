@@ -159,12 +159,6 @@ _个人定制的赞助金额任意，工会定制需要累计赞助 20 及以上
 
 ```
 如果赞助后可以顺手为本项目或子项目点点star，可以额外获得一个名额，您可以将他赠与给您的游戏好友
-
-子项目1：https://github.com/SangonomiyaKoko/KokomiPJ_MainAPI
-子项目2：https://github.com/SangonomiyaKoko/KokomiPJ_WorkerAPI
-子项目3：https://github.com/SangonomiyaKoko/KokomiPJ_MainTask
-
-以上均为Bot后端的子项目
 ```
 
 ---

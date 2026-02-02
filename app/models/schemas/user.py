@@ -1,0 +1,116 @@
+from ..types import UserBindDict, UserLocalDict
+from ...core import Config
+
+
+class Platform:
+    "平台类"
+    def __init__(self, name: str, id: str, cid: str):
+        self.name = name
+        self.id = id    # 平台id或者服务器id
+        self.cid = cid    # 频道id，一个服务器可能有多个频道
+        self.sname = None
+        self.cname = None
+        self.avatar = None
+        self.users = None
+    
+    def set_platform_info(self, sname: str, cname: str, avatar: str, users: dict | list):
+        "写入平台详细数据"
+        self.sname = sname
+        self.cname = cname
+        self.avatar = avatar
+        self.users = users
+
+class UserBasic:
+    "用户基础信息类"
+    def __init__(self, id: str, cid: str):
+        self.id = id    # 查询用户id
+        self.cid = cid    # 原始用户id，处理@查询请求中，可能需要的对原始用户id的溯源
+        self.name = None
+        self.avatar = None
+        self.level = 0
+    
+    def set_user_info(self, name: str, avatar: str):
+        "写入用户详细数据"
+        self.name = name
+        self.avatar = avatar
+
+    def set_user_level(self, level: int):
+        "写入用户的权限等级"
+        self.level = level
+
+class UserBind:
+    "用户绑定信息类"
+    def __init__(self):
+        self.region_id = None
+        self.account_id = None
+
+    def set_user_bind(self, user_bind: UserBindDict):
+        self.region_id = user_bind['region_id']
+        self.account_id = user_bind['account_id']
+    
+    def is_user_binding(self):
+        if self.account_id and self.region_id:
+            return True
+        else:
+            return False
+    
+class UserLocal:
+    "用户本地信息类"
+    def __init__(self):
+        "先按默认值初始化类"
+        self.theme = self.__get_default_theme()
+        self.language = self.__get_default_language()
+        self.show_rating = self.__get_default_rating()
+        self.filter_valid_data = self.__get_default_valid_data()
+
+    @staticmethod
+    def __get_default_rating() -> str:
+        "获取默认评分算法"
+        return Config.default.show_rating
+
+    @staticmethod
+    def __get_default_valid_data() -> str:
+        "获取默认评分算法"
+        return Config.default.filter_valid_data
+    
+    @staticmethod
+    def __get_default_language() -> str:
+        "获取平台默认的语言"
+        return Config.default.language
+
+    @staticmethod
+    def __get_default_theme() -> str:
+        "获取默认图片格式"
+        return Config.default.theme
+
+    def set_user_local(self, user_local: UserLocalDict):
+        "使用用户数据覆写属性值"
+        self.theme = user_local['theme']
+        self.language = user_local['language']
+        self.show_rating = user_local['show_rating']
+        self.filter_valid_data = user_local['filter_valid_data']
+
+class KokomiUser:
+    "继承自Platform类和UserBasic类"
+    def __init__(self, platform: Platform, user_basic: UserBasic):
+        "初始化用户信息"
+        self.platform = platform
+        self.basic = user_basic
+        self.bind = UserBind()
+        self.local = UserLocal()
+
+    def set_user_level(self, user_level: int):
+        "更新用户的等级权限"
+        self.basic.set_user_level(user_level)
+
+    def set_user_bind(self, user_bind: UserBindDict):
+        "更新用户的bind数据"
+        self.bind.set_user_bind(user_bind)
+    
+    def check_user_bind(self):
+        "检查用户的bind数据是否存在"
+        return self.bind.is_user_binding()
+    
+    def set_user_local(self, user_local: UserLocalDict):
+        "更新用户的local数据"
+        self.local.set_user_local(user_local)
